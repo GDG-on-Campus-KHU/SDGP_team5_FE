@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.resq"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.resq"
@@ -56,4 +56,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Compose Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // Bottom Navigation
+    implementation(libs.androidx.material)
 }
