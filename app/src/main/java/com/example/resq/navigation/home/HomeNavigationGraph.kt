@@ -1,24 +1,22 @@
 package com.example.resq.navigation.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.resq.presentaion.list.MainScreen
+import com.example.resq.presentaion.resq.ResQScreen
+import com.example.resq.presentaion.resq.model.ResQ
+import com.example.resq.presentaion.resqdetail.ResQDetailScreen
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun HomeNavigationGraph(padding: PaddingValues) {
-    val navController = rememberNavController()
+fun NavGraphBuilder.homeNavigationGraph(navController: NavHostController, padding: PaddingValues) {
+    composable(HomeNavigationItem.ResQ.route) {
+        ResQScreen(navController, padding) //, topPadding)
+    }
+    composable(HomeNavigationItem.ResQDetail.route + "/{resQ}/{resQImage}") { backStackEntry ->
+        val resQ = backStackEntry.arguments?.getString("resQ").toString()
+        val resQImage = backStackEntry.arguments?.getString("resQImage").toString()
+        val resQInfo = ResQ(resQ, resQImage.toInt())
 
-    NavHost(
-        navController = navController,
-        startDestination = HomeNavigationItem.Home.route
-    ) {
-        composable(HomeNavigationItem.Home.route) {
-            MainScreen(padding)
-        }
+        ResQDetailScreen(navController, padding, resQInfo) //, topPadding, resQInfo)
     }
 }

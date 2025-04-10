@@ -1,23 +1,13 @@
 package com.example.resq.navigation.share
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.example.resq.presentaion.rooms.RoomsScreen
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun ShareNavigationGraph(padding: PaddingValues) {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,
-        startDestination = ShareNavigationItem.Home.route
-    ) {
-        composable(ShareNavigationItem.Home.route) {
-
-        }
+fun NavGraphBuilder.shareNavigationGraph(navController: NavController, padding: PaddingValues) {
+    composable(ShareNavigationItem.Room.route) {
+        RoomsScreen(navController, padding)
     }
 }

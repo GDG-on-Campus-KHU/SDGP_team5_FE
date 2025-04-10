@@ -1,23 +1,13 @@
 package com.example.resq.navigation.user
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.example.resq.presentaion.user.UserScreen
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun UserNavigationGraph(padding: PaddingValues) {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,
-        startDestination = UserNavigationItem.Home.route
-    ) {
-        composable(UserNavigationItem.Home.route) {
-
-        }
+fun NavGraphBuilder.userNavigationGraph(navController: NavController, padding: PaddingValues) {
+    composable(UserNavigationItem.User.route) {
+        UserScreen(navController, padding)
     }
 }
