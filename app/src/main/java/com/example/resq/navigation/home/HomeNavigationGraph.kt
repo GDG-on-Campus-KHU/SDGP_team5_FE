@@ -10,13 +10,13 @@ import com.example.resq.presentaion.resqdetail.ResQDetailScreen
 
 fun NavGraphBuilder.homeNavigationGraph(navController: NavHostController, padding: PaddingValues) {
     composable(HomeNavigationItem.ResQ.route) {
-        ResQScreen(navController, padding) //, topPadding)
+        ResQScreen(navController, padding)
     }
     composable(HomeNavigationItem.ResQDetail.route + "/{resQ}/{resQImage}") { backStackEntry ->
         val resQ = backStackEntry.arguments?.getString("resQ").toString()
         val resQImage = backStackEntry.arguments?.getString("resQImage").toString()
         val resQInfo = ResQ(resQ, resQImage.toInt())
 
-        ResQDetailScreen(navController, padding, resQInfo) //, topPadding, resQInfo)
+        ResQDetailScreen(navController, padding, resQInfo)
     }
 }

@@ -17,7 +17,7 @@ class ResQViewModel : ViewModel() {
             ResQ("경련/발작", R.drawable.resq7),
             ResQ("화상", R.drawable.resq8),
             ResQ("온열/한랭", R.drawable.resq6),
-            ResQ("정신적 응급", R.drawable.resq5)
+            ResQ("정신적응급", R.drawable.resq5)
         )
     )
     val resQList: StateFlow<List<ResQ>> = _resQList

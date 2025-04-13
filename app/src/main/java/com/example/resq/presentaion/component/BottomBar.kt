@@ -13,16 +13,14 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.navigation.Route
 import com.example.resq.navigation.home.HomeNavigationItem
@@ -31,17 +29,12 @@ import com.example.resq.navigation.user.UserNavigationItem
 
 @Composable
 fun BottomBar(navController: NavController) {
-    var selectedItem by rememberSaveable { mutableStateOf("") }
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val bottomItems = listOf(
         Route(HomeNavigationItem.ResQ.route, "Home", Icons.Default.Home),
-        Route(ShareNavigationItem.Room.route, "Share", Icons.AutoMirrored.Filled.List),
+        Route(ShareNavigationItem.Rooms.route, "Share", Icons.AutoMirrored.Filled.List),
         Route(UserNavigationItem.User.route, "User", Icons.Default.AccountCircle)
     )
-
-    LaunchedEffect(currentBackStackEntry) {
-        selectedItem = currentBackStackEntry?.destination?.route ?: ""
-    }
+    var selectedItem by remember { mutableStateOf(bottomItems.first().tab) }
 
     BottomNavigation(backgroundColor = Color.White) {
         bottomItems.forEach { item ->
@@ -51,7 +44,7 @@ fun BottomBar(navController: NavController) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        val color = if (selectedItem == item.route) Color.Blue else Color.Black
+                        val color = if (selectedItem == item.tab) Color.Blue else Color.Black
                         Icon(
                             imageVector = item.icon,
                             contentDescription = item.route,
@@ -63,10 +56,10 @@ fun BottomBar(navController: NavController) {
                         )
                     }
                 },
-                selected = selectedItem == item.route,
+                selected = selectedItem == item.tab,
                 onClick = {
                     navController.navigate(item.route) {
-                        selectedItem = item.route
+                        selectedItem = item.tab
                         popUpTo(bottomItems.first().route) { inclusive = false }
                         launchSingleTop = true
                         restoreState = true
