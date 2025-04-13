@@ -1,12 +1,11 @@
 package com.example.resq
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -25,13 +24,16 @@ fun ResQApp() {
         topBar = { TopBar(navController) },
         bottomBar = { BottomBar(navController) },
         floatingActionButton = {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                FloatingActionButton(
-                    onClick = {},
-                    modifier = Modifier.align(Alignment.CenterStart)
-                ) {
-
+            FloatingActionButton(
+                onClick = {
+                    // 녹음 + 신고
+//                    handleButtonClick()
                 }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Call,
+                    contentDescription = "OneClick"
+                )
             }
         }
     ) { paddingValues ->

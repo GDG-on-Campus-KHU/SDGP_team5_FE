@@ -70,12 +70,11 @@ fun ResQScreen(
                                 .fillMaxHeight(0.8f)
                                 .clickable(
                                     onClick = {
-                                        val resQEncoded =
-                                            URLEncoder.encode(
-                                                it.resQ,
-                                                StandardCharsets.UTF_8.toString()
-                                            )
-                                        navController.navigate(HomeNavigationItem.ResQDetail.route + "/$resQEncoded" + "/${it.resQImage}")
+                                        val resQEncoded = URLEncoder.encode(
+                                            it.resQ,
+                                            StandardCharsets.UTF_8.toString()
+                                        )
+                                        navController.navigate(HomeNavigationItem.ResQDetail.route + "/$resQEncoded/${it.resQImage}")
                                     },
                                     interactionSource = null,
                                     indication = null
