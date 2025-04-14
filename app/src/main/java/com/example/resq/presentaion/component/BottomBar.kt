@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.navigation.Route
 import com.example.resq.navigation.home.HomeNavigationItem
@@ -29,12 +31,22 @@ import com.example.resq.navigation.user.UserNavigationItem
 
 @Composable
 fun BottomBar(navController: NavController) {
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val bottomItems = listOf(
         Route(HomeNavigationItem.ResQ.route, "Home", Icons.Default.Home),
         Route(ShareNavigationItem.Rooms.route, "Share", Icons.AutoMirrored.Filled.List),
         Route(UserNavigationItem.User.route, "User", Icons.Default.AccountCircle)
     )
     var selectedItem by remember { mutableStateOf(bottomItems.first().tab) }
+
+    LaunchedEffect(currentBackStackEntry) {
+        val route = currentBackStackEntry?.destination?.route
+        when (route) {
+            HomeNavigationItem.ResQ.route -> selectedItem = "Home"
+            ShareNavigationItem.Rooms.route -> selectedItem = "Share"
+            UserNavigationItem.User.route -> selectedItem = "User"
+        }
+    }
 
     BottomNavigation(backgroundColor = Color.White) {
         bottomItems.forEach { item ->
