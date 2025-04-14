@@ -74,7 +74,7 @@ fun ResQScreen(
                                             it.resQ,
                                             StandardCharsets.UTF_8.toString()
                                         )
-                                        navController.navigate(HomeNavigationItem.ResQDetail.route + "/$resQEncoded/${it.resQImage}")
+                                        navController.navigate(HomeNavigationItem.ResQDetail.route + "/$resQEncoded")
                                     },
                                     interactionSource = null,
                                     indication = null

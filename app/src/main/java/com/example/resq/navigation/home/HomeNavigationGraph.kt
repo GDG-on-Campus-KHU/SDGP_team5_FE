@@ -12,11 +12,9 @@ fun NavGraphBuilder.homeNavigationGraph(navController: NavHostController, paddin
     composable(HomeNavigationItem.ResQ.route) {
         ResQScreen(navController, padding)
     }
-    composable(HomeNavigationItem.ResQDetail.route + "/{resQ}/{resQImage}") { backStackEntry ->
+    composable(HomeNavigationItem.ResQDetail.route + "/{resQ}") { backStackEntry ->
         val resQ = backStackEntry.arguments?.getString("resQ").toString()
-        val resQImage = backStackEntry.arguments?.getString("resQImage").toString()
-        val resQInfo = ResQ(resQ, resQImage.toInt())
 
-        ResQDetailScreen(navController, padding, resQInfo)
+        ResQDetailScreen(padding, resQ)
     }
 }
