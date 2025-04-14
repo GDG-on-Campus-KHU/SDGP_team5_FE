@@ -52,7 +52,7 @@ fun ResQDetailScreen(
             Spacer(Modifier.height(InnerPadding))
             LazyColumn {
                 items(resQDetail.value) {
-                    Text(text = it)
+                    Text(text = it.title)
                 }
             }
         }
