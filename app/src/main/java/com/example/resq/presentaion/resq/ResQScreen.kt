@@ -50,7 +50,15 @@ fun ResQScreen(
             .padding(padding)
             .padding(InnerPadding)
     ) {
-        SearchBar(searchText) { searchText = it }
+        SearchBar(
+            searchText = searchText,
+            onValueChange = { searchText = it },
+            onClickSearch = {
+                val encodedSearchText =
+                    URLEncoder.encode(searchText, StandardCharsets.UTF_8.toString())
+                navController.navigate(HomeNavigationItem.ResQDetail.route + "/$encodedSearchText")
+            }
+        )
 
         Spacer(Modifier.height(InnerPadding))
         resQList.value.chunked(2).forEach { chunk ->
