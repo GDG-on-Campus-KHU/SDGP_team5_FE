@@ -13,7 +13,8 @@ import androidx.compose.ui.Modifier
 @Composable
 fun SearchBar(
     searchText: String,
-    onValueChange:(String) -> Unit
+    onValueChange: (String) -> Unit,
+    onClickSearch: () -> Unit
 ) {
     Row {
         OutlinedTextField(
@@ -22,11 +23,7 @@ fun SearchBar(
             modifier = Modifier.weight(1f),
             placeholder = { Text(text = "검색할 병이나 증상을 입력하세요.") },
             trailingIcon = {
-                IconButton(
-                    onClick = {
-                        // 검색 결과 화면으로 이동
-                    },
-                ) {
+                IconButton(onClick = { onClickSearch() }) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search"

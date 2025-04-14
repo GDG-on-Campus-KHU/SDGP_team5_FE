@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.resq.presentaion.resq.ResQScreen
-import com.example.resq.presentaion.resq.model.ResQ
+import com.example.resq.presentaion.resqbookmark.ResQBookmarkScreen
 import com.example.resq.presentaion.resqdetail.ResQDetailScreen
 
 fun NavGraphBuilder.homeNavigationGraph(navController: NavHostController, padding: PaddingValues) {
@@ -15,6 +15,9 @@ fun NavGraphBuilder.homeNavigationGraph(navController: NavHostController, paddin
     composable(HomeNavigationItem.ResQDetail.route + "/{resQ}") { backStackEntry ->
         val resQ = backStackEntry.arguments?.getString("resQ").toString()
 
-        ResQDetailScreen(padding, resQ)
+        ResQDetailScreen(navController, padding, resQ)
+    }
+    composable(HomeNavigationItem.ResQBookmark.route) {
+        ResQBookmarkScreen(navController, padding)
     }
 }
