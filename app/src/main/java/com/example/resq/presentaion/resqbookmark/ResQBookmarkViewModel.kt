@@ -1,5 +1,6 @@
 package com.example.resq.presentaion.resqbookmark
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resq.presentaion.resqbookmark.model.ResQBookmark
@@ -27,7 +28,7 @@ class ResQBookmarkViewModel : ViewModel() {
                 delay(1000)
                 _bookmarks.value = (1..10).map { ResQBookmark(it.toString()) }
             } catch (e: Exception) {
-
+                Log.d("getBookmarks", e.message.toString())
             }
             _isLoading.value = false
         }
@@ -39,7 +40,7 @@ class ResQBookmarkViewModel : ViewModel() {
                 // bookmark 삭제
                 getBookmarks("")
             } catch (e: Exception) {
-
+                Log.d("getBookmarks", e.message.toString())
             }
         }
     }

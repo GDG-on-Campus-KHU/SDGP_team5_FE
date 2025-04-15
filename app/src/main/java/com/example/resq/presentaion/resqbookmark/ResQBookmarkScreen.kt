@@ -50,8 +50,8 @@ fun ResQBookmarkScreen(
     padding: PaddingValues,
     viewModel: ResQBookmarkViewModel = viewModel()
 ) {
-    val isLoading = viewModel.isLoading.collectAsState()
-    val bookmarks = viewModel.bookmarks.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val bookmarks by viewModel.bookmarks.collectAsState()
     val isExpanded = remember { mutableStateMapOf<String, Boolean>() }
     var isDialogExpended by remember { mutableStateOf(false) }
     val bookmarkOption = remember { mutableStateOf("") }
@@ -63,12 +63,12 @@ fun ResQBookmarkScreen(
             .padding(padding)
             .padding(horizontal = InnerPadding)
     ) {
-        if (isLoading.value)
+        if (isLoading)
             CenterCircularProgress()
         else
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }
-                items(bookmarks.value) { bookmark ->
+                items(bookmarks) { bookmark ->
                     val isBookmarkOptions = isExpanded[bookmark.title] ?: false
                     Box(
                         modifier = Modifier
@@ -116,6 +116,7 @@ fun ResQBookmarkScreen(
                         }
                     }
                 }
+                item { Spacer(Modifier.height(4.dp)) }
             }
     }
 

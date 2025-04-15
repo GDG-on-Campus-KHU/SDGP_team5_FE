@@ -1,5 +1,6 @@
 package com.example.resq.presentaion.resqdetail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resq.presentaion.resqdetail.model.ResQDetail
@@ -21,9 +22,9 @@ class ResQDetailViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 delay(1000)
-                _resQDetail.value = listOf(ResQDetail("resQ"), ResQDetail("예시 resQDetail"))
+                _resQDetail.value = listOf(ResQDetail(resQ), ResQDetail("예시 resQDetail"))
             } catch (e: Exception) {
-
+                Log.d("getResQDetail", e.message.toString())
             }
             _isLoading.value = false
         }
