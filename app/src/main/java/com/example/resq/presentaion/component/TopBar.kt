@@ -62,17 +62,13 @@ fun TopBar(navController: NavHostController) {
 
                 ShareNavigationItem.Rooms.route ->
                     Row {
-                        IconButton(onClick = {
-                            // 방 추가 화면으로 이동
-                        }) {
+                        IconButton(onClick = { navController.navigate(ShareNavigationItem.RoomNotify.route) }) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
                                 contentDescription = "AddCircle"
                             )
                         }
-                        IconButton(onClick = {
-                            // 방 추가 화면으로 이동
-                        }) {
+                        IconButton(onClick = { navController.navigate(ShareNavigationItem.RoomAdd.route) }) {
                             Icon(
                                 imageVector = Icons.Outlined.AddCircle,
                                 contentDescription = "AddCircle"
@@ -82,7 +78,7 @@ fun TopBar(navController: NavHostController) {
 
                 UserNavigationItem.User.route ->
                     IconButton(onClick = {
-                        // 방 추가 화면으로 이동
+                        // 설정 화면으로 이동
                     }) {
                         Icon(
                             imageVector = Icons.Default.Settings,
