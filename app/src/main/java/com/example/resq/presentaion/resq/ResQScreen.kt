@@ -27,7 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.SearchBar
@@ -37,7 +37,7 @@ import java.nio.charset.StandardCharsets
 
 @Composable
 fun ResQScreen(
-    navController: NavHostController,
+    navController: NavController,
     padding: PaddingValues,
     viewModel: ResQViewModel = viewModel()
 ) {

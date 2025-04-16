@@ -62,7 +62,4 @@ dependencies {
 
     // Bottom Navigation
     implementation(libs.androidx.material)
-
-    // toDp
-    implementation(libs.androidx.compose.testing)
 }
