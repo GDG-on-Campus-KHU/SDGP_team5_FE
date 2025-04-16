@@ -19,7 +19,7 @@ fun SearchBar(
     Row {
         OutlinedTextField(
             value = searchText,
-            onValueChange = { onValueChange(it) },
+            onValueChange = { if (it.length <= 20) onValueChange(it) },
             modifier = Modifier.weight(1f),
             placeholder = { Text(text = "검색할 병이나 증상을 입력하세요.") },
             trailingIcon = {
@@ -29,7 +29,8 @@ fun SearchBar(
                         contentDescription = "Search"
                     )
                 }
-            }
+            },
+            maxLines = 1
         )
     }
 }
