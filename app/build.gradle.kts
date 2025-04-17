@@ -62,4 +62,7 @@ dependencies {
 
     // Bottom Navigation
     implementation(libs.androidx.material)
+
+    // Google SignIn
+    implementation(libs.play.services.auth)
 }
