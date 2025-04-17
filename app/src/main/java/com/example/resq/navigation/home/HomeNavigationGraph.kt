@@ -1,14 +1,14 @@
 package com.example.resq.navigation.home
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.resq.presentaion.resq.ResQScreen
 import com.example.resq.presentaion.resqbookmark.ResQBookmarkScreen
 import com.example.resq.presentaion.resqdetail.ResQDetailScreen
 
-fun NavGraphBuilder.homeNavigationGraph(navController: NavHostController, padding: PaddingValues) {
+fun NavGraphBuilder.homeNavigationGraph(navController: NavController, padding: PaddingValues) {
     composable(HomeNavigationItem.ResQ.route) {
         ResQScreen(navController, padding)
     }

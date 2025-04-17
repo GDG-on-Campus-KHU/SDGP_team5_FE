@@ -63,6 +63,6 @@ dependencies {
     // Bottom Navigation
     implementation(libs.androidx.material)
 
-    // toDp
-    implementation(libs.androidx.compose.testing)
+    // Google SignIn
+    implementation(libs.play.services.auth)
 }
