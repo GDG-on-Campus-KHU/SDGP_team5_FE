@@ -9,6 +9,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.resq.R
 
 @Composable
 fun SearchBar(
@@ -21,7 +23,7 @@ fun SearchBar(
             value = searchText,
             onValueChange = { if (it.length <= 20) onValueChange(it) },
             modifier = Modifier.weight(1f),
-            placeholder = { Text(text = "검색할 병이나 증상을 입력하세요.") },
+            placeholder = { Text(stringResource(R.string.search_placeholder)) },
             trailingIcon = {
                 IconButton(onClick = { onClickSearch() }) {
                     Icon(

@@ -7,23 +7,25 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.resq.R
 
 @Composable
-fun BookmarkOptions(
-    onClick: (String) -> Unit
-) {
+fun BookmarkOptions(onClick: (String) -> Unit) {
+    val delete = stringResource(R.string.delete)
+
     Card(
         modifier = Modifier
             .widthIn(min = 100.dp)
             .clickable(
-                onClick = { onClick("삭제하기") },
+                onClick = { onClick(delete) },
                 interactionSource = null,
                 indication = null
             )
     ) {
         Text(
-            text = "삭제하기",
+            text = delete,
             modifier = Modifier.padding(4.dp)
         )
     }

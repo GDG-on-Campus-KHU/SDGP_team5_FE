@@ -31,11 +31,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.R
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.roomadd.component.AddMemberDialog
 import com.example.resq.ui.theme.InnerPadding
@@ -69,7 +71,7 @@ fun RoomAddScreen(
                     .padding(horizontal = InnerPadding),
                 placeholder = {
                     Text(
-                        text = "방 제목을 입력하세요.",
+                        text = stringResource(R.string.room_title),
                         color = Color.LightGray
                     )
                 }
@@ -92,7 +94,7 @@ fun RoomAddScreen(
                 if (members.isEmpty())
                     item {
                         Text(
-                            text = "클릭하여 멤버를 추가하세요",
+                            text = stringResource(R.string.member_add_placeholder),
                             modifier = Modifier.padding(16.dp),
                             color = Color.LightGray
                         )
@@ -130,7 +132,7 @@ fun RoomAddScreen(
                     viewModel.addMembers(roomTitle, members)
                     navController.popBackStack()
                 }
-            ) { Text(text = "추가하기") }
+            ) { Text(stringResource(R.string.add_button)) }
         }
     }
 

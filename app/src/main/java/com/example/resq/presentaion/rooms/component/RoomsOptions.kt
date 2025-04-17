@@ -1,6 +1,5 @@
 package com.example.resq.presentaion.rooms.component
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,23 +10,27 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.resq.R
 
-@SuppressLint("UnusedBoxWithConstraintsScope", "NewApi")
 @Composable
 fun RoomsOptions(onClick: (String) -> Unit) {
+    val roomDelete = stringResource(R.string.room_delete)
+    val roomOut = stringResource(R.string.room_out)
+
     Column {
         Card(
             modifier = Modifier
                 .widthIn(min = 100.dp)
                 .clickable(
-                    onClick = { onClick("방 삭제하기") },
+                    onClick = { onClick(roomDelete) },
                     interactionSource = null,
                     indication = null
                 )
         ) {
             Text(
-                text = "방 삭제하기",
+                text = roomDelete,
                 modifier = Modifier.padding(4.dp)
             )
         }
@@ -36,13 +39,13 @@ fun RoomsOptions(onClick: (String) -> Unit) {
             modifier = Modifier
                 .widthIn(min = 100.dp)
                 .clickable(
-                    onClick = { onClick("방 나가기") },
+                    onClick = { onClick(roomOut) },
                     interactionSource = null,
                     indication = null
                 )
         ) {
             Text(
-                text = "방 나가기",
+                text = roomOut,
                 modifier = Modifier.padding(4.dp)
             )
         }
