@@ -81,7 +81,7 @@ fun ResQScreen(
                                 .clickable(
                                     onClick = {
                                         val resQEncoded = URLEncoder.encode(
-                                            it.resQ,
+                                            it.resQSlug,
                                             StandardCharsets.UTF_8.toString()
                                         )
                                         navController.navigate(HomeNavigationItem.ResQDetail.route + "/$resQEncoded")
