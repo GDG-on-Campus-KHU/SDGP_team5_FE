@@ -18,8 +18,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.resq.MainActivity.Companion.googleSignInClient
+import com.example.resq.R
 import com.example.resq.ResQApp
 import com.example.resq.ui.theme.ResQTheme
 import com.google.android.gms.auth.api.signin.GoogleSignIn

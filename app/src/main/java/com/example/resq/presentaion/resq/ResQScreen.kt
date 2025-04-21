@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.SearchBar
+import com.example.resq.presentaion.resq.model.ResQ
 import com.example.resq.ui.theme.InnerPadding
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -41,7 +43,7 @@ fun ResQScreen(
     padding: PaddingValues,
     viewModel: ResQViewModel = viewModel()
 ) {
-    val resQList = viewModel.resQList.collectAsState()
+    val resQList = viewModel.getResQList(Locale.current.language)
     var searchText by remember { mutableStateOf("") }
 
     Column(
@@ -61,7 +63,7 @@ fun ResQScreen(
         )
 
         Spacer(Modifier.height(InnerPadding))
-        resQList.value.chunked(2).forEach { chunk ->
+        resQList.chunked(2).forEach { chunk ->
             Row(
                 modifier = Modifier
                     .weight(1f)
@@ -79,7 +81,7 @@ fun ResQScreen(
                                 .clickable(
                                     onClick = {
                                         val resQEncoded = URLEncoder.encode(
-                                            it.resQ,
+                                            it.resQSlug,
                                             StandardCharsets.UTF_8.toString()
                                         )
                                         navController.navigate(HomeNavigationItem.ResQDetail.route + "/$resQEncoded")

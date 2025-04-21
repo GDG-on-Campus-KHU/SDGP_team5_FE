@@ -17,11 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.R
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.navigation.share.ShareNavigationItem
 import com.example.resq.navigation.user.UserNavigationItem
@@ -49,7 +51,7 @@ fun TopBar(navController: NavController) {
                 )
             }
         },
-        title = { Text(text = "ResQ") },
+        title = { Text(stringResource(R.string.app_name)) },
         actions = {
             when (route) {
                 HomeNavigationItem.ResQ.route ->

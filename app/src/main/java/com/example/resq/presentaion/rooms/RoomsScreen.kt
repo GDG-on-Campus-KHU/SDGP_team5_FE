@@ -31,11 +31,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.R
 import com.example.resq.navigation.share.ShareNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.ConfirmDialog
@@ -112,21 +114,25 @@ fun RoomsScreen(
         }
     }
 
-    if (isDialogExpended)
+    if (isDialogExpended) {
+        val deleteCheck = stringResource(R.string.delete_check)
+        val outCheck = stringResource(R.string.out_check)
+
         ConfirmDialog(
             title = when (roomOption.value) {
-                "방 삭제하기" -> "정말 삭제하시겠습니까?"
-                "방 나가기" -> "정말 나가시겠습니까?"
+                stringResource(R.string.room_delete) -> deleteCheck
+                stringResource(R.string.room_out) -> outCheck
                 else -> ""
             },
             onDismissRequest = { isDialogExpended = !isDialogExpended },
             onClick = {
                 when (it) {
-                    "정말 삭제하시겠습니까?" -> viewModel.deleteRoom(roomTitle.value)
-                    "정말 나가시겠습니까?" -> viewModel.outRoom(roomTitle.value)
+                    deleteCheck -> viewModel.deleteRoom(roomTitle.value)
+                    outCheck -> viewModel.outRoom(roomTitle.value)
                 }
             }
         )
+    }
 }
 
 @Preview(showBackground = true)

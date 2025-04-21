@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">ResQ</string>
+    <string name="hoome">홈</string>
+    <string name="share">공유</string>
+    <string name="user">마이페이지</string>
+    <string name="resq1">의식장애/심정지</string>
+    <string name="resq2">호흡곤란</string>
+    <string name="resq3">출혈</string>
+    <string name="resq4">외상</string>
+    <string name="resq5">경련/발작</string>
+    <string name="resq6">화상</string>
+    <string name="resq7">온열/한랭</string>
+    <string name="resq8">정신적응급</string>
+    <string name="google_login">Google 로그인</string>
+    <string name="search_placeholder">병이나 증상을 입력하세요.</string>
+    <string name="room_delete">방 삭제하기</string>
+    <string name="room_out">방 나가기</string>
+    <string name="room_title">방 제목을 입력하세요.</string>
+    <string name="member_add_placeholder">클릭하여 멤버를 추가하세요</string>
+    <string name="add_button">추가하기</string>
+    <string name="email_placeholder">추가할 사람의 이메일을 입력하세요</string>
+    <string name="delete">삭제하기</string>
+    <string name="delete_check">정말 삭제하시겠습니까?</string>
+    <string name="out_check">정말 나가시겠습니까?</string>
+    <string name="cancel">취소</string>
+    <string name="okay">확인</string>
 </resources>
