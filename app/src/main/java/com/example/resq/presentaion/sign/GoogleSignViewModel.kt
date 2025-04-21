@@ -4,7 +4,6 @@ package com.example.resq.presentaion.sign
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.USER_ID
@@ -50,12 +49,9 @@ class GoogleSignViewModel : ViewModel() {
         editor.remove("userEmail")
         editor.remove("userId")
         editor.apply()
-
-        Log.d("testt", "remove")
     }
 
     fun signOut(googleSignInClient: GoogleSignInClient) {
         googleSignInClient.signOut()
-        Log.d("testt", "signout")
     }
 }
