@@ -27,20 +27,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.resq.presentaion.component.CenterCircularProgress
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomNotifyScreen(
-    navController: NavController,
+    onDismissRequest: () -> Unit,
     viewModel: RoomNotifyViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val notifications by viewModel.notifications.collectAsState()
 
-    BasicAlertDialog(onDismissRequest = { navController.popBackStack() }) {
+    BasicAlertDialog(onDismissRequest = { onDismissRequest() }) {
         Surface(
             modifier = Modifier
                 .fillMaxHeight(0.5f)
@@ -55,6 +53,19 @@ fun RoomNotifyScreen(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            IconButton(onClick = { onDismissRequest() }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Close"
+                                )
+                            }
+                        }
+                    }
                     items(notifications) { notify ->
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Row(
@@ -63,19 +74,13 @@ fun RoomNotifyScreen(
                             ) {
                                 Text(text = notify.title)
                                 Spacer(Modifier.weight(1f))
-                                IconButton(onClick = {
-                                    viewModel.acceptNotify("", notify.id)
-                                    navController.popBackStack()
-                                }) {
+                                IconButton(onClick = { viewModel.acceptNotify("", notify.id) }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = "CheckCircle"
                                     )
                                 }
-                                IconButton(onClick = {
-                                    viewModel.refuseNotify("", notify.id)
-                                    navController.popBackStack()
-                                }) {
+                                IconButton(onClick = { viewModel.refuseNotify("", notify.id) }) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = "CheckCircle"
@@ -92,5 +97,5 @@ fun RoomNotifyScreen(
 @Preview(showBackground = true)
 @Composable
 fun RoomNotifyPreview() {
-    RoomNotifyScreen(rememberNavController())
+    RoomNotifyScreen({})
 }
