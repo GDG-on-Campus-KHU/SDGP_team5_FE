@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,16 +43,22 @@ fun GoogleSignInScreen(viewModel: GoogleSignViewModel = viewModel()) {
         ResQTheme {
             ResQApp()
         }
-    else
+    else {
+        var isLoading by remember { mutableStateOf(false) }
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Button(onClick = {
-                val signInIntent = googleSignInClient.signInIntent
-                launcher.launch(signInIntent)
-            }) {
-                Text(text = "Google 로그인")
-            }
+            if (isLoading)
+                CircularProgressIndicator()
+            else
+                Button(onClick = {
+                    val signInIntent = googleSignInClient.signInIntent
+                    launcher.launch(signInIntent)
+                    isLoading = true
+                }) {
+                    Text(text = "Google 로그인")
+                }
         }
+    }
 }
