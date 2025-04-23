@@ -11,7 +11,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -34,12 +33,17 @@ class MainActivity : ComponentActivity() {
         lateinit var googleSignInClient: GoogleSignInClient
         lateinit var USER_EMAIL: String
         lateinit var USER_ID: String
-        private var isLoading by mutableStateOf(true)
     }
 
+    private var isLoading by mutableStateOf(true)
+    private val permissions =
+        arrayOf(Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO)
+
     private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permission ->
+            if (permission[permissions.first()] == true &&
+                permission[permissions.last()] == true
+            ) {
                 isLoading = false
             } else {
                 showPermissionSettingsDialog(this)
@@ -51,12 +55,10 @@ class MainActivity : ComponentActivity() {
 
         checkPermissions(
             activity = this,
+            permissions = permissions,
             onPermission = { isLoading = false },
-            onPermissionLauncher = {
-                requestPermissionLauncher.launch(
-                    Manifest.permission.RECORD_AUDIO
-                )
-            })
+            onPermissionLauncher = { requestPermissionLauncher.launch(permissions) }
+        )
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
@@ -79,16 +81,26 @@ class MainActivity : ComponentActivity() {
 
 private fun checkPermissions(
     activity: Activity,
+    permissions: Array<String>,
     onPermission: () -> Unit,
-    onPermissionLauncher: () -> Unit
+    onPermissionLauncher: () -> Unit,
 ) {
     if (ContextCompat.checkSelfPermission(
             activity,
-            Manifest.permission.RECORD_AUDIO
+            permissions.first()
+        ) == PackageManager.PERMISSION_GRANTED &&
+        ContextCompat.checkSelfPermission(
+            activity,
+            permissions.last()
         ) == PackageManager.PERMISSION_GRANTED
     ) {
         onPermission()
-    } else if (shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO)) {
+    } else if (shouldShowRequestPermissionRationale(
+            activity, permissions.first()
+        ) || shouldShowRequestPermissionRationale(
+            activity, permissions.last()
+        )
+    ) {
         showPermissionSettingsDialog(activity)
     } else {
         onPermissionLauncher()
@@ -98,7 +110,7 @@ private fun checkPermissions(
 private fun showPermissionSettingsDialog(activity: Activity) {
     AlertDialog.Builder(activity)
         .setTitle("권한이 필요합니다")
-        .setMessage("마이크 권한을 거부하셨습니다. 설정에서 권한을 허용해주세요.")
+        .setMessage("권한을 거부하셨습니다. 설정에서 권한을 허용해주세요.")
         .setPositiveButton("설정으로 가기") { _, _ ->
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             val uri = Uri.fromParts("package", activity.packageName, null)
