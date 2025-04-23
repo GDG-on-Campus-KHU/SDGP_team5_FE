@@ -33,11 +33,12 @@ fun ResQApp() {
     val isSignIn by remember { mutableStateOf(GoogleSignViewModel().getUserInfo(context)) }
     var isLocale by remember { mutableStateOf(true) }
     var currentLanguage by remember { mutableStateOf(Locale.getDefault().language) }
+    val isExpanded = remember { mutableStateOf(false) }
 
     if (isSignIn)
         if (isLocale)
             Scaffold(
-                topBar = { TopBar(navController) },
+                topBar = { TopBar(navController) { isExpanded.value = true } },
                 bottomBar = { BottomBar(navController) },
                 floatingActionButton = {
                     FloatingActionButton(
@@ -82,7 +83,7 @@ fun ResQApp() {
                     startDestination = HomeNavigationItem.ResQ.route
                 ) {
                     homeNavigationGraph(navController, paddingValues)
-                    shareNavigationGraph(navController, paddingValues)
+                    shareNavigationGraph(navController, paddingValues, isExpanded)
                     userNavigationGraph(navController, paddingValues)
                 }
             }
