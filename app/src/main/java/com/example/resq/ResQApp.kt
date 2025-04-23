@@ -58,14 +58,10 @@ fun ResQApp() {
                             showOnClickCheckDialog(activity) {
                                 isRecording = startRecording(context)
                             }
-//                                    "ko" -> {
-                        }
 
-                        // 앱 로컬 데이터 베이스에 유저 정보 삭제 및 로그아웃
-//                        val viewModel = GoogleSignViewModel()
-//                        viewModel.removeUserInfo(context)
-//                        viewModel.signOut(googleSignInClient)
-//                        (context as Activity).finishAffinity()
+                            val dialIntent = Intent(Intent.ACTION_CALL, Uri.parse(emerNumber))
+//                            context.startActivity(dialIntent)
+                        }
                     }
                 ) {
                     Icon(
