@@ -5,6 +5,7 @@ package com.example.resq.presentaion.sign
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
+import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.USER_ID
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -23,6 +24,7 @@ class GoogleSignViewModel : ViewModel() {
         val editor = sharedPreferences.edit()
         editor.putString("userEmail", account.email)
         editor.putString("userId", account.id)
+        editor.putString("displayName", account.displayName)
         editor.apply()
 
         _isAccount.value = true
@@ -33,10 +35,12 @@ class GoogleSignViewModel : ViewModel() {
             context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("userEmail", null)
         val userId = sharedPreferences.getString("userId", null)
+        val userDisplayName = sharedPreferences.getString("displayName", null)
 
-        if (userEmail != null && userId != null) {
+        if (userEmail != null && userId != null && userDisplayName != null) {
             USER_EMAIL = userEmail
             USER_ID = userId
+            USER_DISPLAY_NAME = userDisplayName
             return true
         }
         return false
@@ -48,6 +52,7 @@ class GoogleSignViewModel : ViewModel() {
         val editor = sharedPreferences.edit()
         editor.remove("userEmail")
         editor.remove("userId")
+        editor.remove("displayName")
         editor.apply()
     }
 

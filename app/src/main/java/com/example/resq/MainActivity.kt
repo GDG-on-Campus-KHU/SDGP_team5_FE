@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
         lateinit var googleSignInClient: GoogleSignInClient
         lateinit var USER_EMAIL: String
         lateinit var USER_ID: String
+        lateinit var USER_DISPLAY_NAME: String
     }
 
     private var isLoading by mutableStateOf(true)
