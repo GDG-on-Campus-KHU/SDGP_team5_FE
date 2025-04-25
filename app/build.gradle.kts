@@ -80,4 +80,7 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+
+    // Extend Icons
+    implementation(libs.androidx.material.icons.extended)
 }
