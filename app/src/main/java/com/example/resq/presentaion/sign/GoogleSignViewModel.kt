@@ -24,6 +24,7 @@ class GoogleSignViewModel : ViewModel() {
         val editor = sharedPreferences.edit()
         editor.putString("userEmail", account.email)
         editor.putString("userId", account.id)
+        editor.putString("userName", account.displayName)
         editor.apply()
 
         _isAccount.value = true
@@ -49,6 +50,8 @@ class GoogleSignViewModel : ViewModel() {
         val editor = sharedPreferences.edit()
         editor.remove("userEmail")
         editor.remove("userId")
+        editor.remove("userName")
+        editor.remove("")
         editor.apply()
 
         Log.d("testt", "remove")
@@ -58,4 +61,16 @@ class GoogleSignViewModel : ViewModel() {
         googleSignInClient.signOut()
         Log.d("testt", "signout")
     }
+    fun getUserName(context: Context): String? {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("userName", null)
+    }
+
+    fun getUserEmail(context: Context): String? {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("userEmail", null)
+    }
 }
+
