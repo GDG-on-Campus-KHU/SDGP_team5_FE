@@ -27,7 +27,7 @@
     <string name="info_message_placeholder1">응급 상황에 활용할 의료정보를 입력하세요.</string>
     <string name="info_message_placeholder2">모든 정보 입력 완료</string>
     <string name ="medical_info">의료정보</string>
-    <string name ="record_List">녹음리스트</string>
+    <string name ="record_list">녹음리스트</string>
     <string name ="info_name">이름</string>
     <string name ="info_blood_type">혈액형</string>
     <string name ="info_allergies">알레르기</string>

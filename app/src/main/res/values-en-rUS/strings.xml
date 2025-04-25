@@ -28,7 +28,7 @@
     <string name="info_message_placeholder1">Enter medical information for emergency use.</string>
     <string name="info_message_placeholder2">All information entered.</string>
     <string name="medical_info">Medical Info</string>
-    <string name="record_List">Recording List</string>
+    <string name="record_list">Recording List</string>
     <string name="info_name">Name</string>
     <string name="info_blood_type">Blood Type</string>
     <string name="info_allergies">Allergies</string>
