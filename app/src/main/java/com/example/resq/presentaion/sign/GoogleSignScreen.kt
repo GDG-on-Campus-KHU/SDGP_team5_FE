@@ -32,12 +32,14 @@ fun GoogleSignInScreen(viewModel: GoogleSignViewModel = viewModel()) {
     val isAccount by viewModel.isAccount.collectAsState()
     var userEmail by remember { mutableStateOf<String?>(null) }
     var userId by remember { mutableStateOf<String?>(null) }
+    var userDisplayName by remember { mutableStateOf<String?>(null) }
 
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
             userEmail = account?.email
             userId = account?.id
+            userDisplayName = account?.displayName
             viewModel.saveUserInfo(context, account)
         }
 

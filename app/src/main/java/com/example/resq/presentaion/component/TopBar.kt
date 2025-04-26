@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,7 @@ import com.example.resq.navigation.user.UserNavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController) {
+fun TopBar(navController: NavController, onClick: () -> Unit) {
     val route = navController.currentBackStackEntryAsState().value?.destination?.route.toString()
     val isButton =
         route != HomeNavigationItem.ResQ.route && route != ShareNavigationItem.Rooms.route && route != UserNavigationItem.User.route
@@ -64,10 +65,10 @@ fun TopBar(navController: NavController) {
 
                 ShareNavigationItem.Rooms.route ->
                     Row {
-                        IconButton(onClick = { navController.navigate(ShareNavigationItem.RoomNotify.route) }) {
+                        IconButton(onClick = { onClick() }) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
-                                contentDescription = "AddCircle"
+                                contentDescription = "Notifications"
                             )
                         }
                         IconButton(onClick = { navController.navigate(ShareNavigationItem.RoomAdd.route) }) {
@@ -76,6 +77,14 @@ fun TopBar(navController: NavController) {
                                 contentDescription = "AddCircle"
                             )
                         }
+                    }
+
+                ShareNavigationItem.RoomDetail.route + "/{roomId}" ->
+                    IconButton(onClick = { onClick() }) {
+                        Icon(
+                            painter = painterResource(R.drawable.bootstrap_globe2),
+                            contentDescription = "bootstrap_globe2"
+                        )
                     }
 
                 UserNavigationItem.User.route ->
@@ -96,5 +105,5 @@ fun TopBar(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun TopBarPreview() {
-    TopBar(rememberNavController())
+    TopBar(rememberNavController()) {}
 }

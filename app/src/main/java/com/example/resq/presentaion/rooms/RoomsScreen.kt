@@ -1,5 +1,6 @@
 package com.example.resq.presentaion.rooms
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -41,6 +43,7 @@ import com.example.resq.R
 import com.example.resq.navigation.share.ShareNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.ConfirmDialog
+import com.example.resq.presentaion.roomnotify.RoomNotifyScreen
 import com.example.resq.presentaion.rooms.component.RoomsOptions
 import com.example.resq.ui.theme.InnerPadding
 
@@ -48,11 +51,12 @@ import com.example.resq.ui.theme.InnerPadding
 fun RoomsScreen(
     navController: NavController,
     padding: PaddingValues,
+    isExpanded: MutableState<Boolean>,
     viewModel: RoomsViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val rooms by viewModel.rooms.collectAsState()
-    val isExpanded = remember { mutableStateMapOf<String, Boolean>() }
+    val isRoomState = remember { mutableStateMapOf<String, Boolean>() }
     var isDialogExpended by remember { mutableStateOf(false) }
     val roomOption = remember { mutableStateOf("") }
     val roomTitle = remember { mutableStateOf("") }
@@ -69,7 +73,7 @@ fun RoomsScreen(
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }
                 items(rooms) { room ->
-                    val isRoomOptions = isExpanded[room.title] ?: false
+                    val isRoomOptions = isRoomState[room.title] ?: false
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -77,7 +81,7 @@ fun RoomsScreen(
                             .background(Color.LightGray, RoundedCornerShape(16.dp))
                             .padding(8.dp)
                             .clickable(
-                                onClick = { navController.navigate(ShareNavigationItem.RoomDetail.route) },
+                                onClick = { navController.navigate(ShareNavigationItem.RoomDetail.route + "/${room.roomId}") },
                                 interactionSource = null,
                                 indication = null
                             )
@@ -98,8 +102,8 @@ fun RoomsScreen(
                                     isDialogExpended = !isDialogExpended
                                 }
                             IconButton(onClick = {
-                                isExpanded.keys.forEach { isExpanded[it] = false }
-                                isExpanded[room.title] = !isRoomOptions
+                                isRoomState.keys.forEach { isRoomState[it] = false }
+                                isRoomState[room.title] = !isRoomOptions
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.MoreVert,
@@ -133,10 +137,14 @@ fun RoomsScreen(
             }
         )
     }
+
+    if (isExpanded.value)
+        RoomNotifyScreen(onDismissRequest = { isExpanded.value = false })
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 fun RoomsPreview() {
-    RoomsScreen(rememberNavController(), PaddingValues(0.dp))
+    RoomsScreen(rememberNavController(), PaddingValues(0.dp), mutableStateOf(false))
 }

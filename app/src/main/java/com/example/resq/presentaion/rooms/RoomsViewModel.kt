@@ -21,12 +21,12 @@ class RoomsViewModel : ViewModel() {
         getRooms("")
     }
 
-    fun getRooms(userId: String) {
+    private fun getRooms(userId: String) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 delay(1000)
-                _rooms.value = (1..10).map { Room(it.toString()) }
+                _rooms.value = (1..10).map { Room(it.toString(), it.toString()) }
             } catch (e: Exception) {
                 Log.d("getRooms", e.message.toString())
             }
@@ -45,7 +45,7 @@ class RoomsViewModel : ViewModel() {
         }
     }
 
-    fun outRoom(roomTitle: String){
+    fun outRoom(roomTitle: String) {
         viewModelScope.launch {
             try {
                 // 방 나가기

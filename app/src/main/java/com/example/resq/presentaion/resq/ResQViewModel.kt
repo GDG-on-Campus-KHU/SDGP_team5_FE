@@ -1,5 +1,6 @@
 package com.example.resq.presentaion.resq
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.resq.R
 import com.example.resq.presentaion.resq.model.ResQ
@@ -31,4 +32,13 @@ class ResQViewModel : ViewModel() {
             )
     }
 
+    fun getEmerNumber(): String {
+        return try {
+            // 응급 전화 return
+            "tel:" + "실제 긴급구조 전화번호" // ex)119
+        } catch (e: Exception) {
+            Log.d("getEmerNumber", e.message.toString())
+            ""
+        }
+    }
 }
