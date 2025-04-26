@@ -33,7 +33,6 @@ import com.example.resq.presentaion.component.UserTabBar
 import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfo
 import com.example.resq.presentaion.userrecordlist.UserRecordList
-import com.example.resq.ui.theme.Gray3
 import com.example.resq.ui.theme.Gray4
 
 @Composable
@@ -46,7 +45,6 @@ fun UserScreen(
     val googleName = googleSignViewModel.getUserName(context)
     val googleEmail = googleSignViewModel.getUserEmail(context)
     var selectedTab by remember { mutableStateOf(0) }
-
 
     Column(
         modifier = Modifier
@@ -97,7 +95,6 @@ fun UserScreen(
                     modifier = Modifier.padding(start = 3.dp)
                 )
             }
-
         }
         Divider(
             color = Color.Black,
@@ -116,7 +113,7 @@ fun UserScreen(
             selectedTab = it
         }
         when (selectedTab) {
-            0 -> UserMedicalInfo()
+            0 -> UserMedicalInfo(navController, padding)
             1 -> UserRecordList()
         }
     }

@@ -3,6 +3,7 @@ package com.example.resq.presentaion.usermedicalinfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,12 +26,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.resq.R
+import com.example.resq.navigation.home.HomeNavigationItem
+import com.example.resq.navigation.user.UserNavigationItem
 import com.example.resq.ui.theme.Gray2
 import com.example.resq.ui.theme.Gray4
 
 @Composable
-fun UserMedicalInfo() {
+fun UserMedicalInfo(
+    navController: NavController,
+    padding: PaddingValues,
+    ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +63,7 @@ fun UserMedicalInfo() {
                     .size(28.dp)
                     .clickable(
                         onClick = {
-                            //의료 정보 수정
+                            navController.navigate(UserNavigationItem.UpdateMedicalInfo.route)
                         }
                     )
             )
@@ -115,10 +122,4 @@ fun UserMedicalInfo() {
             Divider(modifier = Modifier.padding(vertical = 7.dp, horizontal = 25.dp))
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UserMedicalInfoPreview() {
-    UserMedicalInfo()
 }
