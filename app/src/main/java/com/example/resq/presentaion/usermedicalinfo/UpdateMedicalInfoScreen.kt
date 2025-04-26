@@ -33,7 +33,7 @@ import com.example.resq.ui.theme.Gray2
 import com.example.resq.ui.theme.Gray4
 
 @Composable
-fun UpdateMedicalInfo(
+fun UpdateMedicalInfoScreen(
     navController: NavController,
     padding: PaddingValues,
 ) {
@@ -113,5 +113,5 @@ fun UpdateMedicalInfo(
 @Preview(showBackground = true)
 @Composable
 fun UpdateMedicalInfoPreview() {
-    UpdateMedicalInfo(rememberNavController(), PaddingValues(0.dp))
+    UpdateMedicalInfoScreen(rememberNavController(), PaddingValues(0.dp))
 }

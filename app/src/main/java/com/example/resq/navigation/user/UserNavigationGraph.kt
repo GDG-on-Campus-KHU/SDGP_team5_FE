@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.resq.presentaion.user.UserScreen
-import com.example.resq.presentaion.usermedicalinfo.UpdateMedicalInfo
+import com.example.resq.presentaion.usermedicalinfo.UpdateMedicalInfoScreen
 
 fun NavGraphBuilder.userNavigationGraph(navController: NavController, padding: PaddingValues) {
     composable(UserNavigationItem.User.route) {
@@ -13,6 +13,6 @@ fun NavGraphBuilder.userNavigationGraph(navController: NavController, padding: P
     }
 
     composable(UserNavigationItem.UpdateMedicalInfo.route) {
-        UpdateMedicalInfo(navController, padding)
+        UpdateMedicalInfoScreen(navController, padding)
     }
 }

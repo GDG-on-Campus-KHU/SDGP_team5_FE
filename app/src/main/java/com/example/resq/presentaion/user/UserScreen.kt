@@ -1,6 +1,8 @@
 package com.example.resq.presentaion.user
 
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,7 +33,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.presentaion.user.component.UserTabBar
 import com.example.resq.presentaion.sign.GoogleSignViewModel
-import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfo
+import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoTab
 import com.example.resq.presentaion.userrecordlist.UserRecordList
 import com.example.resq.ui.theme.Gray4
 
@@ -42,8 +44,10 @@ fun UserScreen(
 ) {
     val googleSignViewModel: GoogleSignViewModel = viewModel()
     val context = LocalContext.current
-    val googleName = googleSignViewModel.getUserName(context)
-    val googleEmail = googleSignViewModel.getUserEmail(context)
+    val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+    val googleName = sharedPreferences.getString("displayName", null)
+    val googleEmail = sharedPreferences.getString("userEmail", null)
     var selectedTab by remember { mutableStateOf(0) }
 
     Column(
@@ -103,17 +107,22 @@ fun UserScreen(
         )
 
         //로그아웃 임시 버튼
-        /*Button(onClick = {
-            viewModel.signOut(googleSignInClient)
-            viewModel.removeUserInfo(context)
+        /*
+        Button(
+            onClick = {
+                googleSignViewModel.signOut(googleSignInClient)
+                googleSignViewModel.removeUserInfo(context)
+            }
+        ) {
             Text("로그아웃")
-        }*/
+        }
+        */
 
         UserTabBar(selectedTab = selectedTab) {
             selectedTab = it
         }
         when (selectedTab) {
-            0 -> UserMedicalInfo(navController, padding)
+            0 -> UserMedicalInfoTab(navController, padding)
             1 -> UserRecordList()
         }
     }
