@@ -15,15 +15,17 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.resq.R
 import com.example.resq.ui.theme.Gray2
-import com.example.resq.ui.theme.Gray3
 import com.example.resq.ui.theme.Gray4
 
 @Composable
@@ -33,8 +35,10 @@ fun UserMedicalInfo() {
             .fillMaxSize()
             .padding(top = 5.dp, bottom = 10.dp, start = 5.dp, end = 5.dp)
             .background(Color.White, RoundedCornerShape(12.dp))
-
     ) {
+        val context = LocalContext.current
+        val viewModel: UserMedicalInfoViewModel = viewModel()
+        val medicalInfoList = remember { viewModel.getMedicalInfoList(context) }
         Row(
             modifier = Modifier
                 .padding(top = 10.dp, start = 20.dp)
