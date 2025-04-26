@@ -33,6 +33,8 @@ import com.example.resq.presentaion.component.UserTabBar
 import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfo
 import com.example.resq.presentaion.userrecordlist.UserRecordList
+import com.example.resq.ui.theme.Gray3
+import com.example.resq.ui.theme.Gray4
 
 @Composable
 fun UserScreen(
@@ -91,7 +93,7 @@ fun UserScreen(
                 Text(
                     text = googleEmail ?: "email",
                     fontSize = 14.sp,
-                    color = Color.Gray,
+                    color = Gray4,
                     modifier = Modifier.padding(start = 3.dp)
                 )
             }

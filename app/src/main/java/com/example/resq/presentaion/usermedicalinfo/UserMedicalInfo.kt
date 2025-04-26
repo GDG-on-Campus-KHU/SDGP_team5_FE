@@ -22,6 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.resq.R
+import com.example.resq.ui.theme.Gray2
+import com.example.resq.ui.theme.Gray3
+import com.example.resq.ui.theme.Gray4
 
 @Composable
 fun UserMedicalInfo() {
@@ -67,12 +70,12 @@ fun UserMedicalInfo() {
         }
         Text(
             text = stringResource(R.string.info_message_placeholder1),
-            color = Color.Gray,
+            color = Gray4,
             fontSize = 12.sp,
             modifier = Modifier.padding(start = 60.dp)
         )
         Divider(
-            color = Color.Gray,
+            color = Gray2,
             modifier = Modifier
                 .padding(vertical = 7.dp, horizontal = 18.dp)
         )

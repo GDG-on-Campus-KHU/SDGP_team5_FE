@@ -17,6 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.R
+import com.example.resq.ui.theme.Gray2
+import com.example.resq.ui.theme.Gray3
+import com.example.resq.ui.theme.MainBlack
 
 @Composable
 fun UserTabBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
@@ -34,7 +37,7 @@ fun UserTabBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
         ) {
             Text(
                 text = stringResource(R.string.medical_info),
-                color = if (selectedTab == 0) Color.Black else Color.Gray,
+                color = if (selectedTab == 0) MainBlack else Gray3,
                 fontSize = 24.sp,
                 fontWeight = if (selectedTab == 0) FontWeight.Bold else FontWeight.Normal
             )
@@ -49,7 +52,7 @@ fun UserTabBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
         ) {
             Text(
                 text = stringResource(R.string.record_list),
-                color = if (selectedTab == 1) Color.Black else Color.Gray,
+                color = if (selectedTab == 1) MainBlack else Gray3,
                 fontSize = 24.sp,
                 fontWeight = if (selectedTab == 1) FontWeight.Bold else FontWeight.Normal
             )
