@@ -25,4 +25,27 @@
     <string name="out_check">Are you sure you want to go out?</string>
     <string name="cancel">cancel</string>
     <string name="okay">okay</string>
+    <string name="info_message_placeholder1">Enter medical information for emergency use.</string>
+    <string name="info_message_placeholder2">All information entered.</string>
+    <string name = "info_message1">indicates a required field.</string>
+    <string name="medical_info">Medical Info</string>
+    <string name="record_list">Recording List</string>
+    <string name="info_name">Name</string>
+    <string name="info_blood_type">Blood Type</string>
+    <string name="info_allergies">Allergies</string>
+    <string name="info_medicine">Medications</string>
+    <string name="info_height">Height</string>
+    <string name="info_weight">Weight</string>
+    <string name="info_date_of_birth">Date of Birth</string>
+    <string name="info_additional_notes">Additional Notes</string>
+    <string name="info_name_placeholder">Enter your name.</string>
+    <string name="info_blood_type_placeholder">Select your blood type.</string>
+    <string name="info_allergies_placeholder">Enter allergy-related information.</string>
+    <string name="info_medicine_placeholder">Enter information about medications.</string>
+    <string name="info_height_placeholder">Enter your height.</string>
+    <string name="info_weight_placeholder">Enter your weight.</string>
+    <string name="info_date_of_birth_placeholder">Enter your date of birth.</string>
+    <string name="info_additional_notes_placeholder">Enter any additional information you\'d like to share.</string>
+    <string name="none">None</string>
+
 </resources>
