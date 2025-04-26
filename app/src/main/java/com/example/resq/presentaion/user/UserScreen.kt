@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.resq.presentaion.component.UserTabBar
+import com.example.resq.presentaion.user.component.UserTabBar
 import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfo
 import com.example.resq.presentaion.userrecordlist.UserRecordList
