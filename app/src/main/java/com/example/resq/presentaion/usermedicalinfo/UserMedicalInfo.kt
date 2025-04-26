@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -83,6 +84,36 @@ fun UserMedicalInfo() {
             modifier = Modifier
                 .padding(vertical = 7.dp, horizontal = 18.dp)
         )
+        medicalInfoList.filter { it.show.value }.forEach { element ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 25.dp)
+            ) {
+                Icon(
+                    imageVector = element.icon,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(45.dp)
+                        .padding(top = 7.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                ) {
+                    Text(
+                        text = element.label,
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        text = element.value.value ?: element.placeholder,
+                        fontSize = 12.sp,
+                        color = Gray4,
+                    )
+                }
+            }
+            Divider(modifier = Modifier.padding(vertical = 7.dp, horizontal = 25.dp))
+        }
     }
 }
 
