@@ -2,45 +2,26 @@ package com.example.resq.presentaion.usermedicalinfo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.resq.R
-import com.example.resq.navigation.user.UserNavigationItem
-import com.example.resq.presentaion.user.UserScreen
 import com.example.resq.ui.theme.Gray2
 import com.example.resq.ui.theme.Gray4
 
@@ -49,25 +30,35 @@ fun UserMedicalInfoTab(
     navController: NavController,
     padding: PaddingValues,
 ) {
+    val context = LocalContext.current
+    val viewModel: UserMedicalInfoViewModel = viewModel()
+    val isEditing = remember { mutableStateOf(false) }
+    val nameInput = remember { mutableStateOf("") }
+    val allergyInput = remember { mutableStateOf("") }
+    val medicationInput = remember { mutableStateOf("") }
+    val notesInput = remember { mutableStateOf("") }
+    val bloodTypeInput = remember { mutableStateOf("") }
+    val heightInput = remember{ mutableStateOf(0f) }
+    val weightInput = remember{ mutableStateOf(0f) }
+    val birthDateInput = remember{ mutableStateOf("") }
+    val showEditBloodType = remember { mutableStateOf(false) }
+    val showEditHeight = remember { mutableStateOf(false) }
+    val showEditWeight = remember { mutableStateOf(false) }
+    val showEditBirthDate = remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+        viewModel.initializeMedicalInfoList(context)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 5.dp, bottom = 10.dp, start = 5.dp, end = 5.dp)
+            .padding(5.dp)
             .background(Color.White, RoundedCornerShape(12.dp))
             .verticalScroll(rememberScrollState())
     ) {
-        val context = LocalContext.current
-        val viewModel: UserMedicalInfoViewModel = viewModel()
-
-        LaunchedEffect(Unit) {
-            viewModel.initializeMedicalInfoList(context)
-        }
-        val isEditing = remember { mutableStateOf(false) }
-        val tempName = remember { mutableStateOf("") }
-
         Row(
-            modifier = Modifier
-                .padding(top = 10.dp, start = 20.dp)
+            modifier = Modifier.padding(top = 10.dp, start = 20.dp)
         ) {
             Text(
                 text = stringResource(R.string.medical_info),
@@ -79,16 +70,11 @@ fun UserMedicalInfoTab(
                 modifier = Modifier
                     .padding(top = 5.dp, start = 12.dp)
                     .size(28.dp)
-                    .clickable {
-                        isEditing.value = true
-                    }
+                    .clickable { isEditing.value = true }
             )
         }
 
-        Divider(
-            color = Gray2,
-            modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp)
-        )
+        Divider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
 
         val itemsToDisplay = if (isEditing.value) {
             viewModel.medicalInfoList.value
@@ -122,47 +108,68 @@ fun UserMedicalInfoTab(
                             color = Gray4
                         )
                     } else {
-                        if (element.label in listOf("이름", "알레르기", "복용중인 약", "참고사항")) {
-                            BasicTextField(
-                                value = element.value.value ?: "",
-                                onValueChange = { element.value.value = it },
-                                textStyle = TextStyle(
+                        when (element.label) {
+                            "이름" -> EditBasicTextField(nameInput, element.placeholder)
+                            "알레르기" -> EditBasicTextField(allergyInput, element.placeholder)
+                            "복용중인 약" -> EditBasicTextField(medicationInput, element.placeholder)
+                            "참고사항" -> EditBasicTextField(notesInput, element.placeholder)
+                            else -> {
+                                Text(
+                                    text = element.value.value ?: element.placeholder,
                                     fontSize = 12.sp,
-                                    color = Gray4
-                                ),
-                                modifier = Modifier.fillMaxWidth(),
-                                decorationBox = { innerTextField ->
-                                    if (element.value.value.isNullOrEmpty()) {
-                                        Text(
-                                            text = element.placeholder,
-                                            fontSize = 12.sp,
-                                            color = Gray4
-                                        )
+                                    color = Gray4,
+                                    modifier = Modifier.clickable {
+                                        when (element.label) {
+                                            "혈액형" -> showEditBloodType.value = true
+                                            "키" -> showEditHeight.value = true
+                                            "체중" -> showEditWeight.value = true
+                                            "생년월일" -> showEditBirthDate.value = true
+                                        }
                                     }
-                                    innerTextField()
-                                }
-                            )
-                        } else {
-                            Text(
-                                text = element.value.value ?: element.placeholder,
-                                fontSize = 12.sp,
-                                color = Gray4,
-                                modifier = Modifier
-                                    .clickable {
-                                        // AllertDialog 함수 넣기
-                                    }
-                            )
+                                )
+                            }
                         }
                     }
                 }
             }
             Divider(modifier = Modifier.padding(vertical = 7.dp, horizontal = 25.dp))
         }
+
+        if (isEditing.value) {
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                onClick = {
+                    viewModel.updateMedicalInfo(
+                        name = nameInput.value,
+                        bloodType = bloodTypeInput.value,
+                        allergy = allergyInput.value,
+                        medication = medicationInput.value,
+                        height = heightInput.value,
+                        weight = weightInput.value,
+                        birthDate = birthDateInput.value,
+                        notes = notesInput.value
+                    )
+                    isEditing.value = false
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                Text("저장")
+            }
+        }
+        if (showEditBloodType.value) {
+            EditBloodType(bloodTypeInput, {showEditBloodType.value = false})
+        }
+        if (showEditHeight.value) {
+            EditHeight(heightInput, { showEditHeight.value = false })
+        }
+        if (showEditWeight.value) {
+            EditWeight(weightInput, {showEditWeight.value = false})
+        }
+        if (showEditBirthDate.value) {
+            EditBirthDate(birthDateInput, {showEditBirthDate.value = false})
+        }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun UserMedicalInfoPreview() {
-    UserMedicalInfoTab(rememberNavController(), PaddingValues(0.dp))
-}
