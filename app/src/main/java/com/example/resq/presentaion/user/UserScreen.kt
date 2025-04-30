@@ -24,12 +24,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.presentaion.user.component.UserTabBar
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoTab
+import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoViewModel
 import com.example.resq.presentaion.userrecordlist.UserRecordList
 import com.example.resq.ui.theme.Gray4
 
@@ -41,6 +43,7 @@ fun UserScreen(
     val googleName = USER_DISPLAY_NAME
     val googleEmail = USER_EMAIL
     var selectedTab by remember { mutableIntStateOf(0) }
+    val viewModel: UserMedicalInfoViewModel = viewModel()
 
     Column(
         modifier = Modifier
@@ -114,7 +117,7 @@ fun UserScreen(
             selectedTab = it
         }
         when (selectedTab) {
-            0 -> UserMedicalInfoTab(navController, padding)
+            0 -> UserMedicalInfoTab(navController, padding, viewModel)
             1 -> UserRecordList()
         }
     }

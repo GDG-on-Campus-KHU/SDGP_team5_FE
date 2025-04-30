@@ -23,7 +23,7 @@
     <string name="delete">delete</string>
     <string name="delete_check">Are you sure you want to delete it?</string>
     <string name="out_check">Are you sure you want to go out?</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="okay">okay</string>
     <string name="info_message_placeholder1">Enter medical information for emergency use.</string>
     <string name="info_message_placeholder2">All information entered.</string>
@@ -47,5 +47,11 @@
     <string name="info_date_of_birth_placeholder">Enter your date of birth.</string>
     <string name="info_additional_notes_placeholder">Enter any additional information you\'d like to share.</string>
     <string name="none">None</string>
+    <string name="not_set">not set</string>
+    <string name="ok">OK</string>
+    <string name="done">Done</string>
+    <string name="set_weight">Set weight</string>
+    <string name="set_height">Set height</string>
+    <string name="set_date_of_birth">Set date of birth</string>
 
 </resources>

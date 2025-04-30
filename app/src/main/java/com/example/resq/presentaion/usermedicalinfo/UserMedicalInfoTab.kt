@@ -7,20 +7,24 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.resq.R
 import com.example.resq.ui.theme.Gray2
@@ -30,9 +34,10 @@ import com.example.resq.ui.theme.Gray4
 fun UserMedicalInfoTab(
     navController: NavController,
     padding: PaddingValues,
+    viewModel: UserMedicalInfoViewModel
 ) {
     val context = LocalContext.current
-    val viewModel: UserMedicalInfoViewModel = viewModel()
+    val medicalInfoList by viewModel.medicalInfoList.collectAsState()
     val isEditing = remember { mutableStateOf(false) }
     val nameInput = remember { mutableStateOf("") }
     val allergyInput = remember { mutableStateOf("") }
@@ -46,7 +51,6 @@ fun UserMedicalInfoTab(
     val showEditHeight = remember { mutableStateOf(false) }
     val showEditWeight = remember { mutableStateOf(false) }
     val showEditBirthDate = remember { mutableStateOf(false) }
-
         LaunchedEffect(Unit) {
         viewModel.initializeMedicalInfoList(context)
     }
@@ -78,9 +82,9 @@ fun UserMedicalInfoTab(
         HorizontalDivider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
 
         val itemsToDisplay = if (isEditing.value) {
-            viewModel.medicalInfoList.value
+            medicalInfoList
         } else {
-            viewModel.medicalInfoList.value.filter { it.show.value }
+            medicalInfoList.filter { it.show.value }
         }
 
         itemsToDisplay.forEach { element ->
@@ -145,8 +149,8 @@ fun UserMedicalInfoTab(
                         bloodType = bloodTypeInput.value,
                         allergy = allergyInput.value,
                         medication = medicationInput.value,
-                        height = heightInput.value,
-                        weight = weightInput.value,
+                        height = heightInput.floatValue,
+                        weight = weightInput.floatValue,
                         birthDate = birthDateInput.value,
                         notes = notesInput.value
                     )

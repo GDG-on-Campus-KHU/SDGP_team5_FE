@@ -35,15 +35,19 @@ import com.example.resq.presentaion.usermedicalinfo.model.MedicalInfoElement
 import com.example.resq.ui.theme.Gray4
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class UserMedicalInfoViewModel : ViewModel() {
-    var medicalInfoList = mutableStateOf<List<MedicalInfoElement>>(emptyList())
-        private set
+    private val _medicalInfoList = MutableStateFlow<List<MedicalInfoElement>>(emptyList())
+    val medicalInfoList: StateFlow<List<MedicalInfoElement>> = _medicalInfoList.asStateFlow()
 
     fun initializeMedicalInfoList(context: Context) {
-        if (medicalInfoList.value.isEmpty()) {
-            medicalInfoList.value = listOf(
+        if (_medicalInfoList.value.isEmpty()) {
+            _medicalInfoList.value = listOf(
                 MedicalInfoElement(context.getString(R.string.info_name), context.getString(R.string.info_name_placeholder), Icons.Outlined.Person, mutableStateOf(null), mutableStateOf(true)),
                 MedicalInfoElement(context.getString(R.string.info_blood_type), context.getString(R.string.info_blood_type_placeholder), Icons.Outlined.Bloodtype, mutableStateOf(null), mutableStateOf(true)),
                 MedicalInfoElement(context.getString(R.string.info_allergies), context.getString(R.string.info_allergies_placeholder), Icons.Outlined.Warning, mutableStateOf(null), mutableStateOf(true)),
@@ -113,14 +117,14 @@ fun EditBloodType(
     onDismiss: () -> Unit
 ) {
     val bloodTypes = listOf(
-        "설정 안 함", "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"
+        stringResource(R.string.not_set), "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"
     )
 
     var selectedOption by remember { mutableStateOf(state.value.ifEmpty { "설정 안 함" }) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("혈액형") },
+        title = { stringResource(R.string.info_blood_type) },
         text = {
             Column {
                 bloodTypes.forEach { bloodType ->
@@ -152,12 +156,12 @@ fun EditBloodType(
                 }
                 onDismiss()
             }) {
-                Text("확인")
+                Text(stringResource(R.string.ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("취소")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
@@ -170,7 +174,7 @@ fun EditHeight(state: MutableState<Float>, onDismiss: () -> Unit) {
     var decimalPart = if (state.value == 0f) 0 else ((state.value - intPart) * 10).toInt()
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("키 설정") },
+        title = { Text(stringResource(R.string.set_height)) },
         text = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -209,12 +213,12 @@ fun EditHeight(state: MutableState<Float>, onDismiss: () -> Unit) {
                 state.value = intPart + decimalPart / 10f
                 onDismiss()
             }) {
-                Text("완료")
+                Text(stringResource(R.string.done))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("취소")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
@@ -228,7 +232,7 @@ fun EditWeight(state: MutableState<Float>, onDismiss: () -> Unit) {
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("체중 설정") },
+        title = { Text(stringResource(R.string.set_weight)) },
         text = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -267,12 +271,12 @@ fun EditWeight(state: MutableState<Float>, onDismiss: () -> Unit) {
                 state.value = intPart + decimalPart / 10f
                 onDismiss()
             }) {
-                Text("완료")
+                Text(stringResource(R.string.done))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("취소")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
@@ -295,7 +299,7 @@ fun EditBirthDate(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("생년월일 설정") },
+        title = { Text(stringResource(R.string.set_date_of_birth)) },
         text = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -341,12 +345,12 @@ fun EditBirthDate(
                 state.value = "%04d-%02d-%02d".format(year, month, day)
                 onDismiss()
             }) {
-                Text("완료")
+                Text(stringResource(R.string.done))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("취소")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

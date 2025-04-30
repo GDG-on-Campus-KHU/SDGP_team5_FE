@@ -46,5 +46,11 @@
     <string name="info_date_of_birth_placeholder">생년월일을 입력하세요.</string>
     <string name="info_additional_notes_placeholder">추가로 알리고 싶은 내용을 입력하세요.</string>
     <string name="none">없음</string>
+    <string name="not_set">설정 안 함</string>
+    <string name="ok">확인</string>
+    <string name="done">완료</string>
+    <string name="set_weight">체중 설정</string>
+    <string name="set_height">키 설정</string>
+    <string name="set_date_of_birth">생년월일 설정</string>
 
 </resources>
