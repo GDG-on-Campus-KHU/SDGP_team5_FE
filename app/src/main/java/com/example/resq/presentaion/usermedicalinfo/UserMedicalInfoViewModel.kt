@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.RadioButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bloodtype
 import androidx.compose.material.icons.outlined.Medication
@@ -18,6 +17,7 @@ import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -55,6 +55,7 @@ class UserMedicalInfoViewModel : ViewModel() {
             )
         }
     }
+
     fun updateMedicalInfo(
         name: String,
         bloodType: String,
@@ -162,12 +163,11 @@ fun EditBloodType(
     )
 }
 
-
 //키
 @Composable
 fun EditHeight(state: MutableState<Float>, onDismiss: () -> Unit) {
-    var intPart by remember { mutableStateOf(if (state.value == 0f) 160 else state.value.toInt()) }
-    var decimalPart by remember { mutableStateOf(if (state.value == 0f) 0 else ((state.value - intPart) * 10).toInt()) }
+    var intPart = if (state.value == 0f) 160 else state.value.toInt()
+    var decimalPart = if (state.value == 0f) 0 else ((state.value - intPart) * 10).toInt()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("키 설정") },
@@ -222,9 +222,10 @@ fun EditHeight(state: MutableState<Float>, onDismiss: () -> Unit) {
 
 //체중
 @Composable
-fun EditWeight(state: MutableState<Float>, onDismiss: () -> Unit){
-    var intPart by remember { mutableStateOf(if (state.value == 0f) 60 else state.value.toInt()) }
-    var decimalPart by remember { mutableStateOf(if (state.value == 0f) 0 else ((state.value - intPart) * 10).toInt()) }
+fun EditWeight(state: MutableState<Float>, onDismiss: () -> Unit) {
+    var intPart = if (state.value == 0f) 60 else state.value.toInt()
+    var decimalPart = if (state.value == 0f) 0 else ((state.value - intPart) * 10).toInt()
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("체중 설정") },
@@ -244,7 +245,9 @@ fun EditWeight(state: MutableState<Float>, onDismiss: () -> Unit){
                         }
                     }
                 })
+
                 Text(text = ".", fontSize = 28.sp, modifier = Modifier.padding(horizontal = 4.dp))
+
                 AndroidView(factory = { context ->
                     NumberPicker(context).apply {
                         minValue = 0
@@ -255,6 +258,7 @@ fun EditWeight(state: MutableState<Float>, onDismiss: () -> Unit){
                         }
                     }
                 })
+
                 Text(text = "kg", fontSize = 20.sp, modifier = Modifier.padding(start = 8.dp))
             }
         },
@@ -280,9 +284,14 @@ fun EditBirthDate(
     state: MutableState<String>,
     onDismiss: () -> Unit
 ) {
-    var year by remember { mutableStateOf(2000) }
-    var month by remember { mutableStateOf(1) }
-    var day by remember { mutableStateOf(1) }
+    val (defaultYear, defaultMonth, defaultDay) = Triple(2001, 1, 1)
+    var (year, month, day) = when (state.value) {
+        "" -> Triple(defaultYear, defaultMonth, defaultDay)
+        else -> {
+            val splitList = state.value.split("-")
+            Triple(splitList[0].toInt(), splitList[1].toInt(), splitList[2].toInt())
+        }
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -304,8 +313,6 @@ fun EditBirthDate(
                     }
                 })
 
-                Text(text = "년", fontSize = 20.sp, modifier = Modifier.padding(horizontal = 4.dp))
-
                 AndroidView(factory = { context ->
                     NumberPicker(context).apply {
                         minValue = 1
@@ -317,8 +324,6 @@ fun EditBirthDate(
                     }
                 })
 
-                Text(text = "월", fontSize = 20.sp, modifier = Modifier.padding(horizontal = 4.dp))
-
                 AndroidView(factory = { context ->
                     NumberPicker(context).apply {
                         minValue = 1
@@ -329,13 +334,10 @@ fun EditBirthDate(
                         }
                     }
                 })
-
-                Text(text = "일", fontSize = 20.sp, modifier = Modifier.padding(start = 4.dp))
             }
         },
         confirmButton = {
             TextButton(onClick = {
-                // 선택된 값을 "yyyy-MM-dd" 형태로 저장
                 state.value = "%04d-%02d-%02d".format(year, month, day)
                 onDismiss()
             }) {

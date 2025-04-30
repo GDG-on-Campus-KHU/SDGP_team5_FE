@@ -1,8 +1,5 @@
 package com.example.resq.presentaion.user
 
-
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,28 +8,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
+import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.presentaion.user.component.UserTabBar
-import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoTab
 import com.example.resq.presentaion.userrecordlist.UserRecordList
 import com.example.resq.ui.theme.Gray4
@@ -42,13 +38,9 @@ fun UserScreen(
     navController: NavController,
     padding: PaddingValues,
 ) {
-    val googleSignViewModel: GoogleSignViewModel = viewModel()
-    val context = LocalContext.current
-    val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-    val googleName = sharedPreferences.getString("displayName", null)
-    val googleEmail = sharedPreferences.getString("userEmail", null)
-    var selectedTab by remember { mutableStateOf(0) }
+    val googleName = USER_DISPLAY_NAME
+    val googleEmail = USER_EMAIL
+    var selectedTab by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -73,7 +65,7 @@ fun UserScreen(
                         .padding(top = 4.dp)
                 ) {
                     Text(
-                        text = googleName ?: "User",
+                        text = googleName,
                         fontSize = 24.sp,
                         modifier = Modifier
                             .wrapContentSize()
@@ -93,14 +85,14 @@ fun UserScreen(
                     )
                 }
                 Text(
-                    text = googleEmail ?: "email",
+                    text = googleEmail,
                     fontSize = 14.sp,
                     color = Gray4,
                     modifier = Modifier.padding(start = 3.dp)
                 )
             }
         }
-        Divider(
+        HorizontalDivider(
             color = Color.Black,
             modifier = Modifier
             .padding(vertical = 5.dp, horizontal = 26.dp)

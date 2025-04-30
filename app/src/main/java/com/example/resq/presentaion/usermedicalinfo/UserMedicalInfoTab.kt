@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -38,8 +39,8 @@ fun UserMedicalInfoTab(
     val medicationInput = remember { mutableStateOf("") }
     val notesInput = remember { mutableStateOf("") }
     val bloodTypeInput = remember { mutableStateOf("") }
-    val heightInput = remember{ mutableStateOf(0f) }
-    val weightInput = remember{ mutableStateOf(0f) }
+    val heightInput = remember{ mutableFloatStateOf(0f) }
+    val weightInput = remember{ mutableFloatStateOf(0f) }
     val birthDateInput = remember{ mutableStateOf("") }
     val showEditBloodType = remember { mutableStateOf(false) }
     val showEditHeight = remember { mutableStateOf(false) }
@@ -74,7 +75,7 @@ fun UserMedicalInfoTab(
             )
         }
 
-        Divider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
+        HorizontalDivider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
 
         val itemsToDisplay = if (isEditing.value) {
             viewModel.medicalInfoList.value
@@ -132,7 +133,7 @@ fun UserMedicalInfoTab(
                     }
                 }
             }
-            Divider(modifier = Modifier.padding(vertical = 7.dp, horizontal = 25.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 7.dp, horizontal = 25.dp))
         }
 
         if (isEditing.value) {
