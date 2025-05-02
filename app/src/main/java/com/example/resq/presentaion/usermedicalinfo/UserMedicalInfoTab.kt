@@ -45,8 +45,8 @@ fun UserMedicalInfoTab(
     val medicationInput = remember { mutableStateOf("") }
     val notesInput = remember { mutableStateOf("") }
     val bloodTypeInput = remember { mutableStateOf("") }
-    val heightInput = remember{ mutableFloatStateOf(0f) }
-    val weightInput = remember{ mutableFloatStateOf(0f) }
+    val heightInput = remember { mutableStateOf("") }
+    val weightInput = remember { mutableStateOf("") }
     val birthDateInput = remember{ mutableStateOf("") }
     val showEditBloodType = remember { mutableStateOf(false) }
     val showEditHeight = remember { mutableStateOf(false) }
@@ -167,8 +167,8 @@ fun UserMedicalInfoTab(
                             bloodType = bloodTypeInput.value,
                             allergy = allergyInput.value,
                             medication = medicationInput.value,
-                            height = heightInput.floatValue,
-                            weight = weightInput.floatValue,
+                            height = heightInput.value,
+                            weight = weightInput.value,
                             birthDate = birthDateInput.value,
                             notes = notesInput.value
                         )

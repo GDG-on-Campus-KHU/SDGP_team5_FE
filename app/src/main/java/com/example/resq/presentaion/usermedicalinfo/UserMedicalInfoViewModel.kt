@@ -67,8 +67,8 @@ class UserMedicalInfoViewModel : ViewModel() {
         bloodType: String,
         allergy: String,
         medication: String,
-        height: Float,
-        weight: Float,
+        height: String,
+        weight: String,
         birthDate: String,
         notes: String
     ) {
@@ -78,8 +78,8 @@ class UserMedicalInfoViewModel : ViewModel() {
                 "혈액형" -> element.value.value = bloodType.ifBlank { null }
                 "알레르기" -> element.value.value = allergy.ifBlank { null }
                 "복용중인 약" -> element.value.value = medication.ifBlank { null }
-                "키" -> element.value.value = if (height == 0f) null else height.toString()
-                "체중" -> element.value.value = if (weight == 0f) null else weight.toString()
+                "키" -> element.value.value = height.ifBlank {null}
+                "체중" -> element.value.value = weight.ifBlank {null}
                 "생년월일" -> element.value.value = birthDate.ifBlank { null }
                 "참고사항" -> element.value.value = notes.ifBlank { null }
             }
@@ -176,11 +176,14 @@ fun EditBloodType(
 //키
 @Composable
 fun EditHeight(
-    state: MutableState<Float>,
+    state: MutableState<String>,
     onDismiss: () -> Unit
 ) {
-    var intPart = if (state.value == 0f) 160 else state.value.toInt()
-    var decimalPart = if (state.value == 0f) 0 else ((state.value - intPart) * 10).toInt()
+    val defaultFloat = 160.0f
+    val floatValue = state.value.toFloatOrNull() ?: defaultFloat
+    var intPart = floatValue.toInt()
+    var decimalPart = ((floatValue - intPart) * 10).toInt()
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.set_height)) },
@@ -219,7 +222,7 @@ fun EditHeight(
         },
         confirmButton = {
             TextButton(onClick = {
-                state.value = intPart + decimalPart / 10f
+                state.value = (intPart + decimalPart / 10f).toString()
                 onDismiss()
             }) {
                 Text(stringResource(R.string.done))
@@ -235,9 +238,11 @@ fun EditHeight(
 
 //체중
 @Composable
-fun EditWeight(state: MutableState<Float>, onDismiss: () -> Unit) {
-    var intPart = if (state.value == 0f) 60 else state.value.toInt()
-    var decimalPart = if (state.value == 0f) 0 else ((state.value - intPart) * 10).toInt()
+fun EditWeight(state: MutableState<String>, onDismiss: () -> Unit) {
+    val defaultFloat = 60.0f
+    val floatValue = state.value.toFloatOrNull() ?: defaultFloat
+    var intPart = floatValue.toInt()
+    var decimalPart = ((floatValue - intPart) * 10).toInt()
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -277,7 +282,7 @@ fun EditWeight(state: MutableState<Float>, onDismiss: () -> Unit) {
         },
         confirmButton = {
             TextButton(onClick = {
-                state.value = intPart + decimalPart / 10f
+                state.value = (intPart + decimalPart / 10f).toString()
                 onDismiss()
             }) {
                 Text(stringResource(R.string.done))
