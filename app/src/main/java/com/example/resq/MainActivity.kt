@@ -31,9 +31,9 @@ class MainActivity : ComponentActivity() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var googleSignInClient: GoogleSignInClient
-        lateinit var USER_EMAIL: String
-        lateinit var USER_ID: String
+        lateinit var USER_TOKEN: String
         lateinit var USER_DISPLAY_NAME: String
+        var FAVORITE_RESQ_LIST = emptyList<String>()
     }
 
     private var isLoading by mutableStateOf(true)
@@ -62,8 +62,8 @@ class MainActivity : ComponentActivity() {
         )
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestServerAuthCode(BuildConfig.GOOGLE_AUTH_CLIENT_ID)
             .requestEmail()
-            .requestId()
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
