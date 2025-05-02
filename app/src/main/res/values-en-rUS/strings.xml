@@ -54,5 +54,6 @@
     <string name="set_height">Set height</string>
     <string name="set_date_of_birth">Set date of birth</string>
     <string name="save">Save</string>
+    <string name="toast_message1">Please fill in all required fields.</string>
 
 </resources>

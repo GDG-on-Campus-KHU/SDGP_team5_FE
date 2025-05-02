@@ -1,5 +1,7 @@
 package com.example.resq.presentaion.usermedicalinfoedit
 
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -43,11 +45,16 @@ fun UserMedicalInfoEditScreen(
     val heightInput = remember { mutableStateOf(viewModel.getValueByLabel("키")) }
     val weightInput = remember { mutableStateOf(viewModel.getValueByLabel("체중")) }
     val birthDateInput = remember { mutableStateOf(viewModel.getValueByLabel("생년월일")) }
-
     val showEditBloodType = remember { mutableStateOf(false) }
     val showEditHeight = remember { mutableStateOf(false) }
     val showEditWeight = remember { mutableStateOf(false) }
     val showEditBirthDate = remember { mutableStateOf(false) }
+    val essentialInfo = listOf(
+        stringResource(R.string.info_name),
+        stringResource(R.string.info_blood_type),
+        stringResource(R.string.info_allergies),
+        stringResource(R.string.info_medicine)
+    )
 
     Column(
         modifier = Modifier
@@ -68,8 +75,23 @@ fun UserMedicalInfoEditScreen(
             color = Gray4,
             modifier = Modifier.padding(start = 40.dp)
         )
+        Row(modifier = Modifier.padding(start = 40.dp, top = 2.dp)) {
+            Text(
+                text = "*",
+                fontSize = 14.sp,
+                color = Color.Red
+            )
+            Text(
+                text = stringResource(R.string.info_message1),
+                fontSize = 14.sp,
+                color = Gray4
+            )
+        }
 
-        HorizontalDivider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
+        HorizontalDivider(
+            color = Gray2,
+            modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp)
+        )
 
         medicalInfoList.forEach { element ->
             Row(
@@ -85,14 +107,29 @@ fun UserMedicalInfoEditScreen(
                         .padding(top = 7.dp)
                 )
                 Column(modifier = Modifier.padding(start = 16.dp)) {
-                    Text(text = element.label, fontSize = 12.sp)
+                    Row(){
+                        Text(text = element.label, fontSize = 12.sp)
+                        if (element.label in essentialInfo) {
+                            Text(
+                                text = " *",
+                                fontSize = 12.sp,
+                                color = Color.Red
+                            )
+                        }
+                    }
                     when (element.label) {
                         "이름" -> EditBasicTextField(nameInput, element.placeholder)
                         "알레르기" -> EditBasicTextField(allergyInput, element.placeholder)
                         "복용중인 약" -> EditBasicTextField(medicationInput, element.placeholder)
                         "참고사항" -> EditBasicTextField(notesInput, element.placeholder)
                         else -> Text(
-                            text = element.value.value ?: element.placeholder,
+                            text = when (element.label) {
+                                "혈액형" -> bloodTypeInput.value.ifBlank { element.placeholder }
+                                "키" -> if (heightInput.value.isBlank()) element.placeholder else "${heightInput.value} cm"
+                                "체중" -> if (weightInput.value.isBlank()) element.placeholder else "${weightInput.value} kg"
+                                "생년월일" -> birthDateInput.value.ifBlank { element.placeholder }
+                                else -> element.placeholder
+                            },
                             fontSize = 12.sp,
                             color = Gray4,
                             lineHeight = 16.sp,
@@ -129,6 +166,16 @@ fun UserMedicalInfoEditScreen(
 
             Button(
                 onClick = {
+                    if (nameInput.value.isBlank() ||
+                        bloodTypeInput.value.isBlank() ||
+                        allergyInput.value.isBlank() ||
+                        medicationInput.value.isBlank()
+                    ) {
+                        val toast = Toast.makeText(context, context.getString(R.string.toast_message1), Toast.LENGTH_SHORT)
+                        toast.show()
+                        return@Button
+                    }
+
                     viewModel.updateMedicalInfo(
                         name = nameInput.value,
                         bloodType = bloodTypeInput.value,
