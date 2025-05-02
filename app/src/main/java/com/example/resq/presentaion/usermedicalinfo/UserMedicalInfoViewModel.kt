@@ -1,14 +1,18 @@
 package com.example.resq.presentaion.usermedicalinfo
 
 import android.content.Context
-import android.util.Log
 import android.widget.NumberPicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Accessibility
@@ -17,10 +21,10 @@ import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material.icons.outlined.NoteAlt
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -95,7 +99,7 @@ class UserMedicalInfoViewModel : ViewModel() {
     }
 }
 
-//이름, 알레르기, 복용중인 약, 참고사항
+//이름, 참고사항
 @Composable
 fun EditBasicTextField(state: MutableState<String>, placeholder: String) {
     val textStyle = TextStyle(
@@ -119,6 +123,62 @@ fun EditBasicTextField(state: MutableState<String>, placeholder: String) {
             }
         }
     )
+}
+//알레르기, 복용중인 약
+@Composable
+fun EditBasicTextFieldWithCheckbox(
+    state: MutableState<String>,
+    placeholder: String,
+    checkboxState: MutableState<Boolean>
+) {
+    val textStyle = TextStyle(
+        fontSize = 12.sp,
+        color = Gray4,
+        lineHeight = 16.sp
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(45.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BasicTextField(
+            value = state.value,
+            onValueChange = { state.value = it },
+            enabled = !checkboxState.value,
+            textStyle = textStyle,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            decorationBox = { innerTextField ->
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    if (state.value.isEmpty()) {
+                        Text(text = placeholder, style = textStyle)
+                    }
+                    innerTextField()
+                }
+            }
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Checkbox(
+            checked = checkboxState.value,
+            onCheckedChange = { checked ->
+                checkboxState.value = checked
+                state.value = if (checked) "없음" else ""
+            }
+        )
+        Text(
+            text = "없음",
+            fontSize = 12.sp,
+            modifier = Modifier.padding(start = 4.dp)
+        )
+    }
 }
 
 //혈액형

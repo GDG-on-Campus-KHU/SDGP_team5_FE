@@ -49,6 +49,8 @@ fun UserMedicalInfoEditScreen(
     val showEditHeight = remember { mutableStateOf(false) }
     val showEditWeight = remember { mutableStateOf(false) }
     val showEditBirthDate = remember { mutableStateOf(false) }
+    val allergyNoneChecked = remember { mutableStateOf(allergyInput.value == "없음") }
+    val medicationNoneChecked = remember { mutableStateOf(medicationInput.value == "없음") }
     val essentialInfo = listOf(
         stringResource(R.string.info_name),
         stringResource(R.string.info_blood_type),
@@ -97,6 +99,7 @@ fun UserMedicalInfoEditScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(45.dp)
                     .padding(horizontal = 25.dp)
             ) {
                 Icon(
@@ -119,8 +122,8 @@ fun UserMedicalInfoEditScreen(
                     }
                     when (element.label) {
                         "이름" -> EditBasicTextField(nameInput, element.placeholder)
-                        "알레르기" -> EditBasicTextField(allergyInput, element.placeholder)
-                        "복용중인 약" -> EditBasicTextField(medicationInput, element.placeholder)
+                        "알레르기" -> EditBasicTextFieldWithCheckbox(allergyInput, element.placeholder, allergyNoneChecked)
+                        "복용중인 약" -> EditBasicTextFieldWithCheckbox(medicationInput, element.placeholder, medicationNoneChecked)
                         "참고사항" -> EditBasicTextField(notesInput, element.placeholder)
                         else -> Text(
                             text = when (element.label) {
