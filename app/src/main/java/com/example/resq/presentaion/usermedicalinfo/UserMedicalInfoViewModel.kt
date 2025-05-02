@@ -128,10 +128,10 @@ fun EditBloodType(
     onDismiss: () -> Unit
 ) {
     val bloodTypes = listOf(
-        stringResource(R.string.not_set), "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"
+       "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"
     )
 
-    var selectedOption by remember { mutableStateOf(state.value.ifEmpty { "설정 안 함" }) }
+    var selectedOption by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -159,11 +159,12 @@ fun EditBloodType(
         },
         confirmButton = {
             TextButton(onClick = {
-                state.value = when {
-                    selectedOption == "설정 안 함" -> ""
-                    selectedOption.endsWith("+") -> "RH+ ${selectedOption.dropLast(1)}"
-                    selectedOption.endsWith("-") -> "RH- ${selectedOption.dropLast(1)}"
-                    else -> selectedOption
+                if (selectedOption.isNotBlank()) {
+                    state.value = when {
+                        selectedOption.endsWith("+") -> "RH+ ${selectedOption.dropLast(1)}"
+                        selectedOption.endsWith("-") -> "RH- ${selectedOption.dropLast(1)}"
+                        else -> selectedOption
+                    }
                 }
                 onDismiss()
             }) {
