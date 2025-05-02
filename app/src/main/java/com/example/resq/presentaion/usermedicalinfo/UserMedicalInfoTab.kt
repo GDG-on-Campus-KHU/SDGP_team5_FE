@@ -1,5 +1,6 @@
 package com.example.resq.presentaion.usermedicalinfo
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -110,7 +111,8 @@ fun UserMedicalInfoTab(
                         Text(
                             text = element.value.value ?: element.placeholder,
                             fontSize = 12.sp,
-                            color = Gray4
+                            color = Gray4,
+                            lineHeight = 16.sp
                         )
                     } else {
                         when (element.label) {
@@ -123,6 +125,7 @@ fun UserMedicalInfoTab(
                                     text = element.value.value ?: element.placeholder,
                                     fontSize = 12.sp,
                                     color = Gray4,
+                                    lineHeight = 16.sp,
                                     modifier = Modifier.clickable {
                                         when (element.label) {
                                             "혈액형" -> showEditBloodType.value = true
@@ -142,27 +145,42 @@ fun UserMedicalInfoTab(
 
         if (isEditing.value) {
             Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = {
-                    viewModel.updateMedicalInfo(
-                        name = nameInput.value,
-                        bloodType = bloodTypeInput.value,
-                        allergy = allergyInput.value,
-                        medication = medicationInput.value,
-                        height = heightInput.floatValue,
-                        weight = weightInput.floatValue,
-                        birthDate = birthDateInput.value,
-                        notes = notesInput.value
-                    )
-                    isEditing.value = false
-                },
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text("저장")
+                Button(
+                    onClick = {
+                        isEditing.value = false
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(stringResource(R.string.cancel))
+                }
+
+                Button(
+                    onClick = {
+                        viewModel.updateMedicalInfo(
+                            name = nameInput.value,
+                            bloodType = bloodTypeInput.value,
+                            allergy = allergyInput.value,
+                            medication = medicationInput.value,
+                            height = heightInput.floatValue,
+                            weight = weightInput.floatValue,
+                            birthDate = birthDateInput.value,
+                            notes = notesInput.value
+                        )
+                        isEditing.value = false
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(stringResource(R.string.save))
+                }
             }
         }
+
         if (showEditBloodType.value) {
             EditBloodType(bloodTypeInput, {showEditBloodType.value = false})
         }

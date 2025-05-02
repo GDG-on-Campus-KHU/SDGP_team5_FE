@@ -1,8 +1,10 @@
 package com.example.resq.presentaion.usermedicalinfo
 
 import android.content.Context
+import android.util.Log
 import android.widget.NumberPicker
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -81,7 +83,9 @@ class UserMedicalInfoViewModel : ViewModel() {
                 "생년월일" -> element.value.value = birthDate.ifBlank { null }
                 "참고사항" -> element.value.value = notes.ifBlank { null }
             }
-            element.show.value = element.value.value != null
+            if (element.label in listOf("키", "체중", "생년월일", "참고사항")) {
+                element.show.value = !element.value.value.isNullOrEmpty()
+            }
         }
     }
 }
@@ -89,23 +93,25 @@ class UserMedicalInfoViewModel : ViewModel() {
 //이름, 알레르기, 복용중인 약, 참고사항
 @Composable
 fun EditBasicTextField(state: MutableState<String>, placeholder: String) {
+    val textStyle = TextStyle(
+        fontSize = 12.sp,
+        color = Gray4,
+        lineHeight = 16.sp
+    )
     BasicTextField(
         value = state.value,
         onValueChange = { state.value = it },
-        textStyle = TextStyle(
-            fontSize = 12.sp,
-            color = Gray4
-        ),
-        modifier = Modifier.fillMaxWidth(),
+        textStyle = textStyle,
+        modifier = Modifier
+            .fillMaxWidth(),
         decorationBox = { innerTextField ->
-            if (state.value.isEmpty()) {
-                Text(
-                    text = placeholder,
-                    fontSize = 12.sp,
-                    color = Gray4
-                )
+            Box {
+                    Text(
+                        text = state.value.ifEmpty { placeholder },
+                        style = textStyle
+                    )
+                innerTextField()
             }
-            innerTextField()
         }
     )
 }
@@ -124,7 +130,7 @@ fun EditBloodType(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { stringResource(R.string.info_blood_type) },
+        title = { Text(stringResource(R.string.info_blood_type)) },
         text = {
             Column {
                 bloodTypes.forEach { bloodType ->
@@ -169,7 +175,10 @@ fun EditBloodType(
 
 //키
 @Composable
-fun EditHeight(state: MutableState<Float>, onDismiss: () -> Unit) {
+fun EditHeight(
+    state: MutableState<Float>,
+    onDismiss: () -> Unit
+) {
     var intPart = if (state.value == 0f) 160 else state.value.toInt()
     var decimalPart = if (state.value == 0f) 0 else ((state.value - intPart) * 10).toInt()
     AlertDialog(
@@ -309,7 +318,7 @@ fun EditBirthDate(
                 AndroidView(factory = { context ->
                     NumberPicker(context).apply {
                         minValue = 1900
-                        maxValue = 2100
+                        maxValue = 2025
                         value = year
                         setOnValueChangedListener { _, _, newVal ->
                             year = newVal

@@ -53,5 +53,6 @@
     <string name="set_weight">Set weight</string>
     <string name="set_height">Set height</string>
     <string name="set_date_of_birth">Set date of birth</string>
+    <string name="save">Save</string>
 
 </resources>
