@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.resq.presentaion.user.UserScreen
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoViewModel
 import com.example.resq.presentaion.usermedicalinfoedit.UserMedicalInfoEditScreen
+import com.example.resq.presentaion.usersetting.UserSettingScreen
 
 fun NavGraphBuilder.userNavigationGraph(navController: NavController, padding: PaddingValues) {
     composable(UserNavigationItem.User.route) {
@@ -16,5 +17,8 @@ fun NavGraphBuilder.userNavigationGraph(navController: NavController, padding: P
     composable(UserNavigationItem.UserMedicalInfoEdit.route) {
         val viewModel: UserMedicalInfoViewModel = viewModel()
         UserMedicalInfoEditScreen(navController, padding, viewModel)
+    }
+    composable(UserNavigationItem.Setting.route) {
+        UserSettingScreen(navController, padding)
     }
 }

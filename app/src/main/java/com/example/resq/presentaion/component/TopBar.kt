@@ -89,7 +89,7 @@ fun TopBar(navController: NavController, onClick: () -> Unit) {
 
                 UserNavigationItem.User.route ->
                     IconButton(onClick = {
-                        // 설정 화면으로 이동
+                        navController.navigate("setting")
                     }) {
                         Icon(
                             imageVector = Icons.Default.Settings,
