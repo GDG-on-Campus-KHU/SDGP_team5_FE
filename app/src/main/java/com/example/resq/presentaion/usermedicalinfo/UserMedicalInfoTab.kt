@@ -7,18 +7,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,27 +36,15 @@ fun UserMedicalInfoTab(
 ) {
     val context = LocalContext.current
     val medicalInfoList by viewModel.medicalInfoList.collectAsState()
-    val isEditing = remember { mutableStateOf(false) }
-    val nameInput = remember { mutableStateOf("") }
-    val allergyInput = remember { mutableStateOf("") }
-    val medicationInput = remember { mutableStateOf("") }
-    val notesInput = remember { mutableStateOf("") }
-    val bloodTypeInput = remember { mutableStateOf("") }
-    val heightInput = remember { mutableStateOf("") }
-    val weightInput = remember { mutableStateOf("") }
-    val birthDateInput = remember{ mutableStateOf("") }
-    val showEditBloodType = remember { mutableStateOf(false) }
-    val showEditHeight = remember { mutableStateOf(false) }
-    val showEditWeight = remember { mutableStateOf(false) }
-    val showEditBirthDate = remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
+
+    LaunchedEffect(Unit) {
         viewModel.initializeMedicalInfoList(context)
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(5.dp)
+            .padding(top = 5.dp, bottom = 10.dp, start = 5.dp, end = 5.dp)
             .background(Color.White, RoundedCornerShape(12.dp))
             .verticalScroll(rememberScrollState())
     ) {
@@ -76,19 +61,31 @@ fun UserMedicalInfoTab(
                 modifier = Modifier
                     .padding(top = 5.dp, start = 12.dp)
                     .size(28.dp)
-                    .clickable { isEditing.value = true }
+                    .clickable {
+                        navController.navigate("user_medical_info_edit")
+                    }
+            )
+            Icon(
+                imageVector = Icons.Outlined.Language,
+                contentDescription = "Translate",
+                modifier = Modifier
+                    .padding(top = 5.dp, start = 12.dp)
+                    .size(28.dp)
+                    .clickable {
+                        //번역 기능 구현
+                    }
             )
         }
+        Text(
+            text = stringResource(R.string.info_message_placeholder1),
+            fontSize = 14.sp,
+            color = Gray4,
+            modifier = Modifier.padding(start = 40.dp)
+        )
 
         HorizontalDivider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
 
-        val itemsToDisplay = if (isEditing.value) {
-            medicalInfoList
-        } else {
-            medicalInfoList.filter { it.show.value }
-        }
-
-        itemsToDisplay.forEach { element ->
+        medicalInfoList.filter { it.show.value }.forEach { element ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -106,93 +103,15 @@ fun UserMedicalInfoTab(
                         text = element.label,
                         fontSize = 12.sp
                     )
-
-                    if (!isEditing.value) {
-                        Text(
-                            text = element.value.value ?: element.placeholder,
-                            fontSize = 12.sp,
-                            color = Gray4,
-                            lineHeight = 16.sp
-                        )
-                    } else {
-                        when (element.label) {
-                            "이름" -> EditBasicTextField(nameInput, element.placeholder)
-                            "알레르기" -> EditBasicTextField(allergyInput, element.placeholder)
-                            "복용중인 약" -> EditBasicTextField(medicationInput, element.placeholder)
-                            "참고사항" -> EditBasicTextField(notesInput, element.placeholder)
-                            else -> {
-                                Text(
-                                    text = element.value.value ?: element.placeholder,
-                                    fontSize = 12.sp,
-                                    color = Gray4,
-                                    lineHeight = 16.sp,
-                                    modifier = Modifier.clickable {
-                                        when (element.label) {
-                                            "혈액형" -> showEditBloodType.value = true
-                                            "키" -> showEditHeight.value = true
-                                            "체중" -> showEditWeight.value = true
-                                            "생년월일" -> showEditBirthDate.value = true
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                    }
+                    Text(
+                        text = element.value.value ?: element.placeholder,
+                        fontSize = 12.sp,
+                        color = Gray4,
+                        lineHeight = 16.sp
+                    )
                 }
             }
             HorizontalDivider(modifier = Modifier.padding(vertical = 7.dp, horizontal = 25.dp))
         }
-
-        if (isEditing.value) {
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Button(
-                    onClick = {
-                        isEditing.value = false
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
-
-                Button(
-                    onClick = {
-                        viewModel.updateMedicalInfo(
-                            name = nameInput.value,
-                            bloodType = bloodTypeInput.value,
-                            allergy = allergyInput.value,
-                            medication = medicationInput.value,
-                            height = heightInput.value,
-                            weight = weightInput.value,
-                            birthDate = birthDateInput.value,
-                            notes = notesInput.value
-                        )
-                        isEditing.value = false
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(stringResource(R.string.save))
-                }
-            }
-        }
-
-        if (showEditBloodType.value) {
-            EditBloodType(bloodTypeInput, {showEditBloodType.value = false})
-        }
-        if (showEditHeight.value) {
-            EditHeight(heightInput, { showEditHeight.value = false })
-        }
-        if (showEditWeight.value) {
-            EditWeight(weightInput, {showEditWeight.value = false})
-        }
-        if (showEditBirthDate.value) {
-            EditBirthDate(birthDateInput, {showEditBirthDate.value = false})
-        }
     }
 }
-

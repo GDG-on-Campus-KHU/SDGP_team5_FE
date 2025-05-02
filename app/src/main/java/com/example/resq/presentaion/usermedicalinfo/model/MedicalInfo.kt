@@ -5,8 +5,8 @@ data class MedicalInfo(
     val bloodtype: String? = null,
     val allergy: String? = null,
     val medication: String? = null,
-    val height: Float? = null,
-    val weight: Float? = null,
+    val height: String? = null,
+    val weight: String? = null,
     val birthdate: String? = null,
     val notes: String? = null
 )

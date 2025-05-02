@@ -70,9 +70,7 @@ fun UserScreen(
                     Text(
                         text = googleName,
                         fontSize = 24.sp,
-                        modifier = Modifier
-                            .wrapContentSize()
-                    )
+                        modifier = Modifier.wrapContentSize())
                     Icon(
                         imageVector = Icons.Outlined.Edit,
                         contentDescription = "Edit",
