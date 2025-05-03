@@ -111,7 +111,6 @@ fun EditBasicTextFieldWithCheckbox(
         Text(
             text = "없음",
             fontSize = 12.sp,
-            modifier = Modifier.padding(start = 4.dp)
         )
     }
 }

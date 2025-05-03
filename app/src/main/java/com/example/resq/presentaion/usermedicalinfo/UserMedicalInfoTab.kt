@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,10 +66,10 @@ fun UserMedicalInfoTab(
                     }
             )
             Icon(
-                imageVector = Icons.Outlined.Language,
-                contentDescription = "Translate",
+                painter = painterResource(R.drawable.bootstrap_globe2),
+                contentDescription = "bootstrap_globe2",
                 modifier = Modifier
-                    .padding(top = 5.dp, start = 12.dp)
+                    .padding(top = 7.dp, start = 12.dp)
                     .size(28.dp)
                     .clickable {
                         //번역 기능 구현
