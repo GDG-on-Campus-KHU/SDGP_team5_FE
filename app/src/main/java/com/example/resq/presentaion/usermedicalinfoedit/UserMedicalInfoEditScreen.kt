@@ -1,6 +1,5 @@
 package com.example.resq.presentaion.usermedicalinfoedit
 
-import android.view.Gravity
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
