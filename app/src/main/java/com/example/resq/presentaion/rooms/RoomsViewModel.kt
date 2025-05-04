@@ -3,6 +3,7 @@ package com.example.resq.presentaion.rooms
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.presentaion.rooms.model.Room
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,16 +18,12 @@ class RoomsViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    init {
-        getRooms("")
-    }
-
-    private fun getRooms(userId: String) {
+    fun getRooms() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                delay(1000)
-                _rooms.value = (1..10).map { Room(it.toString(), it.toString()) }
+                val response = apiService.getRooms()
+                _rooms.value = response.body()?.rooms ?: emptyList()
             } catch (e: Exception) {
                 Log.d("getRooms", e.message.toString())
             }
@@ -34,24 +31,36 @@ class RoomsViewModel : ViewModel() {
         }
     }
 
-    fun deleteRoom(roomTitle: String) {
+    fun deleteRoom(roomId: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
-                // 방 삭제
-                getRooms("")
+                apiService.deleteRoom(roomId)
+                _rooms.value.forEachIndexed { index, room ->
+                    if (room.roomId == roomId) {
+                        _rooms.value -= _rooms.value[index]
+                        return@forEachIndexed
+                    }
+                }
             } catch (e: Exception) {
-                Log.d("getRooms", e.message.toString())
+                Log.d("deleteRoom", e.message.toString())
             }
+            _isLoading.value = false
         }
     }
 
-    fun outRoom(roomTitle: String) {
+    fun outRoom(roomId: String) {
         viewModelScope.launch {
             try {
-                // 방 나가기
-                getRooms("")
+                apiService.outRoom(roomId)
+                _rooms.value.forEachIndexed { index, room ->
+                    if (room.roomId == roomId) {
+                        _rooms.value -= _rooms.value[index]
+                        return@forEachIndexed
+                    }
+                }
             } catch (e: Exception) {
-                Log.d("getRooms", e.message.toString())
+                Log.d("outRoom", e.message.toString())
             }
         }
     }

@@ -3,13 +3,12 @@ package com.example.resq.presentaion.roomadd
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.resq.network.RetrofitInstance.apiService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 class RoomAddViewModel : ViewModel() {
 
@@ -39,20 +38,30 @@ class RoomAddViewModel : ViewModel() {
         }
     }
 
-    fun resetMembers() {
-        getMembers("")
-    }
-
-    fun addMembers(roomTitle: String, members: List<String>) {
+    fun newRoom(roomTitle: String, members: List<String>) {
         viewModelScope.launch {
             _isLoading.value = true
             if (members.isNotEmpty())
                 try {
-                    // 멤버 추가
+                    val response = apiService.newRoom(roomTitle)
+                    val roomId = response.body()?.data?.roomId
+                    // 멤버 초대
+//                    roomId?.let { inviteMembers(it, members) }
                 } catch (e: Exception) {
                     Log.d("addMembers", e.message.toString())
                 }
             _isLoading.value = false
+        }
+    }
+
+    fun inviteMembers(roomId: String, members: List<String>) {
+        viewModelScope.launch {
+            if (members.isNotEmpty())
+                try {
+                    members.forEach { apiService.inviteRoomMember(roomId, it) }
+                } catch (e: Exception) {
+                    Log.d("inviteMembers", e.message.toString())
+                }
         }
     }
 }

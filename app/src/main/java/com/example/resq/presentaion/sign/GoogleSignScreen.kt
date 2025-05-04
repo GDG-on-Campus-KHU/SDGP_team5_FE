@@ -2,6 +2,7 @@
 
 package com.example.resq.presentaion.sign
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -10,7 +11,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,49 +20,48 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
+import com.example.resq.MainActivity.Companion.USER_TOKEN
 import com.example.resq.MainActivity.Companion.googleSignInClient
 import com.example.resq.R
-import com.example.resq.ResQApp
-import com.example.resq.ui.theme.ResQTheme
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 
 @Composable
-fun GoogleSignInScreen(viewModel: GoogleSignViewModel = viewModel()) {
+fun GoogleSignInScreen(
+    viewModel: GoogleSignViewModel = viewModel(),
+    onSignIn: () -> Unit
+) {
     val context = LocalContext.current
-    val isAccount by viewModel.isAccount.collectAsState()
-    var userEmail by remember { mutableStateOf<String?>(null) }
-    var userId by remember { mutableStateOf<String?>(null) }
-    var userDisplayName by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
-            userEmail = account?.email
-            userId = account?.id
-            userDisplayName = account?.displayName
-            viewModel.saveUserInfo(context, account)
+            try {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                val account = task.getResult(ApiException::class.java)
+                val serverAuthCode = account.serverAuthCode
+                serverAuthCode?.let { viewModel.signIn(it, context) }
+                USER_DISPLAY_NAME = account.displayName.toString()
+                onSignIn()
+            } catch (e: Exception) {
+                Log.d("signInTest", e.message.toString())
+            }
         }
 
-    if (isAccount)
-        ResQTheme {
-            ResQApp()
-        }
-    else {
-        var isLoading by remember { mutableStateOf(false) }
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            if (isLoading)
-                CircularProgressIndicator()
-            else
-                Button(onClick = {
-                    val signInIntent = googleSignInClient.signInIntent
-                    launcher.launch(signInIntent)
-                    isLoading = true
-                }) {
-                    Text(text = "Google 로그인")
-                }
-        }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        if (isLoading)
+            CircularProgressIndicator()
+        else
+            Button(onClick = {
+                googleSignInClient.signOut()
+                launcher.launch(googleSignInClient.signInIntent)
+                isLoading = true
+            }) {
+                Text(stringResource(R.string.google_login))
+            }
     }
 }

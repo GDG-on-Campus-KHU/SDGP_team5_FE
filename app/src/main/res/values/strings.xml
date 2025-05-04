@@ -16,8 +16,8 @@
     <string name="room_delete">방 삭제하기</string>
     <string name="room_out">방 나가기</string>
     <string name="room_title">방 제목을 입력하세요.</string>
-    <string name="member_add_placeholder">클릭하여 멤버를 추가하세요</string>
-    <string name="add_button">추가하기</string>
+    <string name="member_add_placeholder">클릭하여 초대할 멤버를 추가하세요</string>
+    <string name="add_room_button">생성하기</string>
     <string name="email_placeholder">추가할 사람의 이메일을 입력하세요</string>
     <string name="delete">삭제하기</string>
     <string name="delete_check">정말 삭제하시겠습니까?</string>

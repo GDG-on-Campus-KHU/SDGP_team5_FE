@@ -15,10 +15,10 @@
     <string name="google_login">Google Login</string>
     <string name="search_placeholder">Please enter disease or symptoms</string>
     <string name="room_delete">delete a room</string>
-    <string name="add_button">Add</string>
     <string name="room_out">out of the room</string>
     <string name="room_title">Please enter the room title</string>
-    <string name="member_add_placeholder">Click to add a member</string>
+    <string name="member_add_placeholder">Click to add a member to invite</string>
+    <string name="add_room_button">Add</string>
     <string name="email_placeholder">Please enter the email of the person you want to add</string>
     <string name="delete">delete</string>
     <string name="delete_check">Are you sure you want to delete it?</string>

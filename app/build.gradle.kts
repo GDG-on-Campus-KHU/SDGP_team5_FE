@@ -11,13 +11,15 @@ val properties = Properties().apply {
     load(FileInputStream(rootProject.file("local.properties")))
 }
 val baseUrl: String = properties.getProperty("BASE_URL")
+val searchBaseUrl: String = properties.getProperty("SEARCH_BASU_URL")
+val googleAuthClientId: String = properties.getProperty("GOOGLE_AUTH_CLIENT_ID")
 
 android {
     namespace = "com.example.resq"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.resq"
+        applicationId = "com.example.resqapp"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
@@ -26,6 +28,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "BASE_URL", baseUrl)
+        buildConfigField("String", "SEARCH_BASU_URL", searchBaseUrl)
+        buildConfigField("String", "GOOGLE_AUTH_CLIENT_ID", googleAuthClientId)
     }
 
     buildTypes {
@@ -74,13 +78,11 @@ dependencies {
     // Bottom Navigation
     implementation(libs.androidx.material)
 
-    // Google SignIn
+    // Google Sign
     implementation(libs.play.services.auth)
 
-    // Retrofit
+    // Network
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-
-    // Extend Icons
-    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.okhttp3.okhttp)
 }

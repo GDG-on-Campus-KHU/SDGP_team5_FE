@@ -28,9 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.resq.R
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.roomadd.RoomAddViewModel
+import com.example.resq.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,10 +78,7 @@ fun AddMemberDialog(
                         items(members) { member ->
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
-                                onClick = {
-                                    onClickEmail(member)
-                                    viewModel.resetMembers()
-                                }
+                                onClick = { onClickEmail(member) }
                             ) {
                                 Text(
                                     text = member,

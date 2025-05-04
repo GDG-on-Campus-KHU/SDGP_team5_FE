@@ -2,15 +2,14 @@ package com.example.resq.presentaion.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.BottomNavigation
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,9 +52,9 @@ fun BottomBar(navController: NavController) {
         }
     }
 
-    BottomNavigation(backgroundColor = Color.White) {
+    NavigationBar(containerColor = Color.White) {
         bottomItems.forEach { item ->
-            BottomNavigationItem(
+            NavigationBarItem(
                 icon = {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,6 +72,10 @@ fun BottomBar(navController: NavController) {
                         )
                     }
                 },
+
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = Color.Transparent
+                ),
                 selected = selectedItem == item.tab,
                 onClick = {
                     navController.navigate(item.route) {

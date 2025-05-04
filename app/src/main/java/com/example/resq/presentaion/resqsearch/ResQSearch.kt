@@ -1,5 +1,6 @@
-package com.example.resq.presentaion.resqdetail
+package com.example.resq.presentaion.resqsearch
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -44,11 +45,11 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun ResQDetailScreen(
+fun ResQSearchScreen(
     navController: NavController,
     padding: PaddingValues,
     resQ: String,
-    viewModel: ResQDetailViewModel = viewModel()
+    viewModel: ResQSearchViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val resQDetail by viewModel.resQDetail.collectAsState()
@@ -57,7 +58,7 @@ fun ResQDetailScreen(
     val language = Locale.current.language
 
     DisposableEffect(resQ) {
-        viewModel.getResQDetail(resQ, language)
+        viewModel.getResQSearch(resQ)
         onDispose {
             if (isFavorite) viewModel.addToFavoriteResQList(resQ)
             else viewModel.deleteToFavoriteResQList(resQ)
@@ -83,50 +84,61 @@ fun ResQDetailScreen(
         if (isLoading) {
             CenterCircularProgress()
         } else {
-            Spacer(Modifier.height(InnerPadding))
-            LazyColumn(modifier = Modifier.padding(horizontal = InnerPadding)) {
-                resQDetail.forEach { resQ ->
-                    item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = resQ.resQTitle?.getLocalizedTitle(language).toString(),
-                                fontSize = 30.sp,
-                                modifier = Modifier.weight(1f)
-                            )
-                            IconButton(onClick = { isFavorite = !isFavorite }) {
-                                Icon(
-                                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                    contentDescription = "Favorite",
+            if (resQDetail.isEmpty())
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(text = "검색 결과가 없습니다", modifier = Modifier.align(Alignment.Center))
+                }
+            else {
+                Spacer(Modifier.height(InnerPadding))
+                LazyColumn(modifier = Modifier.padding(horizontal = InnerPadding)) {
+                    resQDetail.forEach { resQ ->
+                        val resQInfo = resQ.resQDetail
+                        item {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = resQInfo.resQTitle?.getLocalizedTitle(language)
+                                        .toString(),
+                                    fontSize = 30.sp,
+                                    modifier = Modifier.weight(1f)
                                 )
-                            }
-                        }
-                    }
-
-                    item { Spacer(Modifier.height(8.dp)) }
-                    resQ.description?.let {
-                        items(it.getLocalizedTitle(language)) { description ->
-                            Row {
-                                Icon(imageVector = Icons.Outlined.Info, contentDescription = "Info")
-                                Text(text = description, fontSize = 16.sp)
-                            }
-                            Spacer(Modifier.height(4.dp))
-                        }
-                    }
-
-                    item { Spacer(Modifier.height(16.dp)) }
-                    resQ.resQActions?.let {
-                        itemsIndexed(it.getLocalizedTitle(language)) { index, resQ ->
-                            Text(text = "${index + 1}. ${resQ.step}", fontSize = 20.sp)
-                            resQ.detail.forEach { detail ->
-                                Row {
-                                    Spacer(Modifier.width(20.dp))
-                                    Text(text = detail)
+                                IconButton(onClick = { isFavorite = !isFavorite }) {
+                                    Icon(
+                                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        contentDescription = "Favorite",
+                                    )
                                 }
                             }
-                            Spacer(Modifier.height(8.dp))
+                        }
+
+                        item { Spacer(Modifier.height(8.dp)) }
+                        resQInfo.description?.let {
+                            items(it.getLocalizedTitle(language)) { description ->
+                                Row {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Info,
+                                        contentDescription = "Info"
+                                    )
+                                    Text(text = description, fontSize = 16.sp)
+                                }
+                                Spacer(Modifier.height(4.dp))
+                            }
+                        }
+
+                        item { Spacer(Modifier.height(16.dp)) }
+                        resQInfo.resQActions?.let {
+                            itemsIndexed(it.getLocalizedTitle(language)) { index, resQ ->
+                                Text(text = "${index + 1}. ${resQ.step}", fontSize = 20.sp)
+                                resQ.detail.forEach { detail ->
+                                    Row {
+                                        Spacer(Modifier.width(20.dp))
+                                        Text(text = detail)
+                                    }
+                                }
+                                Spacer(Modifier.height(8.dp))
+                            }
                         }
                     }
                 }
@@ -137,6 +149,6 @@ fun ResQDetailScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun ResQDetailPreview() {
-    ResQDetailScreen(rememberNavController(), PaddingValues(0.dp), "test")
+fun ResQSearchPreview() {
+    ResQSearchScreen(rememberNavController(), PaddingValues(0.dp), "test")
 }

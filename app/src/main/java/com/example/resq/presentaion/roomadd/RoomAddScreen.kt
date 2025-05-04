@@ -37,10 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.resq.R
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.roomadd.component.AddMemberDialog
 import com.example.resq.ui.theme.InnerPadding
+import com.example.resq.R
 
 @Composable
 fun RoomAddScreen(
@@ -129,10 +129,10 @@ fun RoomAddScreen(
             Spacer(Modifier.height(16.dp))
             Button(
                 onClick = {
-                    viewModel.addMembers(roomTitle, members)
+                    viewModel.newRoom(roomTitle, members)
                     navController.popBackStack()
                 }
-            ) { Text(stringResource(R.string.add_button)) }
+            ) { Text(stringResource(R.string.add_room_button)) }
         }
     }
 

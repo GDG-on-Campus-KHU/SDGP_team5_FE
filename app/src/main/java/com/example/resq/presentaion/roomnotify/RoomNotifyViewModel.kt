@@ -3,6 +3,7 @@ package com.example.resq.presentaion.roomnotify
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.presentaion.roomnotify.model.Notify
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,10 +19,10 @@ class RoomNotifyViewModel : ViewModel() {
     val notifications: MutableStateFlow<List<Notify>> = _notifications
 
     init {
-        getNotifications("")
+        getNotifications()
     }
 
-    private fun getNotifications(userId: String) {
+    private fun getNotifications() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -35,11 +36,36 @@ class RoomNotifyViewModel : ViewModel() {
         }
     }
 
-    fun acceptNotify(userId: String, notifyId: String) {
-
+    fun acceptNotify(roomId: String) {
+        viewModelScope.launch {
+            try {
+                apiService.acceptNotify(roomId)
+                _notifications.value.forEachIndexed { index, notify ->
+                    if (notify.id == roomId) {
+                        _notifications.value -= _notifications.value[index]
+                        return@forEachIndexed
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("acceptNotify", e.message.toString())
+            }
+        }
     }
 
-    fun refuseNotify(userId: String, notifyId: String) {
+    fun refuseNotify(roomId: String) {
+        viewModelScope.launch {
+            try {
+                apiService.rejectNotify(roomId)
+                _notifications.value.forEachIndexed { index, notify ->
+                    if (notify.id == roomId) {
+                        _notifications.value -= _notifications.value[index]
+                        return@forEachIndexed
+                    }
+                }
 
+            } catch (e: Exception) {
+                Log.d("refuseNotify", e.message.toString())
+            }
+        }
     }
 }
