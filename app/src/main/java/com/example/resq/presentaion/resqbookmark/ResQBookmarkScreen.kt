@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.ConfirmDialog
@@ -51,7 +52,6 @@ fun ResQBookmarkScreen(
     viewModel: ResQBookmarkViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val bookmarks by viewModel.bookmarks.collectAsState()
     val isExpanded = remember { mutableStateMapOf<String, Boolean>() }
     var isDialogExpended by remember { mutableStateOf(false) }
     val bookmarkOption = remember { mutableStateOf("") }
@@ -68,8 +68,8 @@ fun ResQBookmarkScreen(
         else
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }
-                items(bookmarks) { bookmark ->
-                    val isBookmarkOptions = isExpanded[bookmark.title] ?: false
+                items(FAVORITE_RESQ_LIST) { bookmark ->
+                    val isBookmarkOptions = isExpanded[bookmark] ?: false
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -80,7 +80,7 @@ fun ResQBookmarkScreen(
                                 onClick = {
                                     val encodedBookmarkTitle =
                                         URLEncoder.encode(
-                                            bookmark.title,
+                                            bookmark,
                                             StandardCharsets.UTF_8.toString()
                                         )
                                     navController.navigate(HomeNavigationItem.ResQDetail.route + "/$encodedBookmarkTitle")
@@ -90,7 +90,7 @@ fun ResQBookmarkScreen(
                             )
                     ) {
                         Text(
-                            text = bookmark.title,
+                            text = bookmark,
                             modifier = Modifier.align(Alignment.CenterStart)
                         )
                         Row(
@@ -101,12 +101,12 @@ fun ResQBookmarkScreen(
                             if (isBookmarkOptions)
                                 BookmarkOptions {
                                     bookmarkOption.value = it
-                                    bookmarkTitle.value = bookmark.title
+                                    bookmarkTitle.value = bookmark
                                     isDialogExpended = !isDialogExpended
                                 }
                             IconButton(onClick = {
                                 isExpanded.keys.forEach { isExpanded[it] = false }
-                                isExpanded[bookmark.title] = !isBookmarkOptions
+                                isExpanded[bookmark] = !isBookmarkOptions
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.MoreVert,
