@@ -36,6 +36,18 @@ interface ApiService {
         @Body accessToken: String
     ): Response<AccessTokenResponse>
 
+    // 사용자 정보 조회
+    @GET("api/users/me")
+    @Headers("Need-Auth: true")
+    suspend fun getMyInfo(): Response<UserInfoResponse>
+
+    // 특정 사용자 정보 조회
+    @GET("api/users/info/{user_id}")
+    @Headers("Need-Auth: true")
+    suspend fun getUserInfo(
+        @Path("user_id") userId: String
+    ): Response<UserInfoResponse>
+
     // 구조 방법 상세 설명
     @GET("api/situation/actions/case/{slug}/{language}")
     suspend fun getResQDetail(

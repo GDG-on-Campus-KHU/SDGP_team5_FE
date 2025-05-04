@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
         lateinit var googleSignInClient: GoogleSignInClient
         lateinit var USER_TOKEN: String
         lateinit var USER_DISPLAY_NAME: String
+        lateinit var USER_EMAIL: String
         var FAVORITE_RESQ_LIST = emptyList<String>()
     }
 

@@ -7,6 +7,8 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
+import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.USER_TOKEN
 import com.example.resq.MainActivity.Companion.googleSignInClient
 import com.example.resq.network.RetrofitInstance.apiService
@@ -30,7 +32,7 @@ class GoogleSignViewModel : ViewModel() {
 //                removeUserToken(context)
 //                saveUserToken(context, USER_TOKEN)
             } catch (e: Exception) {
-                Log.d("signInTest", e.message.toString())
+                Log.d("signInTest", e.toString())
             }
             _isLoading.value = false
         }
@@ -66,5 +68,18 @@ class GoogleSignViewModel : ViewModel() {
 
     fun signOut(googleSignInClient: GoogleSignInClient) {
         googleSignInClient.signOut()
+    }
+
+    fun getMyInfo() {
+        viewModelScope.launch {
+            try {
+                apiService.getMyInfo().body()?.let {
+                    USER_DISPLAY_NAME = it.userInfo.userName
+                    USER_EMAIL = it.userInfo.userEmail
+                }
+            } catch (e: Exception) {
+                Log.d("getUserInfo", e.message.toString())
+            }
+        }
     }
 }

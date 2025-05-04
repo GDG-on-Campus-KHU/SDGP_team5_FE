@@ -48,6 +48,7 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
 
     if (isUserToken) {
         viewModel.signIn("USER_TOKEN", context)
+//        viewModel.getMyInfo()
         ResQViewModel().getFavoriteResQList()
         if (isLoading)
             CenterCircularProgress()
