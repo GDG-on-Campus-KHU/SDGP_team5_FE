@@ -23,11 +23,11 @@
     <string name="delete">delete</string>
     <string name="delete_check">Are you sure you want to delete it?</string>
     <string name="out_check">Are you sure you want to go out?</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="okay">okay</string>
     <string name="info_message_placeholder1">Enter medical information for emergency use.</string>
     <string name="info_message_placeholder2">All information entered.</string>
-    <string name = "info_message1">indicates a required field.</string>
+    <string name="info_message1">indicates a required field.</string>
     <string name="medical_info">Medical Info</string>
     <string name="record_list">Recording List</string>
     <string name="info_name">Name</string>
@@ -47,5 +47,24 @@
     <string name="info_date_of_birth_placeholder">Enter your date of birth.</string>
     <string name="info_additional_notes_placeholder">Enter any additional information you\'d like to share.</string>
     <string name="none">None</string>
+    <string name="not_set">not set</string>
+    <string name="ok">OK</string>
+    <string name="done">Done</string>
+    <string name="set_weight">Set weight</string>
+    <string name="set_height">Set height</string>
+    <string name="set_date_of_birth">Set date of birth</string>
+    <string name="save">Save</string>
+    <string name="toast_message1">Please fill in all required fields.</string>
+    <string name="resq_setting">ResQ Setting</string>
+    <string name="account">Account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="app_settings">App Settings</string>
+    <string name="language">Language</string>
+    <string name="country">Country</string>
+    <string name="permissions">Permissions</string>
+    <string name="terms_and_policies">Terms and Policies</string>
+    <string name="terms_of_service">Terms of service</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
 </resources>

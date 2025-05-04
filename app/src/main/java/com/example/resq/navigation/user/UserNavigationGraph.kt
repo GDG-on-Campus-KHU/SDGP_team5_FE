@@ -1,18 +1,23 @@
 package com.example.resq.navigation.user
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.resq.presentaion.user.UserScreen
-import com.example.resq.presentaion.usermedicalinfo.UpdateMedicalInfo
+import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoViewModel
+import com.example.resq.presentaion.usermedicalinfoedit.UserMedicalInfoEditScreen
+import com.example.resq.presentaion.usersetting.UserSettingScreen
 
 fun NavGraphBuilder.userNavigationGraph(navController: NavController, padding: PaddingValues) {
     composable(UserNavigationItem.User.route) {
         UserScreen(navController, padding)
     }
-
-    composable(UserNavigationItem.UpdateMedicalInfo.route) {
-        UpdateMedicalInfo(navController, padding)
+    composable(UserNavigationItem.UserMedicalInfoEdit.route) {
+        UserMedicalInfoEditScreen(navController, padding)
+    }
+    composable(UserNavigationItem.Setting.route) {
+        UserSettingScreen(navController, padding)
     }
 }
