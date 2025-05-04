@@ -74,16 +74,16 @@ fun RoomNotifyScreen(
                             ) {
                                 Text(text = notify.title)
                                 Spacer(Modifier.weight(1f))
-                                IconButton(onClick = { viewModel.acceptNotify("", notify.id) }) {
+                                IconButton(onClick = { viewModel.refuseNotify("") }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
-                                        contentDescription = "CheckCircle"
+                                        contentDescription = "Close"
                                     )
                                 }
-                                IconButton(onClick = { viewModel.refuseNotify("", notify.id) }) {
+                                IconButton(onClick = { viewModel.acceptNotify("") }) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
-                                        contentDescription = "CheckCircle"
+                                        contentDescription = "Check"
                                     )
                                 }
                             }
