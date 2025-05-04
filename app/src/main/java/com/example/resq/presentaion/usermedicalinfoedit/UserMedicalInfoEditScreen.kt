@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.resq.R
 import com.example.resq.presentaion.usermedicalinfo.*
@@ -28,7 +29,7 @@ import com.example.resq.ui.theme.Gray4
 fun UserMedicalInfoEditScreen(
     navController: NavController,
     padding: PaddingValues,
-    viewModel: UserMedicalInfoViewModel
+    viewModel: UserMedicalInfoViewModel = viewModel()
 ) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {

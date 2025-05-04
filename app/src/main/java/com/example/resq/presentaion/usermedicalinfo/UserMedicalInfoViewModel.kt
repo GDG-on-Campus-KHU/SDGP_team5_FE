@@ -47,14 +47,14 @@ class UserMedicalInfoViewModel : ViewModel() {
         birthDate: String,
         notes: String
     ) {
-        medicalInfoList.value.forEach { element ->
+        _medicalInfoList.value.forEach { element ->
             when (element.label) {
                 "이름" -> element.value.value = name.ifBlank { null }
                 "혈액형" -> element.value.value = bloodType.ifBlank { null }
                 "알레르기" -> element.value.value = allergy.ifBlank { null }
                 "복용중인 약" -> element.value.value = medication.ifBlank { null }
-                "키" -> element.value.value = height.ifBlank {null}
-                "체중" -> element.value.value = weight.ifBlank {null}
+                "키" -> element.value.value = height.ifBlank { null }
+                "체중" -> element.value.value = weight.ifBlank { null }
                 "생년월일" -> element.value.value = birthDate.ifBlank { null }
                 "참고사항" -> element.value.value = notes.ifBlank { null }
             }
@@ -67,4 +67,3 @@ class UserMedicalInfoViewModel : ViewModel() {
         return medicalInfoList.value.find { it.label == label }?.value?.value ?: ""
     }
 }
-

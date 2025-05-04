@@ -15,8 +15,7 @@ fun NavGraphBuilder.userNavigationGraph(navController: NavController, padding: P
         UserScreen(navController, padding)
     }
     composable(UserNavigationItem.UserMedicalInfoEdit.route) {
-        val viewModel: UserMedicalInfoViewModel = viewModel()
-        UserMedicalInfoEditScreen(navController, padding, viewModel)
+        UserMedicalInfoEditScreen(navController, padding)
     }
     composable(UserNavigationItem.Setting.route) {
         UserSettingScreen(navController, padding)

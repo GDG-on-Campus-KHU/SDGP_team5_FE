@@ -55,5 +55,16 @@
     <string name="set_date_of_birth">Set date of birth</string>
     <string name="save">Save</string>
     <string name="toast_message1">Please fill in all required fields.</string>
+    <string name="resq_setting">ResQ Setting</string>
+    <string name="account">Account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="app_settings">App Settings</string>
+    <string name="language">Language</string>
+    <string name="country">Country</string>
+    <string name="permissions">Permissions</string>
+    <string name="terms_and_policies">Terms and Policies</string>
+    <string name="terms_of_service">Terms of service</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
 </resources>
