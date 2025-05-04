@@ -58,7 +58,7 @@ fun ResQScreen(
             onClickSearch = {
                 val encodedSearchText =
                     URLEncoder.encode(searchText, StandardCharsets.UTF_8.toString())
-                navController.navigate(HomeNavigationItem.ResQDetail.route + "/$encodedSearchText")
+                navController.navigate(HomeNavigationItem.ResQSearch.route + "/$encodedSearchText")
             }
         )
 

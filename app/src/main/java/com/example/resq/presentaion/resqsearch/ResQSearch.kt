@@ -1,0 +1,154 @@
+package com.example.resq.presentaion.resqsearch
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
+import com.example.resq.navigation.home.HomeNavigationItem
+import com.example.resq.presentaion.component.CenterCircularProgress
+import com.example.resq.presentaion.component.SearchBar
+import com.example.resq.ui.theme.InnerPadding
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
+@Composable
+fun ResQSearchScreen(
+    navController: NavController,
+    padding: PaddingValues,
+    resQ: String,
+    viewModel: ResQSearchViewModel = viewModel()
+) {
+    val isLoading by viewModel.isLoading.collectAsState()
+    val resQDetail by viewModel.resQDetail.collectAsState()
+    var searchText by remember { mutableStateOf("") }
+    var isFavorite by remember { mutableStateOf(FAVORITE_RESQ_LIST.contains(resQ)) }
+    val language = Locale.current.language
+
+    DisposableEffect(resQ) {
+        viewModel.getResQSearch(resQ)
+        onDispose {
+            if (isFavorite) viewModel.addToFavoriteResQList(resQ)
+            else viewModel.deleteToFavoriteResQList(resQ)
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .padding(InnerPadding)
+    ) {
+        SearchBar(
+            searchText = searchText,
+            onValueChange = { searchText = it },
+            onClickSearch = {
+                val encodedSearchText =
+                    URLEncoder.encode(searchText, StandardCharsets.UTF_8.toString())
+                navController.navigate(HomeNavigationItem.ResQSearch.route + "/$encodedSearchText")
+            }
+        )
+
+        if (isLoading) {
+            CenterCircularProgress()
+        } else {
+            if (resQDetail.isEmpty())
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(text = "검색 결과가 없습니다", modifier = Modifier.align(Alignment.Center))
+                }
+            else {
+                Spacer(Modifier.height(InnerPadding))
+                LazyColumn(modifier = Modifier.padding(horizontal = InnerPadding)) {
+                    resQDetail.forEach { resQ ->
+                        val resQInfo = resQ.resQDetail
+                        item {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = resQInfo.resQTitle?.getLocalizedTitle(language)
+                                        .toString(),
+                                    fontSize = 30.sp,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                IconButton(onClick = { isFavorite = !isFavorite }) {
+                                    Icon(
+                                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        contentDescription = "Favorite",
+                                    )
+                                }
+                            }
+                        }
+
+                        item { Spacer(Modifier.height(8.dp)) }
+                        resQInfo.description?.let {
+                            items(it.getLocalizedTitle(language)) { description ->
+                                Row {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Info,
+                                        contentDescription = "Info"
+                                    )
+                                    Text(text = description, fontSize = 16.sp)
+                                }
+                                Spacer(Modifier.height(4.dp))
+                            }
+                        }
+
+                        item { Spacer(Modifier.height(16.dp)) }
+                        resQInfo.resQActions?.let {
+                            itemsIndexed(it.getLocalizedTitle(language)) { index, resQ ->
+                                Text(text = "${index + 1}. ${resQ.step}", fontSize = 20.sp)
+                                resQ.detail.forEach { detail ->
+                                    Row {
+                                        Spacer(Modifier.width(20.dp))
+                                        Text(text = detail)
+                                    }
+                                }
+                                Spacer(Modifier.height(8.dp))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ResQSearchPreview() {
+    ResQSearchScreen(rememberNavController(), PaddingValues(0.dp), "test")
+}
