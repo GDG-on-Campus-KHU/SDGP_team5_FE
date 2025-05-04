@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,13 +40,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.resq.R
 import com.example.resq.navigation.share.ShareNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.ConfirmDialog
 import com.example.resq.presentaion.roomnotify.RoomNotifyScreen
 import com.example.resq.presentaion.rooms.component.RoomsOptions
 import com.example.resq.ui.theme.InnerPadding
+import com.example.resq.R
 
 @Composable
 fun RoomsScreen(
@@ -59,7 +60,12 @@ fun RoomsScreen(
     val isRoomState = remember { mutableStateMapOf<String, Boolean>() }
     var isDialogExpended by remember { mutableStateOf(false) }
     val roomOption = remember { mutableStateOf("") }
-    val roomTitle = remember { mutableStateOf("") }
+    val roomId = remember { mutableStateOf("") }
+
+    LaunchedEffect(isDialogExpended) {
+        if (!isDialogExpended)
+            viewModel.getRooms()
+    }
 
     Column(
         modifier = Modifier
@@ -73,7 +79,7 @@ fun RoomsScreen(
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }
                 items(rooms) { room ->
-                    val isRoomOptions = isRoomState[room.title] ?: false
+                    val isRoomOptions = isRoomState[room.roomId] ?: false
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -87,7 +93,7 @@ fun RoomsScreen(
                             )
                     ) {
                         Text(
-                            text = room.title,
+                            text = room.roomTitle,
                             modifier = Modifier.align(Alignment.CenterStart)
                         )
                         Row(
@@ -98,12 +104,12 @@ fun RoomsScreen(
                             if (isRoomOptions)
                                 RoomsOptions {
                                     roomOption.value = it
-                                    roomTitle.value = room.title
+                                    roomId.value = room.roomId
                                     isDialogExpended = !isDialogExpended
                                 }
                             IconButton(onClick = {
                                 isRoomState.keys.forEach { isRoomState[it] = false }
-                                isRoomState[room.title] = !isRoomOptions
+                                isRoomState[room.roomId] = !isRoomOptions
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.MoreVert,
@@ -131,8 +137,8 @@ fun RoomsScreen(
             onDismissRequest = { isDialogExpended = !isDialogExpended },
             onClick = {
                 when (it) {
-                    deleteCheck -> viewModel.deleteRoom(roomTitle.value)
-                    outCheck -> viewModel.outRoom(roomTitle.value)
+                    deleteCheck -> viewModel.deleteRoom(roomId.value)
+                    outCheck -> viewModel.outRoom(roomId.value)
                 }
             }
         )
