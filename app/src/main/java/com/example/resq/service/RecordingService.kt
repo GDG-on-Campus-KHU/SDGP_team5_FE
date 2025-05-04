@@ -10,7 +10,14 @@ import android.os.IBinder
 import android.provider.MediaStore
 import android.util.Log
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
-import com.example.resq.MainActivity.Companion.USER_ID
+import com.example.resq.network.RetrofitInstance.apiService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -70,5 +77,31 @@ class RecordingService : Service() {
             release()
         }
         mediaRecorder = null
+
+        recordingUri?.let { uri ->
+            try {
+                val inputStream = contentResolver.openInputStream(uri)
+                val tempFile = File.createTempFile("upload_", ".mp4", cacheDir)
+                inputStream?.use { input ->
+                    tempFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                val requestFile = tempFile.asRequestBody("audio/mp4".toMediaTypeOrNull())
+                val audioPart =
+                    MultipartBody.Part.createFormData("audio", tempFile.name, requestFile)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val response = apiService.uploadAudio(audioPart)
+                    } catch (e: Exception) {
+                        Log.d("uploadAudio", e.message.toString())
+                    }
+                }
+            } catch (e: IOException) {
+                Log.d("stopRecording", e.message.toString())
+            }
+        }
     }
 }
