@@ -39,6 +39,7 @@ import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.SearchBar
+import com.example.resq.presentaion.resq.ResQViewModel
 import com.example.resq.ui.theme.InnerPadding
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -61,6 +62,7 @@ fun ResQDetailScreen(
         onDispose {
             if (isFavorite) viewModel.addToFavoriteResQList(resQ)
             else viewModel.deleteToFavoriteResQList(resQ)
+            ResQViewModel().getFavoriteResQList()
         }
     }
 

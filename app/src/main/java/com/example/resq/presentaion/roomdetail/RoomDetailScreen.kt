@@ -43,7 +43,7 @@ fun RoomDetailScreen(
     viewModel: RoomDetailViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val membersInfo = viewModel.membersInfo.collectAsState()
+    val membersMedicalInfo = viewModel.membersMedicalInfo.collectAsState()
     val translationOptions = viewModel.translationOptions.collectAsState()
     val isHeight = remember { mutableStateMapOf<String, Boolean>() }
 
@@ -63,8 +63,10 @@ fun RoomDetailScreen(
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }
-                items(membersInfo.value) { member ->
-                    val height = isHeight[member.userId] ?: true
+                items(membersMedicalInfo.value) { member ->
+                    val userName = member.first
+                    val userMedicalInfo = member.second
+                    val isExtended = isHeight[member.second.userId] ?: true
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -74,23 +76,27 @@ fun RoomDetailScreen(
                             .clickable(
                                 onClick = {
                                     isHeight.keys.forEach { isHeight[it] = true }
-                                    isHeight[member.userId] = !height
+                                    isHeight[userMedicalInfo.userId] = !isExtended
                                 },
                                 interactionSource = null,
                                 indication = null
                             )
                     ) {
-                        if (height)
+                        if (isExtended)
                             Text(
-                                text = member.userEmail,
+                                text = userName,
                                 modifier = Modifier.align(Alignment.CenterStart)
                             )
                         else
                             Column {
-                                Text(text = member.userId)
-                                Text(text = member.userEmail)
-                                Text(text = member.invitedStatus)
-                                Text(text = member.invitedBy.toString())
+                                Text(text = userName)
+                                Text(text = userMedicalInfo.userBloodType)
+                                Text(text = userMedicalInfo.userAllergy)
+                                Text(text = userMedicalInfo.userMedication)
+                                Text(text = userMedicalInfo.userHeight.toString())
+                                Text(text = userMedicalInfo.userWeight.toString())
+                                Text(text = userMedicalInfo.userBirthdate)
+                                Text(text = userMedicalInfo.userNotes)
                             }
                     }
                 }

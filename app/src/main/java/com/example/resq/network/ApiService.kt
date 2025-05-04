@@ -8,6 +8,7 @@ import com.example.resq.network.model.ResponseMessage
 import com.example.resq.network.model.RoomsResponse
 import com.example.resq.network.model.SignInResponse
 import com.example.resq.network.model.UploadAudioResponse
+import com.example.resq.network.model.UserInfoResponse
 import com.example.resq.presentaion.resqdetail.model.ResQDetailResponse
 import com.example.resq.presentaion.resqsearch.model.SearchRequest
 import com.example.resq.presentaion.roomdetail.model.RoomDetailResponse
@@ -155,4 +156,11 @@ interface ApiService {
     suspend fun uploadAudio(
         @Part audio: MultipartBody.Part,
     ): Response<UploadAudioResponse>
+
+    // 특정 사용자 의료 정보 조회
+    @GET("api/medical-info/{id}")
+    @Headers("Need-Auth: true")
+    suspend fun getMedicalInfo(
+        @Path("id") userId: String
+    ): Response<MedicalInfoResponse>
 }
