@@ -1,9 +1,11 @@
 package com.example.resq.network
 
 import com.example.resq.network.model.AccessTokenResponse
+import com.example.resq.network.model.AuthRequest
 import com.example.resq.network.model.ElasticSearchResponse
 import com.example.resq.network.model.FavoriteResQListResponse
 import com.example.resq.network.model.NewRoomResponse
+import com.example.resq.network.model.NewTokenRequest
 import com.example.resq.network.model.ResponseMessage
 import com.example.resq.network.model.RoomsResponse
 import com.example.resq.network.model.SignInResponse
@@ -27,14 +29,14 @@ interface ApiService {
     // 구글 로그인
     @POST("api/auth/login/google")
     suspend fun googleSignIn(
-        @Body serverAuthCode: String
+        @Body serverAuthCode: AuthRequest
     ): Response<SignInResponse>
 
     // 새로운 accessToken 발급
     @POST("api/auth/refresh-token")
     @Headers("Need-Auth: true")
-    fun getNewAccessToken(
-        @Body accessToken: String
+    suspend fun getNewAccessToken(
+        @Body accessToken: NewTokenRequest
     ): Response<AccessTokenResponse>
 
     // 사용자 정보 조회

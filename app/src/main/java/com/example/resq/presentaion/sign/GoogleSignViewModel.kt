@@ -7,11 +7,12 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.USER_TOKEN
-import com.example.resq.MainActivity.Companion.googleSignInClient
 import com.example.resq.network.RetrofitInstance.apiService
+import com.example.resq.network.model.AuthRequest
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,22 +20,22 @@ import kotlinx.coroutines.launch
 
 class GoogleSignViewModel : ViewModel() {
 
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    private val _isToken = MutableStateFlow(false)
+    val isToken: StateFlow<Boolean> = _isToken
 
     fun signIn(token: String, context: Context) {
         viewModelScope.launch {
             try {
-                Log.d("signInTest", token)
-//                val response = apiService.googleSignIn(token)
-//                Log.d("signInTest", response.body()?.accessToken ?: "없다")
-//                response.body()?.let { USER_TOKEN = it.accessToken }
-//                removeUserToken(context)
-//                saveUserToken(context, USER_TOKEN)
+                val authServerCode = AuthRequest(token)
+                val response = apiService.googleSignIn(authServerCode).body()
+                response?.let {
+                    USER_TOKEN = it.accessToken
+                    saveUserToken(context, it.accessToken)
+                }
+                _isToken.value = true
             } catch (e: Exception) {
                 Log.d("signInTest", e.toString())
             }
-            _isLoading.value = false
         }
     }
 
@@ -50,7 +51,7 @@ class GoogleSignViewModel : ViewModel() {
         }
     }
 
-    private fun saveUserToken(context: Context, token: String) {
+    fun saveUserToken(context: Context, token: String) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -58,7 +59,7 @@ class GoogleSignViewModel : ViewModel() {
         editor.apply()
     }
 
-    private fun removeUserToken(context: Context) {
+    fun removeUserToken(context: Context) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -73,12 +74,34 @@ class GoogleSignViewModel : ViewModel() {
     fun getMyInfo() {
         viewModelScope.launch {
             try {
-                apiService.getMyInfo().body()?.let {
+                val response = apiService.getMyInfo().body()
+                response?.let {
                     USER_DISPLAY_NAME = it.userInfo.userName
                     USER_EMAIL = it.userInfo.userEmail
                 }
             } catch (e: Exception) {
                 Log.d("getUserInfo", e.message.toString())
+            }
+        }
+    }
+
+    fun getEmerNumber(): String {
+        return try {
+            // 응급 전화 return
+            "tel:" + "" // ex)119
+        } catch (e: Exception) {
+            Log.d("getEmerNumber", e.message.toString())
+            ""
+        }
+    }
+
+    fun getFavoriteResQList() {
+        viewModelScope.launch {
+            try {
+                val response = apiService.getFavoriteResQList().body()
+                FAVORITE_RESQ_LIST = response?.favoriteResQList ?: emptyList()
+            } catch (e: Exception) {
+                Log.d("getFavoriteResQList", e.message.toString())
             }
         }
     }

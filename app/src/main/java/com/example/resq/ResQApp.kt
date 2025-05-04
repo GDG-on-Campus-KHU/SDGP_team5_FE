@@ -22,15 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.resq.MainActivity.Companion.USER_TOKEN
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.navigation.home.homeNavigationGraph
 import com.example.resq.navigation.share.shareNavigationGraph
 import com.example.resq.navigation.user.userNavigationGraph
 import com.example.resq.presentaion.component.BottomBar
-import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.TopBar
-import com.example.resq.presentaion.resq.ResQViewModel
 import com.example.resq.presentaion.sign.GoogleSignInScreen
 import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.service.RecordingService
@@ -39,65 +36,60 @@ import com.example.resq.service.RecordingService
 fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
     val context = LocalContext.current
     val activity = LocalActivity.current
-    val isLoading by viewModel.isLoading.collectAsState()
+    val isToken by viewModel.isToken.collectAsState()
     val navController = rememberNavController()
-    var isUserToken by remember { mutableStateOf(viewModel.getUserToken(context)) }
     var isRecording by remember { mutableStateOf(false) }
     val isExpanded = remember { mutableStateOf(false) }
-    val emerNumber = ResQViewModel().getEmerNumber()
+    val emerNumber = viewModel.getEmerNumber()
 
-    if (isUserToken) {
-        viewModel.signIn("USER_TOKEN", context)
-//        viewModel.getMyInfo()
-        ResQViewModel().getFavoriteResQList()
-        if (isLoading)
-            CenterCircularProgress()
-        else
-            Scaffold(
-                topBar = { TopBar(navController) { isExpanded.value = true } },
-                bottomBar = { BottomBar(navController) },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = {
-                            if (isRecording)
-                                stopRecording(context).apply {
-                                    isRecording = !this
-                                    Toast.makeText(context, "음성 녹음이 저장되었습니다.", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                            else {
-                                showOnClickCheckDialog(activity) {
-                                    isRecording = startRecording(context)
+    if (isToken || viewModel.getUserToken(context)) {
+        viewModel.getMyInfo()
+        viewModel.getFavoriteResQList()
+        Scaffold(
+            topBar = { TopBar(navController) { isExpanded.value = true } },
+            bottomBar = { BottomBar(navController) },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {
+                        if (isRecording)
+                            stopRecording(context).apply {
+                                isRecording = !this
+                                Toast.makeText(context, "음성 녹음이 저장되었습니다.", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        else {
+                            showOnClickCheckDialog(activity) {
+                                isRecording = startRecording(context)
 
-                                    val dialIntent =
-                                        Intent(Intent.ACTION_CALL, Uri.parse(emerNumber))
+                                val dialIntent =
+                                    Intent(Intent.ACTION_CALL, Uri.parse(emerNumber))
 //                                context.startActivity(dialIntent)
-                                }
                             }
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                if (isRecording) R.drawable.baseline_stop_24
-                                else R.drawable.baseline_call_24
-                            ),
-                            tint = if (isRecording) Color.Red else Color.Black,
-                            contentDescription = "OneClick"
-                        )
                     }
-                }
-            ) { paddingValues ->
-                NavHost(
-                    navController = navController,
-                    startDestination = HomeNavigationItem.ResQ.route
                 ) {
-                    homeNavigationGraph(navController, paddingValues)
-                    shareNavigationGraph(navController, paddingValues, isExpanded)
-                    userNavigationGraph(navController, paddingValues)
+                    Icon(
+                        painter = painterResource(
+                            if (isRecording) R.drawable.baseline_stop_24
+                            else R.drawable.baseline_call_24
+                        ),
+                        tint = if (isRecording) Color.Red else Color.Black,
+                        contentDescription = "OneClick"
+                    )
                 }
             }
+        ) { paddingValues ->
+            NavHost(
+                navController = navController,
+                startDestination = HomeNavigationItem.ResQ.route
+            ) {
+                homeNavigationGraph(navController, paddingValues)
+                shareNavigationGraph(navController, paddingValues, isExpanded)
+                userNavigationGraph(navController, paddingValues)
+            }
+        }
     } else {
-        GoogleSignInScreen { isUserToken = true }
+        GoogleSignInScreen()
     }
 }
 

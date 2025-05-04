@@ -26,10 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 
 @Composable
-fun GoogleSignInScreen(
-    viewModel: GoogleSignViewModel = viewModel(),
-    onSignIn: () -> Unit
-) {
+fun GoogleSignInScreen(viewModel: GoogleSignViewModel = viewModel(), ) {
     val context = LocalContext.current
     var isLoading by remember { mutableStateOf(false) }
 
@@ -40,7 +37,6 @@ fun GoogleSignInScreen(
                 val account = task.getResult(ApiException::class.java)
                 val serverAuthCode = account.serverAuthCode
                 serverAuthCode?.let { viewModel.signIn(it, context) }
-                onSignIn()
             } catch (e: Exception) {
                 Log.d("signInTest", e.message.toString())
             }
