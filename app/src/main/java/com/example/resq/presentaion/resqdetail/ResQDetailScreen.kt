@@ -70,7 +70,8 @@ fun ResQDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(InnerPadding)
+            .padding(horizontal = InnerPadding)
+            .padding(top = InnerPadding)
     ) {
         SearchBar(
             searchText = searchText,
@@ -85,8 +86,9 @@ fun ResQDetailScreen(
         if (isLoading) {
             CenterCircularProgress()
         } else {
-            Spacer(Modifier.height(InnerPadding))
+            Spacer(Modifier.height(4.dp))
             LazyColumn(modifier = Modifier.padding(horizontal = InnerPadding)) {
+                item { Spacer(Modifier.height(20.dp)) }
                 resQDetail.forEach { resQ ->
                     item {
                         Row(
@@ -132,6 +134,7 @@ fun ResQDetailScreen(
                         }
                     }
                 }
+                item { Spacer(Modifier.height(20.dp)) }
             }
         }
     }

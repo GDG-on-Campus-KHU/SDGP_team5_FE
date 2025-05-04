@@ -69,7 +69,8 @@ fun ResQSearchScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(InnerPadding)
+            .padding(horizontal = InnerPadding)
+            .padding(top = InnerPadding)
     ) {
         SearchBar(
             searchText = searchText,
@@ -89,8 +90,9 @@ fun ResQSearchScreen(
                     Text(text = "검색 결과가 없습니다", modifier = Modifier.align(Alignment.Center))
                 }
             else {
-                Spacer(Modifier.height(InnerPadding))
+                Spacer(Modifier.height(4.dp))
                 LazyColumn(modifier = Modifier.padding(horizontal = InnerPadding)) {
+                    item { Spacer(Modifier.height(20.dp)) }
                     resQDetail.forEach { resQ ->
                         val resQInfo = resQ.resQDetail
                         item {
@@ -141,6 +143,7 @@ fun ResQSearchScreen(
                             }
                         }
                     }
+                    item { Spacer(Modifier.height(20.dp)) }
                 }
             }
         }
