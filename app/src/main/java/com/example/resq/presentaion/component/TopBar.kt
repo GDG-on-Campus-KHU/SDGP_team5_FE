@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.resq.R
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.navigation.share.ShareNavigationItem
 import com.example.resq.navigation.user.UserNavigationItem
+import com.example.resq.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
