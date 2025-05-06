@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.roomdetail.component.TranslationOptions
@@ -43,6 +45,7 @@ fun RoomDetailScreen(
     viewModel: RoomDetailViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
+    val roomTitle = viewModel.roomTitle.collectAsState()
     val membersMedicalInfo = viewModel.membersMedicalInfo.collectAsState()
     val translationOptions = viewModel.translationOptions.collectAsState()
     val isHeight = remember { mutableStateMapOf<String, Boolean>() }
@@ -55,52 +58,62 @@ fun RoomDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(horizontal = InnerPadding),
-        contentAlignment = Alignment.TopEnd
+            .padding(horizontal = InnerPadding)
     ) {
         if (isLoading) {
             CenterCircularProgress()
         } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                item { Spacer(Modifier.height(4.dp)) }
-                items(membersMedicalInfo.value) { member ->
-                    val userName = member.first
-                    val userMedicalInfo = member.second
-                    val isExtended = isHeight[member.second.userId] ?: true
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .background(Color.LightGray, RoundedCornerShape(16.dp))
-                            .padding(horizontal = 8.dp, vertical = 16.dp)
-                            .clickable(
-                                onClick = {
-                                    isHeight.keys.forEach { isHeight[it] = true }
-                                    isHeight[userMedicalInfo.userId] = !isExtended
-                                },
-                                interactionSource = null,
-                                indication = null
-                            )
-                    ) {
-                        if (isExtended)
-                            Text(
-                                text = userName,
-                                modifier = Modifier.align(Alignment.CenterStart)
-                            )
-                        else
-                            Column {
-                                Text(text = userName)
-                                Text(text = userMedicalInfo.userBloodType)
-                                Text(text = userMedicalInfo.userAllergy)
-                                Text(text = userMedicalInfo.userMedication)
-                                Text(text = userMedicalInfo.userHeight.toString())
-                                Text(text = userMedicalInfo.userWeight.toString())
-                                Text(text = userMedicalInfo.userBirthdate)
-                                Text(text = userMedicalInfo.userNotes)
-                            }
-                    }
+            Column {
+                Spacer(Modifier.height(12.dp))
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = roomTitle.value,
+                        fontSize = 30.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
-                item { Spacer(Modifier.height(4.dp)) }
+                Spacer(Modifier.height(12.dp))
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    item { Spacer(Modifier.height(4.dp)) }
+                    items(membersMedicalInfo.value) { member ->
+                        val userName = member.first
+                        val userMedicalInfo = member.second
+                        val isExtended = isHeight[member.second.userId] ?: true
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .background(Color.LightGray, RoundedCornerShape(16.dp))
+                                .padding(horizontal = 8.dp, vertical = 16.dp)
+                                .clickable(
+                                    onClick = {
+                                        isHeight.keys.forEach { isHeight[it] = true }
+                                        isHeight[userMedicalInfo.userId] = !isExtended
+                                    },
+                                    interactionSource = null,
+                                    indication = null
+                                )
+                        ) {
+                            if (isExtended)
+                                Text(
+                                    text = userName,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            else
+                                Column {
+                                    Text(text = userName)
+                                    Text(text = userMedicalInfo.userBloodType)
+                                    Text(text = userMedicalInfo.userAllergy)
+                                    Text(text = userMedicalInfo.userMedication)
+                                    Text(text = userMedicalInfo.userHeight.toString())
+                                    Text(text = userMedicalInfo.userWeight.toString())
+                                    Text(text = userMedicalInfo.userBirthdate)
+                                    Text(text = userMedicalInfo.userNotes)
+                                }
+                        }
+                    }
+                    item { Spacer(Modifier.height(4.dp)) }
+                }
             }
         }
 

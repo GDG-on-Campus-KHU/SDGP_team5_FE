@@ -18,6 +18,9 @@ class RoomDetailViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _roomTitle = MutableStateFlow("")
+    val roomTitle: StateFlow<String> = _roomTitle
+
     private val _membersMedicalInfo = MutableStateFlow(emptyList<Pair<String, MedicalInfo>>())
     val membersMedicalInfo: StateFlow<List<Pair<String, MedicalInfo>>> = _membersMedicalInfo
 
@@ -29,8 +32,10 @@ class RoomDetailViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 val response = apiService.getRoomInfo(roomId)
-                val members = response.body()?.roomDetail?.roomMembers
-                members?.let { getMembersMedicalInfo(it) }
+                response.body()?.roomDetail?.let {
+                    getMembersMedicalInfo(it.roomMembers)
+                    _roomTitle.value = it.roomTitle
+                }
             } catch (e: Exception) {
                 Log.d("getRoomDetail", e.message.toString())
             }
