@@ -21,7 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +40,12 @@ import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.SearchBar
+import com.example.resq.presentaion.resqdetail.ResQDetailViewModel
+import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.ui.theme.InnerPadding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -54,14 +59,16 @@ fun ResQSearchScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val resQDetail by viewModel.resQDetail.collectAsState()
     var searchText by remember { mutableStateOf("") }
-    var isFavorite by remember { mutableStateOf(FAVORITE_RESQ_LIST.contains(resQ)) }
+    var isFavorite by remember { mutableStateOf(false) }
     val language = Locale.current.language
 
-    DisposableEffect(resQ) {
+    LaunchedEffect(resQ) {
         viewModel.getResQSearch(resQ)
-        onDispose {
-            if (isFavorite) viewModel.addToFavoriteResQList(resQ)
-            else viewModel.deleteToFavoriteResQList(resQ)
+        FAVORITE_RESQ_LIST.forEach {
+            if (it.resQSlug == resQ) {
+                isFavorite = true
+                return@forEach
+            }
         }
     }
 
@@ -106,7 +113,22 @@ fun ResQSearchScreen(
                                     fontSize = 30.sp,
                                     modifier = Modifier.weight(1f)
                                 )
-                                IconButton(onClick = { isFavorite = !isFavorite }) {
+                                IconButton(
+                                    onClick = {
+                                        isFavorite = !isFavorite
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            resQ.resQDetail.resQIndex?.let {
+                                                if (isFavorite) ResQDetailViewModel().addToFavoriteResQList(
+                                                    it
+                                                )
+                                                else ResQDetailViewModel().deleteToFavoriteResQList(
+                                                    it
+                                                )
+                                            }
+                                            GoogleSignViewModel().getFavoriteResQList()
+                                        }
+                                    }
+                                ) {
                                     Icon(
                                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                         contentDescription = "Favorite",

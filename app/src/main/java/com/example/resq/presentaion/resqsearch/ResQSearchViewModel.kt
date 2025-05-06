@@ -3,7 +3,6 @@ package com.example.resq.presentaion.resqsearch
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.network.RetrofitInstance.searchApiService
 import com.example.resq.presentaion.resqsearch.model.MatchDetail
 import com.example.resq.presentaion.resqsearch.model.MatchQuery
@@ -39,26 +38,6 @@ class ResQSearchViewModel : ViewModel() {
                 Log.d("getResQSearch", e.message.toString())
             }
             _isLoading.value = false
-        }
-    }
-
-    fun addToFavoriteResQList(resQ: String) {
-        viewModelScope.launch {
-            try {
-                apiService.addToFavoriteResQList(resQ)
-            } catch (e: Exception) {
-                Log.d("addToFavoriteResQList", e.message.toString())
-            }
-        }
-    }
-
-    fun deleteToFavoriteResQList(resQ: String) {
-        viewModelScope.launch {
-            try {
-                apiService.deleteToFavoriteResQList(resQ)
-            } catch (e: Exception) {
-                Log.d("deleteToFavoriteResQList", e.message.toString())
-            }
         }
     }
 }

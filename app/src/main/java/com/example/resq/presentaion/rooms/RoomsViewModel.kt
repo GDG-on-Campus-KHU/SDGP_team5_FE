@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.presentaion.rooms.model.Room
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -22,8 +21,8 @@ class RoomsViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = apiService.getRooms()
-                _rooms.value = response.body()?.rooms ?: emptyList()
+                val response = apiService.getRooms().body()
+                response?.rooms?.let { _rooms.value = it }
             } catch (e: Exception) {
                 Log.d("getRooms", e.message.toString())
             }
@@ -36,12 +35,6 @@ class RoomsViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 apiService.deleteRoom(roomId)
-                _rooms.value.forEachIndexed { index, room ->
-                    if (room.roomId == roomId) {
-                        _rooms.value -= _rooms.value[index]
-                        return@forEachIndexed
-                    }
-                }
             } catch (e: Exception) {
                 Log.d("deleteRoom", e.message.toString())
             }
@@ -53,12 +46,6 @@ class RoomsViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 apiService.outRoom(roomId)
-                _rooms.value.forEachIndexed { index, room ->
-                    if (room.roomId == roomId) {
-                        _rooms.value -= _rooms.value[index]
-                        return@forEachIndexed
-                    }
-                }
             } catch (e: Exception) {
                 Log.d("outRoom", e.message.toString())
             }
