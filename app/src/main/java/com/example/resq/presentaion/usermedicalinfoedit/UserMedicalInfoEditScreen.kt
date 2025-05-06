@@ -1,5 +1,6 @@
 package com.example.resq.presentaion.usermedicalinfoedit
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.resq.R
 import com.example.resq.presentaion.usermedicalinfo.*
+import com.example.resq.network.model.MedicalInfoRequest
+import com.example.resq.presentaion.usermedicalinfoedit.component.EditBasicTextField
+import com.example.resq.presentaion.usermedicalinfoedit.component.EditBasicTextFieldWithCheckbox
+import com.example.resq.presentaion.usermedicalinfoedit.component.EditBirthDate
+import com.example.resq.presentaion.usermedicalinfoedit.component.EditBloodType
+import com.example.resq.presentaion.usermedicalinfoedit.component.EditHeight
+import com.example.resq.presentaion.usermedicalinfoedit.component.EditWeight
 import com.example.resq.ui.theme.Gray2
 import com.example.resq.ui.theme.Gray4
 
@@ -32,18 +40,16 @@ fun UserMedicalInfoEditScreen(
     viewModel: UserMedicalInfoViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        viewModel.initializeMedicalInfoList(context)
-    }
     val medicalInfoList by viewModel.medicalInfoList.collectAsState()
 
-    val nameInput = remember { mutableStateOf(viewModel.getValueByLabel("이름")) }
     val allergyInput = remember { mutableStateOf(viewModel.getValueByLabel("알레르기")) }
     val medicationInput = remember { mutableStateOf(viewModel.getValueByLabel("복용중인 약")) }
     val notesInput = remember { mutableStateOf(viewModel.getValueByLabel("참고사항")) }
     val bloodTypeInput = remember { mutableStateOf(viewModel.getValueByLabel("혈액형")) }
-    val heightInput = remember { mutableStateOf(viewModel.getValueByLabel("키")) }
-    val weightInput = remember { mutableStateOf(viewModel.getValueByLabel("체중")) }
+    val heightInput = remember { mutableDoubleStateOf(viewModel.getValueByLabelAsDouble("키")) }
+    val weightInput = remember { mutableDoubleStateOf(viewModel.getValueByLabelAsDouble("체중")) }
+    val heightUnitInput = remember { mutableStateOf("cm") }
+    val weightUnitInput = remember { mutableStateOf("kg") }
     val birthDateInput = remember { mutableStateOf(viewModel.getValueByLabel("생년월일")) }
     val showEditBloodType = remember { mutableStateOf(false) }
     val showEditHeight = remember { mutableStateOf(false) }
@@ -52,7 +58,6 @@ fun UserMedicalInfoEditScreen(
     val allergyNoneChecked = remember { mutableStateOf(allergyInput.value == "없음") }
     val medicationNoneChecked = remember { mutableStateOf(medicationInput.value == "없음") }
     val essentialInfo = listOf(
-        stringResource(R.string.info_name),
         stringResource(R.string.info_blood_type),
         stringResource(R.string.info_allergies),
         stringResource(R.string.info_medicine)
@@ -90,10 +95,7 @@ fun UserMedicalInfoEditScreen(
             )
         }
 
-        HorizontalDivider(
-            color = Gray2,
-            modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp)
-        )
+        HorizontalDivider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
 
         medicalInfoList.forEach { element ->
             Row(
@@ -121,15 +123,14 @@ fun UserMedicalInfoEditScreen(
                         }
                     }
                     when (element.label) {
-                        "이름" -> EditBasicTextField(nameInput, element.placeholder)
                         "알레르기" -> EditBasicTextFieldWithCheckbox(allergyInput, element.placeholder, allergyNoneChecked)
                         "복용중인 약" -> EditBasicTextFieldWithCheckbox(medicationInput, element.placeholder, medicationNoneChecked)
                         "참고사항" -> EditBasicTextField(notesInput, element.placeholder)
                         else -> Text(
                             text = when (element.label) {
                                 "혈액형" -> bloodTypeInput.value.ifBlank { element.placeholder }
-                                "키" -> if (heightInput.value.isBlank()) element.placeholder else "${heightInput.value} cm"
-                                "체중" -> if (weightInput.value.isBlank()) element.placeholder else "${weightInput.value} kg"
+                                "키" -> if (heightInput.doubleValue == 0.0) element.placeholder else "${heightInput.doubleValue} ${heightUnitInput.value}"
+                                "체중" -> if (weightInput.doubleValue == 0.0) element.placeholder else "${weightInput.doubleValue} ${weightUnitInput.value}"
                                 "생년월일" -> birthDateInput.value.ifBlank { element.placeholder }
                                 else -> element.placeholder
                             },
@@ -169,27 +170,44 @@ fun UserMedicalInfoEditScreen(
 
             Button(
                 onClick = {
-                    if (nameInput.value.isBlank() ||
-                        bloodTypeInput.value.isBlank() ||
+                    if (bloodTypeInput.value.isBlank() ||
                         allergyInput.value.isBlank() ||
                         medicationInput.value.isBlank()
                     ) {
-                        val toast = Toast.makeText(context, context.getString(R.string.toast_message1), Toast.LENGTH_SHORT)
-                        toast.show()
+                        Toast.makeText(context, context.getString(R.string.toast_message1), Toast.LENGTH_SHORT)
+                            .show()
                         return@Button
                     }
-
-                    viewModel.updateMedicalInfo(
-                        name = nameInput.value,
+                    val request = MedicalInfoRequest(
                         bloodType = bloodTypeInput.value,
                         allergy = allergyInput.value,
                         medication = medicationInput.value,
-                        height = heightInput.value,
-                        weight = weightInput.value,
+                        height = heightInput.doubleValue,
+                        heightUnit = heightUnitInput.value,
+                        weight = weightInput.doubleValue,
+                        weightUnit = weightUnitInput.value,
                         birthDate = birthDateInput.value,
                         notes = notesInput.value
                     )
-                    navController.popBackStack()
+                    if (viewModel.medicalInfoList.value.isEmpty()) {
+                        viewModel.newInfo(request) { success ->
+                            if (success) {
+                                Toast.makeText(context, "저장 완료", Toast.LENGTH_SHORT).show()
+                                navController.popBackStack()
+                            } else {
+                                Log.d("UserMedicalInfo", "생성 실패")
+                            }
+                        }
+                    } else {
+                        viewModel.editInfo(request) { success ->
+                            if (success) {
+                                Toast.makeText(context, "저장 완료", Toast.LENGTH_SHORT).show()
+                                navController.popBackStack()
+                            } else {
+                                Log.d("UserMedicalInfo", "수정 실패")
+                            }
+                        }
+                    }
                 },
                 modifier = Modifier.weight(1f)
             ) {
@@ -201,10 +219,10 @@ fun UserMedicalInfoEditScreen(
             EditBloodType(bloodTypeInput) { showEditBloodType.value = false }
         }
         if (showEditHeight.value) {
-            EditHeight(heightInput) { showEditHeight.value = false }
+            EditHeight(heightInput, heightUnitInput) { showEditHeight.value = false }
         }
         if (showEditWeight.value) {
-            EditWeight(weightInput) { showEditWeight.value = false }
+            EditWeight(weightInput, weightUnitInput) { showEditWeight.value = false }
         }
         if (showEditBirthDate.value) {
             EditBirthDate(birthDateInput) { showEditBirthDate.value = false }

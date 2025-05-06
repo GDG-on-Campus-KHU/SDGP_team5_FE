@@ -6,6 +6,7 @@ import com.example.resq.network.model.ElasticSearchResponse
 import com.example.resq.network.model.FavoriteResQListResponse
 import com.example.resq.network.model.InviteRoomRequest
 import com.example.resq.network.model.NewRoomRequest
+import com.example.resq.network.model.MedicalInfoResponse
 import com.example.resq.network.model.NewRoomResponse
 import com.example.resq.network.model.NewTokenRequest
 import com.example.resq.network.model.ResponseMessage
@@ -16,6 +17,7 @@ import com.example.resq.network.model.UserInfoResponse
 import com.example.resq.presentaion.resqdetail.model.ResQDetailResponse
 import com.example.resq.presentaion.resqsearch.model.SearchRequest
 import com.example.resq.presentaion.roomdetail.model.RoomDetailResponse
+import com.example.resq.network.model.MedicalInfoRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -24,6 +26,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -172,4 +175,24 @@ interface ApiService {
     suspend fun getMedicalInfo(
         @Path("id") userId: String
     ): Response<MedicalInfoResponse>
+
+    // 사용자 의료 정보 생성
+    @POST("api/medical-info")
+    @Headers("Need-Auth: true")
+    suspend fun newInfo(
+        @Body request: MedicalInfoRequest
+    ): Response<MedicalInfoResponse>
+
+    // 사용자 의료 정보 조회
+    @GET("api/medical-info/me")
+    @Headers("Need-Auth: true")
+    suspend fun getInfo(): Response<MedicalInfoResponse>
+
+    // 사용자 의료 정보 수정
+    @PUT("api/medical-info")
+    @Headers("Need-Auth: true")
+    suspend fun editInfo(
+        @Body request: MedicalInfoRequest
+    ): Response<MedicalInfoResponse>
 }
+

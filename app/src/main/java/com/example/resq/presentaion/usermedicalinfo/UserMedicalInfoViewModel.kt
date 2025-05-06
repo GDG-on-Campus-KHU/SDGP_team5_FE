@@ -1,69 +1,144 @@
 package com.example.resq.presentaion.usermedicalinfo
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Accessibility
 import androidx.compose.material.icons.outlined.Bloodtype
 import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material.icons.outlined.NoteAlt
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.resq.R
+import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.presentaion.usermedicalinfo.model.MedicalInfoElement
+import com.example.resq.network.model.MedicalInfoRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class UserMedicalInfoViewModel : ViewModel() {
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     private val _medicalInfoList = MutableStateFlow<List<MedicalInfoElement>>(emptyList())
     val medicalInfoList: StateFlow<List<MedicalInfoElement>> = _medicalInfoList.asStateFlow()
 
-    fun initializeMedicalInfoList(context: Context) {
-        if (_medicalInfoList.value.isEmpty()) {
-            _medicalInfoList.value = listOf(
-                MedicalInfoElement(context.getString(R.string.info_name), context.getString(R.string.info_name_placeholder), Icons.Outlined.Person, mutableStateOf(null), mutableStateOf(true)),
-                MedicalInfoElement(context.getString(R.string.info_blood_type), context.getString(R.string.info_blood_type_placeholder), Icons.Outlined.Bloodtype, mutableStateOf(null), mutableStateOf(true)),
-                MedicalInfoElement(context.getString(R.string.info_allergies), context.getString(R.string.info_allergies_placeholder), Icons.Outlined.Warning, mutableStateOf(null), mutableStateOf(true)),
-                MedicalInfoElement(context.getString(R.string.info_medicine), context.getString(R.string.info_medicine_placeholder), Icons.Outlined.Medication, mutableStateOf(null), mutableStateOf(true)),
-                MedicalInfoElement(context.getString(R.string.info_height), context.getString(R.string.info_height_placeholder), Icons.Outlined.Accessibility, mutableStateOf(null), mutableStateOf(false)),
-                MedicalInfoElement(context.getString(R.string.info_weight), context.getString(R.string.info_weight_placeholder), Icons.Outlined.MonitorWeight, mutableStateOf(null), mutableStateOf(false)),
-                MedicalInfoElement(context.getString(R.string.info_date_of_birth), context.getString(R.string.info_date_of_birth_placeholder), Icons.Outlined.Today, mutableStateOf(null), mutableStateOf(false)),
-                MedicalInfoElement(context.getString(R.string.info_additional_notes), context.getString(R.string.info_additional_notes_placeholder), Icons.Outlined.NoteAlt, mutableStateOf(null), mutableStateOf(false))
-            )
+    fun getInfo(context: Context) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = apiService.getInfo()
+                response.body()?.medicalInfo?.let { data ->
+                    _medicalInfoList.value = listOf(
+                        MedicalInfoElement(
+                            context.getString(R.string.info_blood_type),
+                            context.getString(R.string.info_blood_type_placeholder),
+                            Icons.Outlined.Bloodtype,
+                            mutableStateOf(data.userBloodType),
+                            mutableStateOf(true)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_allergies),
+                            context.getString(R.string.info_allergies_placeholder),
+                            Icons.Outlined.Warning,
+                            mutableStateOf(data.userAllergy),
+                            mutableStateOf(true)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_medicine),
+                            context.getString(R.string.info_medicine_placeholder),
+                            Icons.Outlined.Medication,
+                            mutableStateOf(data.userMedication),
+                            mutableStateOf(true)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_height),
+                            context.getString(R.string.info_height_placeholder),
+                            Icons.Outlined.Accessibility,
+                            mutableStateOf(data.userHeight.toString()),
+                            mutableStateOf(false)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_weight),
+                            context.getString(R.string.info_weight_placeholder),
+                            Icons.Outlined.MonitorWeight,
+                            mutableStateOf(data.userWeight.toString()),
+                            mutableStateOf(false)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_date_of_birth),
+                            context.getString(R.string.info_date_of_birth_placeholder),
+                            Icons.Outlined.Today,
+                            mutableStateOf(data.userBirthdate),
+                            mutableStateOf(false)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_additional_notes),
+                            context.getString(R.string.info_additional_notes_placeholder),
+                            Icons.Outlined.NoteAlt,
+                            mutableStateOf(data.userNotes),
+                            mutableStateOf(false)
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                Log.d("getInfo", e.message.toString())
+            }
+            _isLoading.value = false
         }
     }
 
-    fun updateMedicalInfo(
-        name: String,
-        bloodType: String,
-        allergy: String,
-        medication: String,
-        height: String,
-        weight: String,
-        birthDate: String,
-        notes: String
+    fun newInfo(
+        request: MedicalInfoRequest,
+        onResult: (Boolean) -> Unit
     ) {
-        _medicalInfoList.value.forEach { element ->
-            when (element.label) {
-                "이름" -> element.value.value = name.ifBlank { null }
-                "혈액형" -> element.value.value = bloodType.ifBlank { null }
-                "알레르기" -> element.value.value = allergy.ifBlank { null }
-                "복용중인 약" -> element.value.value = medication.ifBlank { null }
-                "키" -> element.value.value = height.ifBlank { null }
-                "체중" -> element.value.value = weight.ifBlank { null }
-                "생년월일" -> element.value.value = birthDate.ifBlank { null }
-                "참고사항" -> element.value.value = notes.ifBlank { null }
+        viewModelScope.launch {
+            _isLoading.value = true
+
+            try {
+                val response = apiService.newInfo(request)
+                val success = response.isSuccessful && response.body()?.boolean == true
+                onResult(success)
+            } catch (e: Exception) {
+                Log.d("newInfo", e.message.toString())
+                onResult(false)
             }
-            if (element.label in listOf("키", "체중", "생년월일", "참고사항")) {
-                element.show.value = !element.value.value.isNullOrEmpty()
-            }
+            _isLoading.value = false
         }
     }
+
+    fun editInfo(
+        request: MedicalInfoRequest,
+        onResult: (Boolean) -> Unit
+    ) {
+        viewModelScope.launch {
+            _isLoading.value = true
+
+            try {
+                val response = apiService.editInfo(request)
+                val success = response.isSuccessful && response.body()?.boolean == true
+                onResult(success)
+            } catch (e: Exception) {
+                Log.d("newInfo", e.message.toString())
+                onResult(false)
+            }
+            _isLoading.value = false
+        }
+    }
+
     fun getValueByLabel(label: String): String {
         return medicalInfoList.value.find { it.label == label }?.value?.value ?: ""
     }
+
+    fun getValueByLabelAsDouble(label: String): Double {
+        return getValueByLabel(label).toDoubleOrNull() ?: 0.0
+    }
+
 }

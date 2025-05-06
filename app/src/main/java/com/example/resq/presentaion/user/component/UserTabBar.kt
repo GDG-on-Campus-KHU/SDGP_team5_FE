@@ -27,9 +27,8 @@ fun UserTabBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
         Box(
             modifier = Modifier
                 .weight(1f)
-                .padding(start = 55.dp)
                 .clickable { onTabSelected(0) },
-            contentAlignment = Alignment.CenterStart
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = stringResource(R.string.medical_info),
@@ -42,9 +41,8 @@ fun UserTabBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
         Box(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 55.dp)
                 .clickable { onTabSelected(1) },
-            contentAlignment = Alignment.CenterEnd
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = stringResource(R.string.record_list),

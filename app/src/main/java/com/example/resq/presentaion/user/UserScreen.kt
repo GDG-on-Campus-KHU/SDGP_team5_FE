@@ -1,6 +1,5 @@
 package com.example.resq.presentaion.user
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,17 +9,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,10 +40,12 @@ fun UserScreen(
     navController: NavController,
     padding: PaddingValues,
 ) {
-    val googleName = USER_DISPLAY_NAME
-    val googleEmail = USER_EMAIL
     var selectedTab by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
     val viewModel: UserMedicalInfoViewModel = viewModel()
+    LaunchedEffect(Unit) {
+        viewModel.getInfo(context)
+    }
 
     Column(
         modifier = Modifier
@@ -63,30 +65,13 @@ fun UserScreen(
                 modifier = Modifier
                     .padding(start = 15.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                ) {
-                    Text(
-                        text = googleName,
-                        fontSize = 24.sp,
-                        modifier = Modifier.wrapContentSize())
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = "Edit",
-                        modifier = Modifier
-                            .padding(top = 5.dp, start = 12.dp)
-                            .size(28.dp)
-                            .clickable(
-                                onClick = {
-                                    //이름 고치기 기능 구현 예정
-                                }
-
-                            )
-                    )
-                }
                 Text(
-                    text = googleEmail,
+                    text = USER_DISPLAY_NAME,
+                    fontSize = 24.sp,
+                    modifier = Modifier.wrapContentSize()
+                )
+                Text(
+                    text = USER_EMAIL,
                     fontSize = 14.sp,
                     color = Gray4,
                     modifier = Modifier.padding(start = 3.dp)
@@ -96,20 +81,8 @@ fun UserScreen(
         HorizontalDivider(
             color = Color.Black,
             modifier = Modifier
-            .padding(vertical = 5.dp, horizontal = 26.dp)
+                .padding(vertical = 5.dp, horizontal = 26.dp)
         )
-
-        //로그아웃 임시 버튼
-        /*
-        Button(
-            onClick = {
-                googleSignViewModel.signOut(googleSignInClient)
-                googleSignViewModel.removeUserInfo(context)
-            }
-        ) {
-            Text("로그아웃")
-        }
-        */
 
         UserTabBar(selectedTab = selectedTab) {
             selectedTab = it
