@@ -7,12 +7,12 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.USER_TOKEN
 import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.network.model.AuthRequest
+import com.example.resq.presentaion.resqbookmark.model.ResQBookmark
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -95,11 +95,12 @@ class GoogleSignViewModel : ViewModel() {
         }
     }
 
-    fun getFavoriteResQList() {
+    fun getFavoriteResQList(onResult: (List<ResQBookmark>) -> Unit) {
         viewModelScope.launch {
             try {
                 val response = apiService.getFavoriteResQList().body()
-                FAVORITE_RESQ_LIST = response?.favoriteResQList ?: emptyList()
+                val favoriteResQList = response?.favoriteResQList ?: emptyList()
+                onResult(favoriteResQList)
             } catch (e: Exception) {
                 Log.d("getFavoriteResQList", e.message.toString())
             }
