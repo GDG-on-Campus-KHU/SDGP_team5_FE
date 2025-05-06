@@ -72,7 +72,7 @@ fun RoomNotifyScreen(
                                 modifier = Modifier.padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = notify.title)
+                                Text(text = notify.roomTitle)
                                 Spacer(Modifier.weight(1f))
                                 IconButton(onClick = { viewModel.refuseNotify("") }) {
                                     Icon(

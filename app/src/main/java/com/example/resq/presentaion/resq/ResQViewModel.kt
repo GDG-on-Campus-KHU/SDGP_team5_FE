@@ -1,13 +1,8 @@
 package com.example.resq.presentaion.resq
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
-import com.example.resq.network.RetrofitInstance.apiService
-import com.example.resq.presentaion.resq.model.ResQ
 import com.example.resq.R
-import kotlinx.coroutines.launch
+import com.example.resq.presentaion.resq.model.ResQ
 
 class ResQViewModel : ViewModel() {
 
@@ -34,26 +29,5 @@ class ResQViewModel : ViewModel() {
                 ResQ("heat-illness/cold-illness", "heat-illness/cold-illness", R.drawable.resq6),
                 ResQ("mental-crisis", "mental-crisis", R.drawable.resq5)
             )
-    }
-
-    fun getEmerNumber(): String {
-        return try {
-            // 응급 전화 return
-            "tel:" + "" // ex)119
-        } catch (e: Exception) {
-            Log.d("getEmerNumber", e.message.toString())
-            ""
-        }
-    }
-
-    fun getFavoriteResQList() {
-        viewModelScope.launch {
-            try {
-                val response = apiService.getFavoriteResQList().body()
-                response?.let { FAVORITE_RESQ_LIST = it.favoriteResQList }
-            } catch (e: Exception) {
-                Log.d("getFavoriteResQList", e.message.toString())
-            }
-        }
     }
 }

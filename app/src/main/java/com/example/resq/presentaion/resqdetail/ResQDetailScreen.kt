@@ -20,7 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +39,11 @@ import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.SearchBar
+import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.ui.theme.InnerPadding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -53,14 +57,16 @@ fun ResQDetailScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val resQDetail by viewModel.resQDetail.collectAsState()
     var searchText by remember { mutableStateOf("") }
-    var isFavorite by remember { mutableStateOf(FAVORITE_RESQ_LIST.contains(resQ)) }
+    var isFavorite by remember { mutableStateOf(false) }
     val language = Locale.current.language
 
-    DisposableEffect(resQ) {
+    LaunchedEffect(resQ) {
         viewModel.getResQDetail(resQ, language)
-        onDispose {
-            if (isFavorite) viewModel.addToFavoriteResQList(resQ)
-            else viewModel.deleteToFavoriteResQList(resQ)
+        FAVORITE_RESQ_LIST.forEach {
+            if (it.resQSlug == resQ) {
+                isFavorite = true
+                return@forEach
+            }
         }
     }
 
@@ -68,7 +74,8 @@ fun ResQDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
-            .padding(InnerPadding)
+            .padding(horizontal = InnerPadding)
+            .padding(top = InnerPadding)
     ) {
         SearchBar(
             searchText = searchText,
@@ -83,8 +90,9 @@ fun ResQDetailScreen(
         if (isLoading) {
             CenterCircularProgress()
         } else {
-            Spacer(Modifier.height(InnerPadding))
+            Spacer(Modifier.height(4.dp))
             LazyColumn(modifier = Modifier.padding(horizontal = InnerPadding)) {
+                item { Spacer(Modifier.height(20.dp)) }
                 resQDetail.forEach { resQ ->
                     item {
                         Row(
@@ -96,7 +104,18 @@ fun ResQDetailScreen(
                                 fontSize = 30.sp,
                                 modifier = Modifier.weight(1f)
                             )
-                            IconButton(onClick = { isFavorite = !isFavorite }) {
+                            IconButton(
+                                onClick = {
+                                    isFavorite = !isFavorite
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        resQ.resQIndex?.let {
+                                            if (isFavorite) viewModel.addToFavoriteResQList(it)
+                                            else viewModel.deleteToFavoriteResQList(it)
+                                        }
+                                        GoogleSignViewModel().getFavoriteResQList()
+                                    }
+                                }
+                            ) {
                                 Icon(
                                     imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                     contentDescription = "Favorite",
@@ -130,6 +149,7 @@ fun ResQDetailScreen(
                         }
                     }
                 }
+                item { Spacer(Modifier.height(20.dp)) }
             }
         }
     }

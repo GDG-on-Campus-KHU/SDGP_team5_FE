@@ -6,6 +6,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -29,10 +30,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 class MainActivity : ComponentActivity() {
 
     companion object {
+        lateinit var appContext: Context
+
         @SuppressLint("StaticFieldLeak")
         lateinit var googleSignInClient: GoogleSignInClient
         lateinit var USER_TOKEN: String
         lateinit var USER_DISPLAY_NAME: String
+        lateinit var USER_EMAIL: String
         var FAVORITE_RESQ_LIST = emptyList<String>()
     }
 
@@ -54,6 +58,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        appContext = applicationContext
+
         checkPermissions(
             activity = this,
             permissions = permissions,
@@ -62,10 +68,11 @@ class MainActivity : ComponentActivity() {
         )
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestServerAuthCode(BuildConfig.GOOGLE_AUTH_CLIENT_ID)
+            .requestServerAuthCode(BuildConfig.GOOGLE_AUTH_CLIENT_ID, true)
+            .requestProfile()
             .requestEmail()
+            .requestId()
             .build()
-
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         enableEdgeToEdge()

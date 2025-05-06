@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,7 +57,8 @@ fun ResQBookmarkScreen(
     val isExpanded = remember { mutableStateMapOf<String, Boolean>() }
     var isDialogExpended by remember { mutableStateOf(false) }
     val bookmarkOption = remember { mutableStateOf("") }
-    val bookmarkTitle = remember { mutableStateOf("") }
+    val bookmarkTitle = remember { mutableIntStateOf(0) }
+    val language = Locale.current.language
 
     Column(
         modifier = Modifier
@@ -69,7 +72,7 @@ fun ResQBookmarkScreen(
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }
                 items(FAVORITE_RESQ_LIST) { bookmark ->
-                    val isBookmarkOptions = isExpanded[bookmark] ?: false
+                    val isBookmarkOptions = isExpanded[bookmark.resQSlug] ?: false
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -78,19 +81,24 @@ fun ResQBookmarkScreen(
                             .padding(8.dp)
                             .clickable(
                                 onClick = {
-                                    val encodedBookmarkTitle =
+                                    val encodedBookmarkSlug =
                                         URLEncoder.encode(
-                                            bookmark,
+                                            bookmark.resQSlug,
                                             StandardCharsets.UTF_8.toString()
                                         )
-                                    navController.navigate(HomeNavigationItem.ResQDetail.route + "/$encodedBookmarkTitle")
+                                    navController.navigate(HomeNavigationItem.ResQDetail.route + "/$encodedBookmarkSlug")
                                 },
                                 interactionSource = null,
                                 indication = null
                             )
                     ) {
                         Text(
-                            text = bookmark,
+                            text =
+                            when (language) {
+                                "ko" -> bookmark.resQTitle.korean
+                                "en" -> bookmark.resQTitle.english
+                                else -> ""
+                            },
                             modifier = Modifier.align(Alignment.CenterStart)
                         )
                         Row(
@@ -101,12 +109,12 @@ fun ResQBookmarkScreen(
                             if (isBookmarkOptions)
                                 BookmarkOptions {
                                     bookmarkOption.value = it
-                                    bookmarkTitle.value = bookmark
+                                    bookmarkTitle.value = bookmark.resQIndex
                                     isDialogExpended = !isDialogExpended
                                 }
                             IconButton(onClick = {
                                 isExpanded.keys.forEach { isExpanded[it] = false }
-                                isExpanded[bookmark] = !isBookmarkOptions
+                                isExpanded[bookmark.resQSlug] = !isBookmarkOptions
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.MoreVert,

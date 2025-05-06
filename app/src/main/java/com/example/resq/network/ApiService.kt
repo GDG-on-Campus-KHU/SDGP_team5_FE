@@ -1,13 +1,18 @@
 package com.example.resq.network
 
 import com.example.resq.network.model.AccessTokenResponse
+import com.example.resq.network.model.AuthRequest
 import com.example.resq.network.model.ElasticSearchResponse
 import com.example.resq.network.model.FavoriteResQListResponse
+import com.example.resq.network.model.InviteRoomRequest
+import com.example.resq.network.model.NewRoomRequest
 import com.example.resq.network.model.NewRoomResponse
+import com.example.resq.network.model.NewTokenRequest
 import com.example.resq.network.model.ResponseMessage
 import com.example.resq.network.model.RoomsResponse
 import com.example.resq.network.model.SignInResponse
 import com.example.resq.network.model.UploadAudioResponse
+import com.example.resq.network.model.UserInfoResponse
 import com.example.resq.presentaion.resqdetail.model.ResQDetailResponse
 import com.example.resq.presentaion.resqsearch.model.SearchRequest
 import com.example.resq.presentaion.roomdetail.model.RoomDetailResponse
@@ -26,15 +31,27 @@ interface ApiService {
     // 구글 로그인
     @POST("api/auth/login/google")
     suspend fun googleSignIn(
-        @Body serverAuthCode: String
+        @Body serverAuthCode: AuthRequest
     ): Response<SignInResponse>
 
     // 새로운 accessToken 발급
     @POST("api/auth/refresh-token")
     @Headers("Need-Auth: true")
-    fun getNewAccessToken(
-        @Body accessToken: String
+    suspend fun getNewAccessToken(
+        @Body accessToken: NewTokenRequest
     ): Response<AccessTokenResponse>
+
+    // 사용자 정보 조회
+    @GET("api/users/me")
+    @Headers("Need-Auth: true")
+    suspend fun getMyInfo(): Response<UserInfoResponse>
+
+    // 특정 사용자 정보 조회
+    @GET("api/users/info/{user_id}")
+    @Headers("Need-Auth: true")
+    suspend fun getUserInfo(
+        @Path("user_id") userId: String
+    ): Response<UserInfoResponse>
 
     // 구조 방법 상세 설명
     @GET("api/situation/actions/case/{slug}/{language}")
@@ -52,20 +69,20 @@ interface ApiService {
     // 즐겨찾기 구조 리스트 조회
     @GET("api/favorites")
     @Headers("Need-Auth: true")
-    fun getFavoriteResQList(): Response<FavoriteResQListResponse>
+    suspend fun getFavoriteResQList(): Response<FavoriteResQListResponse>
 
     // 즐겨찾기에 추가
     @POST("api/favorites/{situationIndex}")
     @Headers("Need-Auth: true")
-    fun addToFavoriteResQList(
-        @Path("situationIndex") resQ: String
+    suspend fun addToFavoriteResQList(
+        @Path("situationIndex") resQ: Int
     ): Response<ResponseMessage>
 
     // 즐겨찾기에 제거
     @DELETE("api/favorites/{situationIndex}")
     @Headers("Need-Auth: true")
-    fun deleteToFavoriteResQList(
-        @Path("situationIndex") resQ: String
+    suspend fun deleteToFavoriteResQList(
+        @Path("situationIndex") resQ: Int
     ): Response<ResponseMessage>
 
     // 공유 방 조회
@@ -73,11 +90,16 @@ interface ApiService {
     @Headers("Need-Auth: true")
     suspend fun getRooms(): Response<RoomsResponse>
 
+    // 초대받은 공유 방 조회
+    @GET("api/groups/pending/me")
+    @Headers("Need-Auth: true")
+    suspend fun getInvitedRooms(): Response<RoomsResponse>
+
     // 공유 방 생성
     @POST("api/groups")
     @Headers("Need-Auth: true")
     suspend fun newRoom(
-        @Body roomTitle: String
+        @Body roomTitle: NewRoomRequest
     ): Response<NewRoomResponse>
 
     // 공유 방 초대
@@ -85,7 +107,7 @@ interface ApiService {
     @Headers("Need-Auth: true")
     suspend fun inviteRoomMember(
         @Path("id") roomId: String,
-        @Body email: String
+        @Body email: InviteRoomRequest
     ): Response<ResponseMessage>
 
     // 공유 방 정보 조회
@@ -143,4 +165,11 @@ interface ApiService {
     suspend fun uploadAudio(
         @Part audio: MultipartBody.Part,
     ): Response<UploadAudioResponse>
+
+    // 특정 사용자 의료 정보 조회
+    @GET("api/medical-info/{id}")
+    @Headers("Need-Auth: true")
+    suspend fun getMedicalInfo(
+        @Path("id") userId: String
+    ): Response<MedicalInfoResponse>
 }

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +31,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.SearchBar
-import com.example.resq.presentaion.resq.model.ResQ
 import com.example.resq.ui.theme.InnerPadding
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
