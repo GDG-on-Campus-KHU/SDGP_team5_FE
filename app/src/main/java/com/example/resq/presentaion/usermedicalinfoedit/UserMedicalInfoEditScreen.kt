@@ -23,7 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.resq.R
 import com.example.resq.presentaion.usermedicalinfo.*
-import com.example.resq.presentaion.usermedicalinfo.model.MedicalInfoRequest
+import com.example.resq.network.model.MedicalInfoRequest
 import com.example.resq.presentaion.usermedicalinfoedit.component.EditBasicTextField
 import com.example.resq.presentaion.usermedicalinfoedit.component.EditBasicTextFieldWithCheckbox
 import com.example.resq.presentaion.usermedicalinfoedit.component.EditBirthDate

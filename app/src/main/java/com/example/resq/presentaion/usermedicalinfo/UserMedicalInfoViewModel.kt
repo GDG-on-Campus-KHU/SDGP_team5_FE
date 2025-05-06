@@ -16,7 +16,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.resq.R
 import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.presentaion.usermedicalinfo.model.MedicalInfoElement
-import com.example.resq.presentaion.usermedicalinfo.model.MedicalInfoRequest
+import com.example.resq.network.model.MedicalInfoRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,15 +35,57 @@ class UserMedicalInfoViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 val response = apiService.getInfo()
-                response.body()?.data?.let { data ->
+                response.body()?.medicalInfo?.let { data ->
                     _medicalInfoList.value = listOf(
-                        MedicalInfoElement(context.getString(R.string.info_blood_type), context.getString(R.string.info_blood_type_placeholder), Icons.Outlined.Bloodtype, mutableStateOf(data.bloodType), mutableStateOf(true)),
-                        MedicalInfoElement(context.getString(R.string.info_allergies), context.getString(R.string.info_allergies_placeholder), Icons.Outlined.Warning, mutableStateOf(data.allergy), mutableStateOf(true)),
-                        MedicalInfoElement(context.getString(R.string.info_medicine), context.getString(R.string.info_medicine_placeholder), Icons.Outlined.Medication, mutableStateOf(data.medication), mutableStateOf(true)),
-                        MedicalInfoElement(context.getString(R.string.info_height), context.getString(R.string.info_height_placeholder), Icons.Outlined.Accessibility, mutableStateOf(data.height.toString()), mutableStateOf(false)),
-                        MedicalInfoElement(context.getString(R.string.info_weight), context.getString(R.string.info_weight_placeholder), Icons.Outlined.MonitorWeight, mutableStateOf(data.weight.toString()), mutableStateOf(false)),
-                        MedicalInfoElement(context.getString(R.string.info_date_of_birth), context.getString(R.string.info_date_of_birth_placeholder), Icons.Outlined.Today, mutableStateOf(data.birthDate), mutableStateOf(false)),
-                        MedicalInfoElement(context.getString(R.string.info_additional_notes), context.getString(R.string.info_additional_notes_placeholder), Icons.Outlined.NoteAlt, mutableStateOf(data.notes), mutableStateOf(false))
+                        MedicalInfoElement(
+                            context.getString(R.string.info_blood_type),
+                            context.getString(R.string.info_blood_type_placeholder),
+                            Icons.Outlined.Bloodtype,
+                            mutableStateOf(data.userBloodType),
+                            mutableStateOf(true)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_allergies),
+                            context.getString(R.string.info_allergies_placeholder),
+                            Icons.Outlined.Warning,
+                            mutableStateOf(data.userAllergy),
+                            mutableStateOf(true)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_medicine),
+                            context.getString(R.string.info_medicine_placeholder),
+                            Icons.Outlined.Medication,
+                            mutableStateOf(data.userMedication),
+                            mutableStateOf(true)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_height),
+                            context.getString(R.string.info_height_placeholder),
+                            Icons.Outlined.Accessibility,
+                            mutableStateOf(data.userHeight.toString()),
+                            mutableStateOf(false)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_weight),
+                            context.getString(R.string.info_weight_placeholder),
+                            Icons.Outlined.MonitorWeight,
+                            mutableStateOf(data.userWeight.toString()),
+                            mutableStateOf(false)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_date_of_birth),
+                            context.getString(R.string.info_date_of_birth_placeholder),
+                            Icons.Outlined.Today,
+                            mutableStateOf(data.userBirthdate),
+                            mutableStateOf(false)
+                        ),
+                        MedicalInfoElement(
+                            context.getString(R.string.info_additional_notes),
+                            context.getString(R.string.info_additional_notes_placeholder),
+                            Icons.Outlined.NoteAlt,
+                            mutableStateOf(data.userNotes),
+                            mutableStateOf(false)
+                        )
                     )
                 }
             } catch (e: Exception) {
