@@ -37,7 +37,7 @@ class ResQDetailViewModel : ViewModel() {
         }
     }
 
-    fun addToFavoriteResQList(resQ: String) {
+    fun addToFavoriteResQList(resQ: Int) {
         viewModelScope.launch {
             try {
                 apiService.addToFavoriteResQList(resQ)
@@ -47,7 +47,7 @@ class ResQDetailViewModel : ViewModel() {
         }
     }
 
-    fun deleteToFavoriteResQList(resQ: String) {
+    fun deleteToFavoriteResQList(resQ: Int) {
         viewModelScope.launch {
             try {
                 apiService.deleteToFavoriteResQList(resQ)
