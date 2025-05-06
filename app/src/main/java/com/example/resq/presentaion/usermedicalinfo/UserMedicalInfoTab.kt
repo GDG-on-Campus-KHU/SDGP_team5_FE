@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -34,12 +33,7 @@ fun UserMedicalInfoTab(
     padding: PaddingValues,
     viewModel: UserMedicalInfoViewModel
 ) {
-    val context = LocalContext.current
     val medicalInfoList by viewModel.medicalInfoList.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.initializeMedicalInfoList(context)
-    }
 
     Column(
         modifier = Modifier

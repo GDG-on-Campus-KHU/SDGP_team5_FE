@@ -1,5 +1,6 @@
 package com.example.resq.presentaion.user
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,12 +16,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,7 +31,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
-import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.presentaion.user.component.UserTabBar
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoTab
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoViewModel
@@ -40,10 +42,14 @@ fun UserScreen(
     navController: NavController,
     padding: PaddingValues,
 ) {
-    val googleName = USER_DISPLAY_NAME
-    val googleEmail = USER_EMAIL
+    val googleName = "user"//추후 USER_DISPLAY_NAME
+    val googleEmail = "melon@gmail.com"//추후 USER_EMAIL
     var selectedTab by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
     val viewModel: UserMedicalInfoViewModel = viewModel()
+    LaunchedEffect(Unit) {
+        viewModel.getInfo(context)
+    }
 
     Column(
         modifier = Modifier
@@ -98,18 +104,6 @@ fun UserScreen(
             modifier = Modifier
             .padding(vertical = 5.dp, horizontal = 26.dp)
         )
-
-        //로그아웃 임시 버튼
-        /*
-        Button(
-            onClick = {
-                googleSignViewModel.signOut(googleSignInClient)
-                googleSignViewModel.removeUserInfo(context)
-            }
-        ) {
-            Text("로그아웃")
-        }
-        */
 
         UserTabBar(selectedTab = selectedTab) {
             selectedTab = it

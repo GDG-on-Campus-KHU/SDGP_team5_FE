@@ -46,12 +46,12 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
     val isExpanded = remember { mutableStateOf(false) }
     val emerNumber = ResQViewModel().getEmerNumber()
 
-    if (isUserToken) {
-        viewModel.signIn("USER_TOKEN", context)
-        ResQViewModel().getFavoriteResQList()
-        if (isLoading)
-            CenterCircularProgress()
-        else
+//    if (isUserToken) {
+//        viewModel.signIn("USER_TOKEN", context)
+//        ResQViewModel().getFavoriteResQList()
+//        if (isLoading)
+//            CenterCircularProgress()
+//        else
             Scaffold(
                 topBar = { TopBar(navController) { isExpanded.value = true } },
                 bottomBar = { BottomBar(navController) },
@@ -95,9 +95,9 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
                     userNavigationGraph(navController, paddingValues)
                 }
             }
-    } else {
-        GoogleSignInScreen { isUserToken = true }
-    }
+//    } else {
+//        GoogleSignInScreen { isUserToken = true }
+//    }
 }
 
 private fun startRecording(context: Context): Boolean {

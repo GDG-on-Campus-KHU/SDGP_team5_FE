@@ -85,4 +85,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp3.okhttp)
+
+    // Extended Icons
+    implementation(libs.material.icons.extended)
 }
