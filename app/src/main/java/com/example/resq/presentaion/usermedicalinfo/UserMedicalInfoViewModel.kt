@@ -35,6 +35,10 @@ class UserMedicalInfoViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 val response = apiService.getInfo()
+                Log.d("getInfo", "API 응답 성공 여부: ${response.isSuccessful}")
+                Log.e("getInfo", "HTTP 상태 코드: ${response.code()}, 메시지: ${response.message()}")
+                Log.d("getInfo", "responsebody: ${response.body()}")
+
                 response.body()?.medicalInfo?.let { data ->
                     _medicalInfoList.value = listOf(
                         MedicalInfoElement(
@@ -63,33 +67,35 @@ class UserMedicalInfoViewModel : ViewModel() {
                             context.getString(R.string.info_height_placeholder),
                             Icons.Outlined.Accessibility,
                             mutableStateOf(data.userHeight.toString()),
-                            mutableStateOf(false)
+                            mutableStateOf(data.userHeight != 0.0),
+                            data.userHeightUnit
                         ),
                         MedicalInfoElement(
                             context.getString(R.string.info_weight),
                             context.getString(R.string.info_weight_placeholder),
                             Icons.Outlined.MonitorWeight,
                             mutableStateOf(data.userWeight.toString()),
-                            mutableStateOf(false)
+                            mutableStateOf(data.userWeight != 0.0),
+                            data.userWeightUnit
                         ),
                         MedicalInfoElement(
                             context.getString(R.string.info_date_of_birth),
                             context.getString(R.string.info_date_of_birth_placeholder),
                             Icons.Outlined.Today,
                             mutableStateOf(data.userBirthdate),
-                            mutableStateOf(false)
+                            mutableStateOf(data.userBirthdate != "None")
                         ),
                         MedicalInfoElement(
                             context.getString(R.string.info_additional_notes),
                             context.getString(R.string.info_additional_notes_placeholder),
                             Icons.Outlined.NoteAlt,
                             mutableStateOf(data.userNotes),
-                            mutableStateOf(false)
+                            mutableStateOf(!(data.userNotes.isBlank() || data.userNotes == context.getString(R.string.none)))
                         )
                     )
                 }
             } catch (e: Exception) {
-                Log.d("getInfo", e.message.toString())
+                Log.e("getInfo", "예외: ${e.message}")
             }
             _isLoading.value = false
         }
@@ -104,6 +110,9 @@ class UserMedicalInfoViewModel : ViewModel() {
 
             try {
                 val response = apiService.newInfo(request)
+                Log.d("newInfo", "응답 코드: ${response.code()}, 메시지: ${response.message()}, body: ${response.body()}")
+                val errorBody = response.errorBody()?.string()
+                Log.e("newInfo", "에러 바디: $errorBody")
                 val success = response.isSuccessful && response.body()?.boolean == true
                 onResult(success)
             } catch (e: Exception) {
@@ -123,6 +132,8 @@ class UserMedicalInfoViewModel : ViewModel() {
 
             try {
                 val response = apiService.editInfo(request)
+                val errorBody = response.errorBody()?.string()
+                Log.e("editInfo", "에러 바디: $errorBody")
                 val success = response.isSuccessful && response.body()?.boolean == true
                 onResult(success)
             } catch (e: Exception) {
@@ -141,4 +152,57 @@ class UserMedicalInfoViewModel : ViewModel() {
         return getValueByLabel(label).toDoubleOrNull() ?: 0.0
     }
 
+    fun initEmptyMedicalInfo(context: Context) {
+        _medicalInfoList.value = listOf(
+            MedicalInfoElement(
+                context.getString(R.string.info_blood_type),
+                context.getString(R.string.info_blood_type_placeholder),
+                Icons.Outlined.Bloodtype,
+                mutableStateOf(""),
+                mutableStateOf(true)
+            ),
+            MedicalInfoElement(
+                context.getString(R.string.info_allergies),
+                context.getString(R.string.info_allergies_placeholder),
+                Icons.Outlined.Warning,
+                mutableStateOf(""),
+                mutableStateOf(true)
+            ),
+            MedicalInfoElement(
+                context.getString(R.string.info_medicine),
+                context.getString(R.string.info_medicine_placeholder),
+                Icons.Outlined.Medication,
+                mutableStateOf(""),
+                mutableStateOf(true)
+            ),
+            MedicalInfoElement(
+                context.getString(R.string.info_height),
+                context.getString(R.string.info_height_placeholder),
+                Icons.Outlined.Accessibility,
+                mutableStateOf(""),
+                mutableStateOf(false)
+            ),
+            MedicalInfoElement(
+                context.getString(R.string.info_weight),
+                context.getString(R.string.info_weight_placeholder),
+                Icons.Outlined.MonitorWeight,
+                mutableStateOf(""),
+                mutableStateOf(false)
+            ),
+            MedicalInfoElement(
+                context.getString(R.string.info_date_of_birth),
+                context.getString(R.string.info_date_of_birth_placeholder),
+                Icons.Outlined.Today,
+                mutableStateOf(""),
+                mutableStateOf(false)
+            ),
+            MedicalInfoElement(
+                context.getString(R.string.info_additional_notes),
+                context.getString(R.string.info_additional_notes_placeholder),
+                Icons.Outlined.NoteAlt,
+                mutableStateOf(""),
+                mutableStateOf(false)
+            )
+        )
+    }
 }

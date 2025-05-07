@@ -9,5 +9,6 @@ data class MedicalInfoElement(
     val placeholder: String,
     val icon: ImageVector,
     val value: MutableState<String?> = mutableStateOf(null),
-    val show: MutableState<Boolean> = mutableStateOf(false)
+    val show: MutableState<Boolean> = mutableStateOf(false),
+    val unit: String? = null
 )

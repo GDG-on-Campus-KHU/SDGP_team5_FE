@@ -45,7 +45,7 @@
     <string name="info_height_placeholder">Enter your height.</string>
     <string name="info_weight_placeholder">Enter your weight.</string>
     <string name="info_date_of_birth_placeholder">Enter your date of birth.</string>
-    <string name="info_additional_notes_placeholder">Enter any additional information you\'d like to share.</string>
+    <string name="info_additional_notes_placeholder">Enter any additional information.</string>
     <string name="none">None</string>
     <string name="not_set">not set</string>
     <string name="ok">OK</string>
@@ -66,5 +66,6 @@
     <string name="terms_and_policies">Terms and Policies</string>
     <string name="terms_of_service">Terms of service</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="saved_successfully">Saved successfully</string>
 
 </resources>

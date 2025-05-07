@@ -65,5 +65,6 @@
     <string name="terms_and_policies">약관 및 정책</string>
     <string name="terms_of_service">이용약관</string>
     <string name="privacy_policy">개인정보 처리방침</string>
+    <string name="saved_successfully">저장 완료</string>
 
 </resources>

@@ -56,11 +56,7 @@ fun EditBloodType(
         confirmButton = {
             TextButton(onClick = {
                 if (selectedOption.isNotBlank()) {
-                    state.value = when {
-                        selectedOption.endsWith("+") -> "RH+ ${selectedOption.dropLast(1)}"
-                        selectedOption.endsWith("-") -> "RH- ${selectedOption.dropLast(1)}"
-                        else -> selectedOption
-                    }
+                    state.value = selectedOption
                 }
                 onDismiss()
             }) {

@@ -22,12 +22,11 @@ fun EditBirthDate(
     onDismiss: () -> Unit
 ) {
     val (defaultYear, defaultMonth, defaultDay) = Triple(2001, 1, 1)
-    var (year, month, day) = when (state.value) {
-        "" -> Triple(defaultYear, defaultMonth, defaultDay)
-        else -> {
-            val splitList = state.value.split("-")
-            Triple(splitList[0].toInt(), splitList[1].toInt(), splitList[2].toInt())
-        }
+    var (year, month, day) = if (state.value.isBlank() || state.value == "None") {
+        Triple(defaultYear, defaultMonth, defaultDay)
+    } else {
+        val splitList = state.value.split("-")
+        Triple(splitList[0].toInt(), splitList[1].toInt(), splitList[2].toInt())
     }
 
     AlertDialog(
