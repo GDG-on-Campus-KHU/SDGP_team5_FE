@@ -42,6 +42,9 @@ fun UserMedicalInfoEditScreen(
     val medicalInfoList by viewModel.medicalInfoList.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.getInfo(context)
+        if (viewModel.medicalInfoList.value.isEmpty()) {
+            viewModel.initEmptyMedicalInfo(context)
+        }
     }
     val allergyInput = remember(medicalInfoList) { mutableStateOf(viewModel.getValueByLabel(context.getString(R.string.info_allergies))) }
     val medicationInput = remember(medicalInfoList) { mutableStateOf(viewModel.getValueByLabel(context.getString(R.string.info_medicine))) }
@@ -191,23 +194,15 @@ fun UserMedicalInfoEditScreen(
                         birthDate = birthDateInput.value,
                         notes = notesInput.value
                     )
-                    if (viewModel.medicalInfoList.value.isEmpty()) {
-                        viewModel.editInfo(request) { success ->
-                            if (success) {
-                                Toast.makeText(context, "저장 완료", Toast.LENGTH_SHORT).show()
-                                navController.popBackStack()
-                            } else {
-                                Log.d("UserMedicalInfo", "수정 실패")
-                            }
-                        }
-                    } else {
-                        viewModel.editInfo(request) { success ->
-                            if (success) {
-                                Toast.makeText(context, "저장 완료", Toast.LENGTH_SHORT).show()
-                                navController.popBackStack()
-                            } else {
-                                Log.d("UserMedicalInfo", "수정 실패")
-                            }
+                    Log.d("SaveRequest", "Request 데이터: $request")
+                    val isNew = !viewModel.isInitialized.value
+                    val action = if (isNew) viewModel::newInfo else viewModel::editInfo
+                    action(request) { success ->
+                        if (success) {
+                            Toast.makeText(context, "저장완료", Toast.LENGTH_SHORT).show()
+                            navController.popBackStack()
+                        } else {
+                            Log.d("UserMedicalInfo", "저장 실패")
                         }
                     }
                 },

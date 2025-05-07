@@ -30,6 +30,9 @@ class UserMedicalInfoViewModel : ViewModel() {
     private val _medicalInfoList = MutableStateFlow<List<MedicalInfoElement>>(emptyList())
     val medicalInfoList: StateFlow<List<MedicalInfoElement>> = _medicalInfoList.asStateFlow()
 
+    private val _isInitialized = MutableStateFlow(false)
+    val isInitialized: StateFlow<Boolean> = _isInitialized
+
     fun getInfo(context: Context) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -90,9 +93,10 @@ class UserMedicalInfoViewModel : ViewModel() {
                             context.getString(R.string.info_additional_notes_placeholder),
                             Icons.Outlined.NoteAlt,
                             mutableStateOf(data.userNotes),
-                            mutableStateOf(!(data.userNotes.isBlank() || data.userNotes == context.getString(R.string.none)))
+                            mutableStateOf(!(data.userNotes.isBlank() || data.userNotes == "없음" || data.userNotes == "None"))
                         )
                     )
+                    _isInitialized.value = true
                 }
             } catch (e: Exception) {
                 Log.e("getInfo", "예외: ${e.message}")
@@ -137,7 +141,7 @@ class UserMedicalInfoViewModel : ViewModel() {
                 val success = response.isSuccessful && response.body()?.boolean == true
                 onResult(success)
             } catch (e: Exception) {
-                Log.d("newInfo", e.message.toString())
+                Log.d("editInfo", e.message.toString())
                 onResult(false)
             }
             _isLoading.value = false
@@ -145,7 +149,7 @@ class UserMedicalInfoViewModel : ViewModel() {
     }
 
     fun getValueByLabel(label: String): String {
-        return medicalInfoList.value.find { it.label == label }?.value?.value ?: ""
+        return medicalInfoList.value.find { it.label == label }?.value?.value ?: "None"
     }
 
     fun getValueByLabelAsDouble(label: String): Double {
@@ -193,14 +197,14 @@ class UserMedicalInfoViewModel : ViewModel() {
                 context.getString(R.string.info_date_of_birth),
                 context.getString(R.string.info_date_of_birth_placeholder),
                 Icons.Outlined.Today,
-                mutableStateOf(""),
+                mutableStateOf("None"),
                 mutableStateOf(false)
             ),
             MedicalInfoElement(
                 context.getString(R.string.info_additional_notes),
                 context.getString(R.string.info_additional_notes_placeholder),
                 Icons.Outlined.NoteAlt,
-                mutableStateOf(""),
+                mutableStateOf("None"),
                 mutableStateOf(false)
             )
         )
