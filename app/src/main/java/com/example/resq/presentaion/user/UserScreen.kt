@@ -88,7 +88,7 @@ fun UserScreen(
             selectedTab = it
         }
         when (selectedTab) {
-            0 -> UserMedicalInfoTab(navController, padding, viewModel)
+            0 -> UserMedicalInfoTab(navController, viewModel)
             1 -> UserRecordList()
         }
     }

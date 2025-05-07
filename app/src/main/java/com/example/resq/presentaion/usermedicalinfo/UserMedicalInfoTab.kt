@@ -30,7 +30,6 @@ import com.example.resq.ui.theme.Gray4
 @Composable
 fun UserMedicalInfoTab(
     navController: NavController,
-    padding: PaddingValues,
     viewModel: UserMedicalInfoViewModel
 ) {
     val medicalInfoList by viewModel.medicalInfoList.collectAsState()
