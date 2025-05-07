@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resq.network.RetrofitInstance.apiService
+import com.example.resq.network.model.InviteRoomRequest
+import com.example.resq.network.model.NewRoomRequest
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,16 +43,17 @@ class RoomAddViewModel : ViewModel() {
     fun newRoom(roomTitle: String, members: List<String>) {
         viewModelScope.launch {
             _isLoading.value = true
-            if (members.isNotEmpty())
-                try {
-                    val response = apiService.newRoom(roomTitle)
-                    val roomId = response.body()?.data?.roomId
-                    // 멤버 초대
+            try {
+                val title = NewRoomRequest(roomTitle)
+                val response = apiService.newRoom(title)
+                val roomId = response.body()?.data?.roomId
+                if (members.isNotEmpty()) {
 //                    roomId?.let { inviteMembers(it, members) }
-                } catch (e: Exception) {
-                    Log.d("addMembers", e.message.toString())
                 }
-            _isLoading.value = false
+            } catch (e: Exception) {
+                Log.d("addMembers", e.message.toString())
+                _isLoading.value = false
+            }
         }
     }
 
@@ -58,7 +61,7 @@ class RoomAddViewModel : ViewModel() {
         viewModelScope.launch {
             if (members.isNotEmpty())
                 try {
-                    members.forEach { apiService.inviteRoomMember(roomId, it) }
+                    members.forEach { apiService.inviteRoomMember(roomId, InviteRoomRequest(it)) }
                 } catch (e: Exception) {
                     Log.d("inviteMembers", e.message.toString())
                 }

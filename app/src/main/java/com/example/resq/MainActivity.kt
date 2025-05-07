@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import com.example.resq.presentaion.component.CenterCircularProgress
+import com.example.resq.presentaion.resqbookmark.model.ResQBookmark
 import com.example.resq.ui.theme.ResQTheme
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
         lateinit var USER_TOKEN: String
         lateinit var USER_DISPLAY_NAME: String
         lateinit var USER_EMAIL: String
-        var FAVORITE_RESQ_LIST = emptyList<String>()
+        var FAVORITE_RESQ_LIST = emptyList<ResQBookmark>()
     }
 
     private var isLoading by mutableStateOf(true)
