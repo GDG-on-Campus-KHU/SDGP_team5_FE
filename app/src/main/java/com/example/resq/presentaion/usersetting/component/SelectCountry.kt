@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.resq.R
 
-
 @Composable
 fun SelectCountry(
     onDismiss: () -> Unit,
