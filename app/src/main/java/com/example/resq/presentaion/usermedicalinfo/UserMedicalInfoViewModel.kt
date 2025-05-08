@@ -39,6 +39,10 @@ class UserMedicalInfoViewModel : ViewModel() {
     private val _userId = MutableStateFlow<Int?>(null)
     val userId: StateFlow<Int?> = _userId
 
+    private val _userDisplayName = MutableStateFlow(USER_DISPLAY_NAME)
+    val userDisplayName: StateFlow<String> = _userDisplayName
+    private var originalDisplayName: String? = null
+
     fun getInfo(context: Context) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -49,6 +53,7 @@ class UserMedicalInfoViewModel : ViewModel() {
                 Log.d("getInfo", "responsebody: ${response.body()}")
 
                 response.body()?.medicalInfo?.let { data ->
+                    updateDisplayName(originalDisplayName ?: USER_DISPLAY_NAME)
                     _medicalInfoList.value = listOf(
                         MedicalInfoElement(
                             context.getString(R.string.info_blood_type),
@@ -227,6 +232,8 @@ class UserMedicalInfoViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     response.body()?.userInfo?.let {
                         _userId.value = it.userId
+                        originalDisplayName = it.userName
+                        updateDisplayName(it.userName)
                     }
                 } else {
                     Log.e("getUserId", "응답 실패: ${response.code()}")
@@ -236,7 +243,6 @@ class UserMedicalInfoViewModel : ViewModel() {
             }
         }
     }
-
 
     fun translateInfo(context: Context, userId: Int) {
         viewModelScope.launch {
@@ -251,6 +257,7 @@ class UserMedicalInfoViewModel : ViewModel() {
                     Log.e("translateInfo", "에러 바디: $errorBody")
                 }
                 response.body()?.data?.let { data ->
+                    updateDisplayName(data.name)
                     _medicalInfoList.value = listOf(
                         MedicalInfoElement(
                             context.getString(R.string.info_blood_type),
@@ -311,5 +318,9 @@ class UserMedicalInfoViewModel : ViewModel() {
             }
             _isLoading.value = false
         }
+    }
+    fun updateDisplayName(name: String) {
+        USER_DISPLAY_NAME = name
+        _userDisplayName.value = name
     }
 }
