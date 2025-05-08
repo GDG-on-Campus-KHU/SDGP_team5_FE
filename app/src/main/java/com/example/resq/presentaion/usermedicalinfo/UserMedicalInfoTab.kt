@@ -1,5 +1,6 @@
 package com.example.resq.presentaion.usermedicalinfo
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,10 +13,12 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,6 +36,12 @@ fun UserMedicalInfoTab(
     viewModel: UserMedicalInfoViewModel
 ) {
     val medicalInfoList by viewModel.medicalInfoList.collectAsState()
+    val context = LocalContext.current
+    val userId by viewModel.userId.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getUserId()
+    }
 
     Column(
         modifier = Modifier
@@ -65,7 +74,9 @@ fun UserMedicalInfoTab(
                     .padding(top = 7.dp, start = 12.dp)
                     .size(28.dp)
                     .clickable {
-                        //번역 기능 구현
+                        userId?.let {
+                            viewModel.translateInfo(context, it)
+                        } ?: Log.d("translateInfo", "userId가 아직 로드되지 않았습니다.")
                     }
             )
         }

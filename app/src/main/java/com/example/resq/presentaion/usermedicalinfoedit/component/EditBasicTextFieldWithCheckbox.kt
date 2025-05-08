@@ -52,7 +52,7 @@ fun EditBasicTextFieldWithCheckbox(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    if (state.value.isBlank() || state.value == "None") {
+                    if (state.value.isBlank() || state.value == "None" ) {
                         Text(text = placeholder, style = textStyle)
                     }
                     innerTextField()
