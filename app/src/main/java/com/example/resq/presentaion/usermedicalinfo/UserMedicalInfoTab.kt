@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +40,7 @@ fun UserMedicalInfoTab(
     val medicalInfoList by viewModel.medicalInfoList.collectAsState()
     val context = LocalContext.current
     val userId by viewModel.userId.collectAsState()
+    val isTranslated = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.getUserId()
@@ -75,8 +78,13 @@ fun UserMedicalInfoTab(
                     .size(28.dp)
                     .clickable {
                         userId?.let {
-                            viewModel.translateInfo(context, it)
-                        } ?: Log.d("translateInfo", "userId가 아직 로드되지 않았습니다.")
+                            if (isTranslated.value) {
+                                viewModel.getInfo(context)
+                            } else {
+                                viewModel.translateInfo(context, it)
+                            }
+                            isTranslated.value = !isTranslated.value
+                        } ?: Log.d("translateInfo", "userId 로드 오류")
                     }
             )
         }
