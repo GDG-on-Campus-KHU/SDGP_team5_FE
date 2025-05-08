@@ -12,25 +12,24 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.resq.R
+import com.example.resq.presentaion.usermedicalinfo.component.showBloodType
+import com.example.resq.presentaion.usermedicalinfo.component.showUnit
 import com.example.resq.ui.theme.Gray2
 import com.example.resq.ui.theme.Gray4
 
 @Composable
 fun UserMedicalInfoTab(
     navController: NavController,
-    padding: PaddingValues,
     viewModel: UserMedicalInfoViewModel
 ) {
     val medicalInfoList by viewModel.medicalInfoList.collectAsState()
@@ -98,7 +97,12 @@ fun UserMedicalInfoTab(
                         fontSize = 12.sp
                     )
                     Text(
-                        text = element.value.value ?: element.placeholder,
+                        text = when (element.label) {
+                            stringResource(R.string.info_blood_type) -> showBloodType(element)
+                            stringResource(R.string.info_height),
+                            stringResource(R.string.info_weight) -> showUnit(element)
+                            else -> element.value.value?.takeIf { it.isNotBlank() } ?: element.placeholder
+                        },
                         fontSize = 12.sp,
                         color = Gray4,
                         lineHeight = 16.sp

@@ -5,14 +5,21 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.resq.R
+import com.example.resq.network.model.CountryRequest
+import com.example.resq.presentaion.usersetting.component.SelectCountry
 import com.example.resq.presentaion.usersetting.component.SettingItem
 import com.example.resq.presentaion.usersetting.component.SettingSection
 
@@ -21,6 +28,9 @@ fun UserSettingScreen(
     navController: NavController,
     padding: PaddingValues,
 ) {
+    val viewModel: UserSettingViewModel = viewModel()
+    var showCountryAlertDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,9 +64,9 @@ fun UserSettingScreen(
             SettingItem(text = stringResource(R.string.language), onClick = {
                 // 언어 선택 fun SettingLanguage
             })
-            SettingItem(text = stringResource(R.string.country), onClick = {
-                // 국가 선택 fun SettingCountry
-            })
+            SettingItem(text = stringResource(R.string.country),
+                onClick = { showCountryAlertDialog = true }
+            )
         }
 
         // 접근 권한
@@ -75,5 +85,13 @@ fun UserSettingScreen(
                 // 개인정보 처리방침 fun SettingPrivacyPolicy
             })
         }
+    }
+    if (showCountryAlertDialog) {
+        SelectCountry(
+            onDismiss = { showCountryAlertDialog = false },
+            onCountrySelected = { selectedCountry ->
+                viewModel.updateCountry(CountryRequest(selectedCountry))
+            }
+        )
     }
 }

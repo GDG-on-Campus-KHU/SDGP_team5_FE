@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
 import com.example.resq.MainActivity.Companion.USER_EMAIL
+import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.presentaion.user.component.UserTabBar
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoTab
 import com.example.resq.presentaion.usermedicalinfo.UserMedicalInfoViewModel
@@ -39,14 +40,13 @@ import com.example.resq.ui.theme.Gray4
 fun UserScreen(
     navController: NavController,
     padding: PaddingValues,
+    viewModel: UserMedicalInfoViewModel = viewModel()
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
-    val viewModel: UserMedicalInfoViewModel = viewModel()
     LaunchedEffect(Unit) {
         viewModel.getInfo(context)
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,7 +88,7 @@ fun UserScreen(
             selectedTab = it
         }
         when (selectedTab) {
-            0 -> UserMedicalInfoTab(navController, padding, viewModel)
+            0 -> UserMedicalInfoTab(navController, viewModel)
             1 -> UserRecordList()
         }
     }
