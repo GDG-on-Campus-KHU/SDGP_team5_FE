@@ -5,8 +5,9 @@ import com.example.resq.network.model.AuthRequest
 import com.example.resq.network.model.ElasticSearchResponse
 import com.example.resq.network.model.FavoriteResQListResponse
 import com.example.resq.network.model.InviteRoomRequest
-import com.example.resq.network.model.NewRoomRequest
+import com.example.resq.network.model.MedicalInfoRequest
 import com.example.resq.network.model.MedicalInfoResponse
+import com.example.resq.network.model.NewRoomRequest
 import com.example.resq.network.model.NewRoomResponse
 import com.example.resq.network.model.NewTokenRequest
 import com.example.resq.network.model.ResponseMessage
@@ -17,7 +18,6 @@ import com.example.resq.network.model.UserInfoResponse
 import com.example.resq.presentaion.resqdetail.model.ResQDetailResponse
 import com.example.resq.presentaion.resqsearch.model.SearchRequest
 import com.example.resq.presentaion.roomdetail.model.RoomDetailResponse
-import com.example.resq.network.model.MedicalInfoRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -53,7 +53,7 @@ interface ApiService {
     @GET("api/users/info/{user_id}")
     @Headers("Need-Auth: true")
     suspend fun getUserInfo(
-        @Path("user_id") userId: String
+        @Path("user_id") userId: Int
     ): Response<UserInfoResponse>
 
     // 구조 방법 상세 설명
@@ -173,7 +173,7 @@ interface ApiService {
     @GET("api/medical-info/{id}")
     @Headers("Need-Auth: true")
     suspend fun getMedicalInfo(
-        @Path("id") userId: String
+        @Path("id") userId: Int
     ): Response<MedicalInfoResponse>
 
     // 사용자 의료 정보 생성
@@ -195,4 +195,3 @@ interface ApiService {
         @Body request: MedicalInfoRequest
     ): Response<MedicalInfoResponse>
 }
-

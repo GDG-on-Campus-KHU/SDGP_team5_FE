@@ -22,6 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
+import com.example.resq.MainActivity.Companion.USER_TOKEN
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.navigation.home.homeNavigationGraph
 import com.example.resq.navigation.share.shareNavigationGraph
@@ -44,7 +46,7 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
 
     if (isToken || viewModel.getUserToken(context)) {
         viewModel.getMyInfo()
-        viewModel.getFavoriteResQList()
+        viewModel.getFavoriteResQList { FAVORITE_RESQ_LIST = it }
         Scaffold(
             topBar = { TopBar(navController) { isExpanded.value = true } },
             bottomBar = { BottomBar(navController) },

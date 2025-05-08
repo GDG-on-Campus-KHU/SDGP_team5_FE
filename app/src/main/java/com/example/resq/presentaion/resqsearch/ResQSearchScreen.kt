@@ -41,7 +41,6 @@ import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.SearchBar
 import com.example.resq.presentaion.resqdetail.ResQDetailViewModel
-import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.ui.theme.InnerPadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -116,16 +115,10 @@ fun ResQSearchScreen(
                                 IconButton(
                                     onClick = {
                                         isFavorite = !isFavorite
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            resQ.resQDetail.resQIndex?.let {
-                                                if (isFavorite) ResQDetailViewModel().addToFavoriteResQList(
-                                                    it
-                                                )
-                                                else ResQDetailViewModel().deleteToFavoriteResQList(
-                                                    it
-                                                )
-                                            }
-                                            GoogleSignViewModel().getFavoriteResQList()
+                                        resQ.resQDetail.resQIndex?.let {
+                                            if (isFavorite)
+                                                ResQDetailViewModel().addToFavoriteResQList(it)
+                                            else ResQDetailViewModel().deleteToFavoriteResQList(it)
                                         }
                                     }
                                 ) {

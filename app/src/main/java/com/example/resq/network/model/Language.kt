@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Language(
     @SerializedName("ko") val korean: String,
-    @SerializedName("ko") val english: String
+    @SerializedName("en") val english: String
 )
