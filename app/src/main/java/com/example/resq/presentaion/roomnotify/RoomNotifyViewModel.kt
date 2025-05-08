@@ -50,7 +50,7 @@ class RoomNotifyViewModel : ViewModel() {
         }
     }
 
-    fun refuseNotify(roomId: String) {
+    fun rejectNotify(roomId: String) {
         viewModelScope.launch {
             try {
                 apiService.rejectNotify(roomId)
