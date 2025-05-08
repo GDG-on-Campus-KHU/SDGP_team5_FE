@@ -47,45 +47,19 @@
 
 ## 📂 Project Structure
 
-```
-.
-├── 🔒 auth/
-├── ⭐ favorite/
-├── 👥 group/
-├── 🌍 language/
-├── 💊 medical_info/
-├── 🎤 recording/
-├── 🚑 situation/
-├── 👤 user/
-├── 🔧 util/
-├── db
-│   ├── gcs.go
-│   └── mongo.go
-├── docs
-│   ├── docs.go
-│   ├── swagger.json
-│   └── swagger.yaml
-├── 🐋 Dockerfile
-├── go.mod
-├── go.sum
-├── ▶️ main.go
-└── README.md
-```
+
 
 <br>
 
 ## ▶️ How to Run
 
 ```
-git clone https://github.com/GDG-on-Campus-KHU/SDGP_team5_BE.git
 ```
 
 ```
-cd SDGP_team5_BE
 ```
 
 ```
-go mod tidy
 ```
 
 ```
