@@ -79,29 +79,39 @@ class RecordingService : Service() {
         mediaRecorder = null
 
         recordingUri?.let { uri ->
-            try {
-                val inputStream = contentResolver.openInputStream(uri)
-                val tempFile = File.createTempFile("upload_", ".mp4", cacheDir)
-                inputStream?.use { input ->
-                    tempFile.outputStream().use { output ->
-                        input.copyTo(output)
-                    }
+            CoroutineScope(Dispatchers.IO).launch {
+                val tempFile = saveToTempFile(uri)
+                tempFile?.let {
+                    uploadAudioFile(it)
+                    it.delete()
                 }
-
-                val requestFile = tempFile.asRequestBody("audio/mp4".toMediaTypeOrNull())
-                val audioPart =
-                    MultipartBody.Part.createFormData("audio", tempFile.name, requestFile)
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val response = apiService.uploadAudio(audioPart)
-                    } catch (e: Exception) {
-                        Log.d("uploadAudio", e.message.toString())
-                    }
-                }
-            } catch (e: IOException) {
-                Log.d("stopRecording", e.message.toString())
             }
+        }
+    }
+
+    private fun saveToTempFile(uri: Uri): File? {
+        return try {
+            val tempFile = File.createTempFile("upload_", ".mp4", cacheDir)
+            contentResolver.openInputStream(uri)?.use { input ->
+                tempFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            tempFile
+        } catch (e: IOException) {
+            Log.e("saveToTempFile", "Error saving file: ${e.message}")
+            null
+        }
+    }
+
+    private suspend fun uploadAudioFile(file: File) {
+        val requestFile = file.asRequestBody("audio/mp4".toMediaTypeOrNull())
+        val audioPart = MultipartBody.Part.createFormData("audio", file.name, requestFile)
+
+        try {
+            apiService.uploadAudio(audioPart)
+        } catch (e: Exception) {
+            Log.d("uploadAudioFile", e.message.toString())
         }
     }
 }

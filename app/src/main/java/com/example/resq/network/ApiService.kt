@@ -5,6 +5,7 @@ import com.example.resq.network.model.AuthRequest
 import com.example.resq.network.model.CountryRequest
 import com.example.resq.network.model.ElasticSearchResponse
 import com.example.resq.network.model.FavoriteResQListResponse
+import com.example.resq.network.model.GetRecordsResponse
 import com.example.resq.network.model.InviteRoomRequest
 import com.example.resq.network.model.NewRoomRequest
 import com.example.resq.network.model.MedicalInfoResponse
@@ -13,6 +14,8 @@ import com.example.resq.network.model.NewTokenRequest
 import com.example.resq.network.model.ResponseMessage
 import com.example.resq.network.model.RoomsResponse
 import com.example.resq.network.model.SignInResponse
+import com.example.resq.network.model.TranslateInfoRequest
+import com.example.resq.network.model.TranslateInfoResponse
 import com.example.resq.network.model.UploadAudioResponse
 import com.example.resq.network.model.UserInfoResponse
 import com.example.resq.presentaion.resqdetail.model.ResQDetailResponse
@@ -167,11 +170,15 @@ interface ApiService {
 
     // 녹음 파일 저장
     @Multipart
-    @POST("api/recordings")
+    @POST("api/recordings/stt")
     @Headers("Need-Auth: true")
     suspend fun uploadAudio(
         @Part audio: MultipartBody.Part,
     ): Response<UploadAudioResponse>
+
+    // 녹음 파일 불러오기
+    @GET("api/recordings/me")
+    suspend fun getRecords():Response<GetRecordsResponse>
 
     // 특정 사용자 의료 정보 조회
     @GET("api/medical-info/{id}")
