@@ -2,6 +2,7 @@ package com.example.resq.network
 
 import com.example.resq.network.model.AccessTokenResponse
 import com.example.resq.network.model.AuthRequest
+import com.example.resq.network.model.CountryRequest
 import com.example.resq.network.model.ElasticSearchResponse
 import com.example.resq.network.model.FavoriteResQListResponse
 import com.example.resq.network.model.InviteRoomRequest
@@ -25,6 +26,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
@@ -194,5 +196,11 @@ interface ApiService {
     suspend fun editInfo(
         @Body request: MedicalInfoRequest
     ): Response<MedicalInfoResponse>
+
+    // 여행 국가 변경
+    @PATCH("api/users/me/country")
+    suspend fun updateCountry(
+        @Body request: CountryRequest
+    ): Response<UserInfoResponse>
 }
 

@@ -66,5 +66,14 @@
     <string name="terms_of_service">이용약관</string>
     <string name="privacy_policy">개인정보 처리방침</string>
     <string name="saved_successfully">저장 완료</string>
+    <string name="country_kr">대한민국</string>
+    <string name="country_us">미국</string>
+    <string name="country_gb">영국</string>
+    <string name="country_jp">일본</string>
+    <string name="country_cn">중국</string>
+    <string name="country_de">독일</string>
+    <string name="country_fr">프랑스</string>
+    <string name="country_mx">멕시코</string>
+    <string name="select_country">여행 국가 선택</string>
 
 </resources>
