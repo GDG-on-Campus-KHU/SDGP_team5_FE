@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         lateinit var USER_TOKEN: String
         lateinit var USER_DISPLAY_NAME: String
         lateinit var USER_EMAIL: String
-        var FAVORITE_RESQ_LIST = emptyList<ResQBookmark>()
+        lateinit var FAVORITE_RESQ_LIST: List<ResQBookmark>
     }
 
     private var isLoading by mutableStateOf(true)
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
         )
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestServerAuthCode(BuildConfig.GOOGLE_AUTH_CLIENT_ID, true)
+            .requestServerAuthCode(BuildConfig.GOOGLE_AUTH_CLIENT_ID)
             .requestProfile()
             .requestEmail()
             .requestId()
@@ -79,9 +79,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ResQTheme {
-                if (isLoading)
-                    CenterCircularProgress()
-                else
+                CenterCircularProgress()
+                if (!isLoading)
                     ResQApp()
             }
         }

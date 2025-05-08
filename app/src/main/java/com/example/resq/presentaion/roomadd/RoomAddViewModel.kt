@@ -7,7 +7,6 @@ import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.network.model.InviteRoomRequest
 import com.example.resq.network.model.NewRoomRequest
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -22,23 +21,22 @@ class RoomAddViewModel : ViewModel() {
 
     private var getMembersJop: Job? = null
 
-    fun getMembers(email: String) {
-        getMembersJop?.cancel()
-        getMembersJop = viewModelScope.launch {
-            _isLoading.value = true
-            if (email.isEmpty())
-                _members.value = emptyList()
-            else
-                try {
-                    // 전체에서 멤버 검색
-                    delay(1000)
-                    _members.value = (1..10).map { it.toString() }
-                } catch (e: Exception) {
-                    Log.d("getMembers", e.message.toString())
-                }
-            _isLoading.value = false
-        }
-    }
+    // 차후에 사용자를 검색을 통해 찾아서 추가할 수 있게 하기
+//    fun getMembers(email: String) {
+//        getMembersJop?.cancel()
+//        getMembersJop = viewModelScope.launch {
+//            _isLoading.value = true
+//            if (email.isEmpty())
+//                _members.value = emptyList()
+//            else
+//                try {
+//                    // 전체에서 멤버 검색
+//                } catch (e: Exception) {
+//                    Log.d("getMembers", e.message.toString())
+//                }
+//            _isLoading.value = false
+//        }
+//    }
 
     fun newRoom(roomTitle: String, members: List<String>) {
         viewModelScope.launch {
@@ -48,7 +46,7 @@ class RoomAddViewModel : ViewModel() {
                 val response = apiService.newRoom(title)
                 val roomId = response.body()?.data?.roomId
                 if (members.isNotEmpty()) {
-//                    roomId?.let { inviteMembers(it, members) }
+                    roomId?.let { inviteMembers(it, members) }
                 }
             } catch (e: Exception) {
                 Log.d("addMembers", e.message.toString())
@@ -57,11 +55,14 @@ class RoomAddViewModel : ViewModel() {
         }
     }
 
-    fun inviteMembers(roomId: String, members: List<String>) {
+    private fun inviteMembers(roomId: String, members: List<String>) {
         viewModelScope.launch {
             if (members.isNotEmpty())
                 try {
-                    members.forEach { apiService.inviteRoomMember(roomId, InviteRoomRequest(it)) }
+                    members.forEach {
+                        val email = InviteRoomRequest(it)
+                        apiService.inviteRoomMember(roomId, email)
+                    }
                 } catch (e: Exception) {
                     Log.d("inviteMembers", e.message.toString())
                 }

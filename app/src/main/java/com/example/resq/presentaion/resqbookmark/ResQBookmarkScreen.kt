@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.ConfirmDialog
@@ -54,6 +53,7 @@ fun ResQBookmarkScreen(
     viewModel: ResQBookmarkViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
+    val resQBookmarks by viewModel.resQBookmarks.collectAsState()
     val isExpanded = remember { mutableStateMapOf<String, Boolean>() }
     var isDialogExpended by remember { mutableStateOf(false) }
     val bookmarkOption = remember { mutableStateOf("") }
@@ -71,7 +71,7 @@ fun ResQBookmarkScreen(
         else
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }
-                items(FAVORITE_RESQ_LIST) { bookmark ->
+                items(resQBookmarks) { bookmark ->
                     val isBookmarkOptions = isExpanded[bookmark.resQSlug] ?: false
                     Box(
                         modifier = Modifier
@@ -109,7 +109,7 @@ fun ResQBookmarkScreen(
                             if (isBookmarkOptions)
                                 BookmarkOptions {
                                     bookmarkOption.value = it
-                                    bookmarkTitle.value = bookmark.resQIndex
+                                    bookmarkTitle.intValue = bookmark.resQIndex
                                     isDialogExpended = !isDialogExpended
                                 }
                             IconButton(onClick = {
@@ -132,7 +132,7 @@ fun ResQBookmarkScreen(
         ConfirmDialog(
             title = bookmarkOption.value,
             onDismissRequest = { isDialogExpended = !isDialogExpended },
-            onClick = { viewModel.deleteBookmark(bookmarkTitle.value) }
+            onClick = { viewModel.deleteBookmark(bookmarkTitle.intValue) }
         )
 }
 
