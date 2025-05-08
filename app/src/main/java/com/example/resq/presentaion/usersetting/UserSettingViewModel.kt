@@ -19,6 +19,9 @@ class UserSettingViewModel : ViewModel() {
             try {
                 val response = apiService.updateCountry(request)
                 val success = response.isSuccessful && response.body()?.boolean == true
+                val body = response.body()
+                Log.d("updateCountry", "response body: $body")
+
                 if (success) {
                     Log.d("updateCountry", "국가 코드 변경 성공")
                 } else {

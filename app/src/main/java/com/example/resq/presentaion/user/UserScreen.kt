@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +45,7 @@ fun UserScreen(
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
+    val displayName by viewModel.userDisplayName.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.getInfo(context)
     }
@@ -66,7 +68,7 @@ fun UserScreen(
                     .padding(start = 15.dp)
             ) {
                 Text(
-                    text = USER_DISPLAY_NAME,
+                    text = displayName,
                     fontSize = 24.sp,
                     modifier = Modifier.wrapContentSize()
                 )
