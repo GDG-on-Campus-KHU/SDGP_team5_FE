@@ -79,9 +79,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ResQTheme {
-                if (isLoading)
-                    CenterCircularProgress()
-                else
+                CenterCircularProgress()
+                if (!isLoading)
                     ResQApp()
             }
         }
