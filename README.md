@@ -54,16 +54,19 @@
 ## ▶️ How to Run
 
 ```
+git clone https://github.com/GDG-on-Campus-KHU/SDGP_team5_FE.git
 ```
 
 ```
+cd SDGP_team5_FE
 ```
 
 ```
+Android Studio > File > Open > 'SDGP_team5_FE'
 ```
 
 ```
-air
+./gradlew installDebug
 ```
 
 <br>
