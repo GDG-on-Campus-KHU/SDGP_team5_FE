@@ -39,7 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.navigation.home.HomeNavigationItem
-import com.example.resq.presentaion.component.CenterCircularProgress
+import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.ConfirmDialog
 import com.example.resq.presentaion.resqbookmark.component.BookmarkOptions
 import com.example.resq.ui.theme.InnerPadding
@@ -66,8 +66,8 @@ fun ResQBookmarkScreen(
             .padding(padding)
             .padding(horizontal = InnerPadding)
     ) {
-        if (isLoading)
-            CenterCircularProgress()
+        if (resQBookmarks.isEmpty())
+            CenterBlankText("저장된 응급상황 대처법이 없습니다.")
         else
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }

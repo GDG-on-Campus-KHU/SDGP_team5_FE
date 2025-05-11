@@ -38,6 +38,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.navigation.home.HomeNavigationItem
+import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.SearchBar
 import com.example.resq.presentaion.resqdetail.ResQDetailViewModel
@@ -92,9 +93,7 @@ fun ResQSearchScreen(
             CenterCircularProgress()
         } else {
             if (resQDetail.isEmpty())
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Text(text = "검색 결과가 없습니다", modifier = Modifier.align(Alignment.Center))
-                }
+                CenterBlankText("검색 결과가 없습니다")
             else {
                 Spacer(Modifier.height(4.dp))
                 LazyColumn(modifier = Modifier.padding(horizontal = InnerPadding)) {

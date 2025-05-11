@@ -7,8 +7,9 @@ import com.example.resq.network.model.ElasticSearchResponse
 import com.example.resq.network.model.FavoriteResQListResponse
 import com.example.resq.network.model.GetRecordsResponse
 import com.example.resq.network.model.InviteRoomRequest
-import com.example.resq.network.model.NewRoomRequest
+import com.example.resq.network.model.MedicalInfoRequest
 import com.example.resq.network.model.MedicalInfoResponse
+import com.example.resq.network.model.NewRoomRequest
 import com.example.resq.network.model.NewRoomResponse
 import com.example.resq.network.model.NewTokenRequest
 import com.example.resq.network.model.ResponseMessage
@@ -21,9 +22,6 @@ import com.example.resq.network.model.UserInfoResponse
 import com.example.resq.presentaion.resqdetail.model.ResQDetailResponse
 import com.example.resq.presentaion.resqsearch.model.SearchRequest
 import com.example.resq.presentaion.roomdetail.model.RoomDetailResponse
-import com.example.resq.network.model.MedicalInfoRequest
-import com.example.resq.network.model.TranslateInfoRequest
-import com.example.resq.network.model.TranslateInfoResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body

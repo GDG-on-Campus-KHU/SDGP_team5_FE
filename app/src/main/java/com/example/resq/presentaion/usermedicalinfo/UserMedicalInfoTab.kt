@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.resq.R
+import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.usermedicalinfo.component.showBloodType
 import com.example.resq.presentaion.usermedicalinfo.component.showUnit
 import com.example.resq.ui.theme.Gray2
@@ -95,40 +96,48 @@ fun UserMedicalInfoTab(
             modifier = Modifier.padding(start = 40.dp)
         )
 
-        HorizontalDivider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
+        HorizontalDivider(
+            color = Gray2,
+            modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp)
+        )
 
-        medicalInfoList.filter { it.show.value }.forEach { element ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp)
-            ) {
-                Icon(
-                    imageVector = element.icon,
-                    contentDescription = null,
+        if (medicalInfoList.isEmpty())
+            CenterBlankText("의료정보가 없습니다.")
+        else
+            medicalInfoList.filter { it.show.value }.forEach { element ->
+                Row(
                     modifier = Modifier
-                        .size(45.dp)
-                        .padding(top = 7.dp)
-                )
-                Column(modifier = Modifier.padding(start = 16.dp)) {
-                    Text(
-                        text = element.label,
-                        fontSize = 12.sp
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp)
+                ) {
+                    Icon(
+                        imageVector = element.icon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(45.dp)
+                            .padding(top = 7.dp)
                     )
-                    Text(
-                        text = when (element.label) {
-                            stringResource(R.string.info_blood_type) -> showBloodType(element)
-                            stringResource(R.string.info_height),
-                            stringResource(R.string.info_weight) -> showUnit(element)
-                            else -> element.value.value?.takeIf { it.isNotBlank() } ?: element.placeholder
-                        },
-                        fontSize = 12.sp,
-                        color = Gray4,
-                        lineHeight = 16.sp
-                    )
+                    Column(modifier = Modifier.padding(start = 16.dp)) {
+                        Text(
+                            text = element.label,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = when (element.label) {
+                                stringResource(R.string.info_blood_type) -> showBloodType(element)
+                                stringResource(R.string.info_height),
+                                stringResource(R.string.info_weight) -> showUnit(element)
+
+                                else -> element.value.value?.takeIf { it.isNotBlank() }
+                                    ?: element.placeholder
+                            },
+                            fontSize = 12.sp,
+                            color = Gray4,
+                            lineHeight = 16.sp
+                        )
+                    }
                 }
+                HorizontalDivider(modifier = Modifier.padding(vertical = 7.dp, horizontal = 25.dp))
             }
-            HorizontalDivider(modifier = Modifier.padding(vertical = 7.dp, horizontal = 25.dp))
-        }
     }
 }

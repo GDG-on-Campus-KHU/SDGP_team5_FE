@@ -23,7 +23,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
-import com.example.resq.MainActivity.Companion.USER_TOKEN
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.navigation.home.homeNavigationGraph
 import com.example.resq.navigation.share.shareNavigationGraph
