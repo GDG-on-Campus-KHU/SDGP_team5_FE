@@ -40,13 +40,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.R
 import com.example.resq.navigation.share.ShareNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
+import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.ConfirmDialog
 import com.example.resq.presentaion.roomnotify.RoomNotifyScreen
 import com.example.resq.presentaion.rooms.component.RoomsOptions
 import com.example.resq.ui.theme.InnerPadding
-import com.example.resq.R
 
 @Composable
 fun RoomsScreen(
@@ -62,8 +63,9 @@ fun RoomsScreen(
     val roomOption = remember { mutableStateOf("") }
     val roomId = remember { mutableStateOf("") }
 
-    LaunchedEffect(isDialogExpended) {
-        if (!isDialogExpended)
+    isExpanded.value = false
+    LaunchedEffect(isExpanded.value) {
+        if (!isExpanded.value)
             viewModel.getRooms()
     }
 

@@ -35,6 +35,7 @@ class RoomsViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 apiService.deleteRoom(roomId)
+                getRooms()
             } catch (e: Exception) {
                 Log.d("deleteRoom", e.message.toString())
             }
@@ -46,6 +47,7 @@ class RoomsViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 apiService.outRoom(roomId)
+                getRooms()
             } catch (e: Exception) {
                 Log.d("outRoom", e.message.toString())
             }
