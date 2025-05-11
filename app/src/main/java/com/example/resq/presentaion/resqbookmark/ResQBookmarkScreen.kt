@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -52,13 +53,16 @@ fun ResQBookmarkScreen(
     padding: PaddingValues,
     viewModel: ResQBookmarkViewModel = viewModel()
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
     val resQBookmarks by viewModel.resQBookmarks.collectAsState()
     val isExpanded = remember { mutableStateMapOf<String, Boolean>() }
     var isDialogExpended by remember { mutableStateOf(false) }
     val bookmarkOption = remember { mutableStateOf("") }
     val bookmarkTitle = remember { mutableIntStateOf(0) }
     val language = Locale.current.language
+
+    LaunchedEffect(navController) {
+        viewModel.getBookmarks()
+    }
 
     Column(
         modifier = Modifier

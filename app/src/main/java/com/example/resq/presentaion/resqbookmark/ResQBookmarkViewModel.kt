@@ -13,16 +13,13 @@ import kotlinx.coroutines.launch
 
 class ResQBookmarkViewModel : ViewModel() {
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
-
     private val _resQBookmarks = MutableStateFlow(emptyList<ResQBookmark>())
     val resQBookmarks: StateFlow<List<ResQBookmark>> = _resQBookmarks
 
-    init {
+    fun getBookmarks() {
         _resQBookmarks.value = FAVORITE_RESQ_LIST
     }
-    
+
     fun deleteBookmark(bookmark: Int) {
         viewModelScope.launch {
             try {

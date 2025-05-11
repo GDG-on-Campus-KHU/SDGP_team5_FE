@@ -40,9 +40,6 @@ import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.SearchBar
 import com.example.resq.ui.theme.InnerPadding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -61,12 +58,7 @@ fun ResQDetailScreen(
 
     LaunchedEffect(resQ) {
         viewModel.getResQDetail(resQ, language)
-        FAVORITE_RESQ_LIST.forEach {
-            if (it.resQSlug == resQ) {
-                isFavorite = true
-                return@forEach
-            }
-        }
+        isFavorite = FAVORITE_RESQ_LIST.any { it.resQSlug == resQ }
     }
 
     Column(
