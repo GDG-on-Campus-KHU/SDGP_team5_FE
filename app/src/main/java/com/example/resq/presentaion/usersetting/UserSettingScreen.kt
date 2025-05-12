@@ -1,10 +1,19 @@
 package com.example.resq.presentaion.usersetting
 
-import androidx.compose.foundation.layout.*
+import android.app.Activity
+import android.app.AlertDialog
+import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,8 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.resq.MainActivity.Companion.USER_COUNTRY_CODE
+import com.example.resq.MainActivity.Companion.USER_EMAIL
+import com.example.resq.MainActivity.Companion.googleSignInClient
 import com.example.resq.R
 import com.example.resq.network.model.CountryRequest
+import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.presentaion.usersetting.component.SelectCountry
 import com.example.resq.presentaion.usersetting.component.SettingItem
 import com.example.resq.presentaion.usersetting.component.SettingSection
@@ -27,9 +40,14 @@ import com.example.resq.presentaion.usersetting.component.SettingSection
 fun UserSettingScreen(
     navController: NavController,
     padding: PaddingValues,
+    viewModel: UserSettingViewModel = viewModel()
 ) {
-    val viewModel: UserSettingViewModel = viewModel()
+    val activity = LocalActivity.current
+    val countries = viewModel.countries.collectAsState()
     var showCountryAlertDialog by remember { mutableStateOf(false) }
+    var userCountry by remember {
+        mutableStateOf(viewModel.getCountryName(USER_COUNTRY_CODE))
+    }
 
     Column(
         modifier = Modifier
@@ -50,10 +68,10 @@ fun UserSettingScreen(
 
         // 계정
         SettingSection(title = stringResource(R.string.account)) {
-            SettingItem(text = "meolon@gmail.com", enabled = false) // 추후 USER_EMAIL
-            SettingItem(text = stringResource(R.string.sign_out), onClick = {
-                // 로그아웃 fun SettingSignOut
-            })
+            SettingItem(text = USER_EMAIL, enabled = false)
+            SettingItem(
+                text = stringResource(R.string.sign_out),
+                onClick = { activity?.let { signOut(it) } })
             SettingItem(text = stringResource(R.string.delete_account), onClick = {
                 // 회원탈퇴 fun SettingDeleteAccount
             })
@@ -64,7 +82,7 @@ fun UserSettingScreen(
             SettingItem(text = stringResource(R.string.language), onClick = {
                 // 언어 선택 fun SettingLanguage
             })
-            SettingItem(text = stringResource(R.string.country),
+            SettingItem(text = "${stringResource(R.string.country)}: $userCountry",
                 onClick = { showCountryAlertDialog = true }
             )
         }
@@ -89,9 +107,21 @@ fun UserSettingScreen(
     if (showCountryAlertDialog) {
         SelectCountry(
             onDismiss = { showCountryAlertDialog = false },
+            countries = countries.value,
             onCountrySelected = { selectedCountry ->
                 viewModel.updateCountry(CountryRequest(selectedCountry))
+                userCountry = viewModel.getCountryName(selectedCountry)
             }
         )
     }
+}
+
+private fun signOut(activity: Activity) {
+    AlertDialog.Builder(activity)
+        .setTitle("로그아웃")
+        .setMessage("정말 로그아웃 하시겠습니까?")
+        .setPositiveButton("로그아웃") { _, _ -> GoogleSignViewModel().signOut(googleSignInClient) }
+        .setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+        .setOnDismissListener { it.dismiss() }
+        .show()
 }

@@ -2,7 +2,6 @@ package com.example.resq.presentaion.usersetting.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import com.example.resq.presentaion.usersetting.model.Country
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -14,23 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.resq.R
+import com.example.resq.presentaion.usersetting.model.Country
 
 @Composable
 fun SelectCountry(
     onDismiss: () -> Unit,
+    countries: List<Country>,
     onCountrySelected: (String) -> Unit
 ) {
-    val countries = listOf(
-        Country("KR", stringResource(R.string.country_kr)),
-        Country("US", stringResource(R.string.country_us)),
-        Country("GB", stringResource(R.string.country_gb)),
-        Country("JP", stringResource(R.string.country_jp)),
-        Country("CN", stringResource(R.string.country_cn)),
-        Country("DE", stringResource(R.string.country_de)),
-        Country("FR", stringResource(R.string.country_fr)),
-        Country("MX", stringResource(R.string.country_mx))
-    )
-
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {

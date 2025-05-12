@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.resq.MainActivity.Companion.USER_COUNTRY_CODE
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.USER_TOKEN
@@ -78,6 +79,7 @@ class GoogleSignViewModel : ViewModel() {
                 response?.let {
                     USER_DISPLAY_NAME = it.userInfo.userName
                     USER_EMAIL = it.userInfo.userEmail
+                    USER_COUNTRY_CODE = it.userInfo.userCountryCode
                 }
             } catch (e: Exception) {
                 Log.d("getUserInfo", e.message.toString())

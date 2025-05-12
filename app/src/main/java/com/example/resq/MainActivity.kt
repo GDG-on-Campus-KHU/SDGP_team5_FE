@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
         lateinit var USER_TOKEN: String
         lateinit var USER_DISPLAY_NAME: String
         lateinit var USER_EMAIL: String
+        lateinit var USER_COUNTRY_CODE: String
         lateinit var FAVORITE_RESQ_LIST: List<ResQBookmark>
     }
 
