@@ -53,8 +53,8 @@ fun UserMedicalInfoEditScreen(
     val heightInput = remember(medicalInfoList) { mutableDoubleStateOf(viewModel.getValueByLabelAsDouble(context.getString(R.string.info_height))) }
     val weightInput = remember(medicalInfoList) { mutableDoubleStateOf(viewModel.getValueByLabelAsDouble(context.getString(R.string.info_weight))) }
     val birthDateInput = remember(medicalInfoList) { mutableStateOf(viewModel.getValueByLabel(context.getString(R.string.info_date_of_birth))) }
-    val heightUnitInput = remember { mutableStateOf("cm") }
-    val weightUnitInput = remember { mutableStateOf("kg") }
+    val heightUnitInput = remember(medicalInfoList) { mutableStateOf(viewModel.getUnitByLabel(context.getString(R.string.info_height)).ifBlank { "cm" }) }
+    val weightUnitInput = remember(medicalInfoList){ mutableStateOf(viewModel.getUnitByLabel(context.getString(R.string.info_weight)).ifBlank { "kg" }) }
     val showEditBloodType = remember { mutableStateOf(false) }
     val showEditHeight = remember { mutableStateOf(false) }
     val showEditWeight = remember { mutableStateOf(false) }

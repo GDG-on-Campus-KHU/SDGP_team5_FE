@@ -170,7 +170,9 @@ class UserMedicalInfoViewModel : ViewModel() {
     fun getValueByLabelAsDouble(label: String): Double {
         return getValueByLabel(label).toDoubleOrNull() ?: 0.0
     }
-
+    fun getUnitByLabel(label: String) : String {
+        return medicalInfoList.value.find {it.label == label}?.unit ?: ""
+    }
     fun initEmptyMedicalInfo(context: Context) {
         _medicalInfoList.value = listOf(
             MedicalInfoElement(
@@ -199,14 +201,16 @@ class UserMedicalInfoViewModel : ViewModel() {
                 context.getString(R.string.info_height_placeholder),
                 Icons.Outlined.Accessibility,
                 mutableStateOf(""),
-                mutableStateOf(false)
+                mutableStateOf(false),
+                "cm"
             ),
             MedicalInfoElement(
                 context.getString(R.string.info_weight),
                 context.getString(R.string.info_weight_placeholder),
                 Icons.Outlined.MonitorWeight,
                 mutableStateOf(""),
-                mutableStateOf(false)
+                mutableStateOf(false),
+                "kg"
             ),
             MedicalInfoElement(
                 context.getString(R.string.info_date_of_birth),
