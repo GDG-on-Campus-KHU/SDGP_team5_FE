@@ -32,6 +32,7 @@ import com.example.resq.presentaion.usermedicalinfo.component.showBloodType
 import com.example.resq.presentaion.usermedicalinfo.component.showUnit
 import com.example.resq.ui.theme.Gray2
 import com.example.resq.ui.theme.Gray4
+import com.example.resq.ui.theme.IsTranslated
 
 @Composable
 fun UserMedicalInfoTab(
@@ -74,6 +75,7 @@ fun UserMedicalInfoTab(
             Icon(
                 painter = painterResource(R.drawable.bootstrap_globe2),
                 contentDescription = "bootstrap_globe2",
+                tint = if (isTranslated.value) IsTranslated else Color.Black,
                 modifier = Modifier
                     .padding(top = 7.dp, start = 12.dp)
                     .size(28.dp)
@@ -88,6 +90,7 @@ fun UserMedicalInfoTab(
                         } ?: Log.d("translateInfo", "userId 로드 오류")
                     }
             )
+
         }
         Text(
             text = stringResource(R.string.info_message_placeholder1),
