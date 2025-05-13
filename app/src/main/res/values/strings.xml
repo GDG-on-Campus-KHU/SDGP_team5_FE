@@ -75,6 +75,7 @@
     <string name="country_fr">프랑스</string>
     <string name="country_mx">멕시코</string>
     <string name="select_country">여행 국가 선택</string>
+    <string name="select_language">언어 선택</string>
     <string name="no_saved_emergency_info">저장된 응급상황 대처법이 없습니다.</string>
     <string name="no_search_results">검색 결과가 없습니다.</string>
     <string name="add">추가하기</string>

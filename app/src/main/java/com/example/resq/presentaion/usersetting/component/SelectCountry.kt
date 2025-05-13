@@ -16,27 +16,28 @@ import com.example.resq.R
 import com.example.resq.presentaion.usersetting.model.Country
 
 @Composable
-fun SelectCountry(
+fun SelectDialog(
+    text: String,
     onDismiss: () -> Unit,
-    countries: List<Country>,
-    onCountrySelected: (String) -> Unit
+    selectOptions: List<Country>,
+    onSelectedOptions: (String) -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = stringResource(R.string.select_country))
+            Text(text = text)
         },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                countries.forEach { country ->
+                selectOptions.forEach { country ->
                     Text(
                         text = country.name,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 15.dp)
                             .clickable {
-                                onCountrySelected(country.code)
                                 onDismiss()
+                                onSelectedOptions(country.code)
                             }
                     )
                 }

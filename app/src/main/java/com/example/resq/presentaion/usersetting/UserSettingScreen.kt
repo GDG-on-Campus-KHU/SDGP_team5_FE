@@ -2,6 +2,8 @@ package com.example.resq.presentaion.usersetting
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
+import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,34 +22,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.resq.MainActivity.Companion.USER_COUNTRY_CODE
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.googleSignInClient
 import com.example.resq.R
 import com.example.resq.network.model.CountryRequest
 import com.example.resq.presentaion.sign.GoogleSignViewModel
-import com.example.resq.presentaion.usersetting.component.SelectCountry
+import com.example.resq.presentaion.usersetting.component.SelectDialog
 import com.example.resq.presentaion.usersetting.component.SettingItem
 import com.example.resq.presentaion.usersetting.component.SettingSection
+import java.util.Locale
 
 @Composable
 fun UserSettingScreen(
-    navController: NavController,
     padding: PaddingValues,
     viewModel: UserSettingViewModel = viewModel()
 ) {
     val activity = LocalActivity.current
+    val context = LocalContext.current
     val countries = viewModel.countries.collectAsState()
+    val languages = viewModel.languages.collectAsState()
+    var showLanguageAlertDialog by remember { mutableStateOf(false) }
     var showCountryAlertDialog by remember { mutableStateOf(false) }
-    var userCountry by remember {
-        mutableStateOf(viewModel.getCountryName(USER_COUNTRY_CODE))
-    }
+    var appLanguage by remember { mutableStateOf(Locale.getDefault().language) }
+    var userCountry by remember { mutableStateOf(viewModel.getCountryName(USER_COUNTRY_CODE)) }
 
     Column(
         modifier = Modifier
@@ -71,7 +75,16 @@ fun UserSettingScreen(
             SettingItem(text = USER_EMAIL, enabled = false)
             SettingItem(
                 text = stringResource(R.string.sign_out),
-                onClick = { activity?.let { signOut(it) } })
+                onClick = {
+                    activity?.let {
+                        signOut(it) {
+                            val viewmodel = GoogleSignViewModel()
+                            viewmodel.removeUserToken(context)
+                            viewmodel.signOut(googleSignInClient)
+                            it.finish()
+                        }
+                    }
+                })
             SettingItem(text = stringResource(R.string.delete_account), onClick = {
                 // 회원탈퇴 fun SettingDeleteAccount
             })
@@ -79,9 +92,9 @@ fun UserSettingScreen(
 
         // 앱 기본 설정
         SettingSection(title = stringResource(R.string.app_settings)) {
-            SettingItem(text = stringResource(R.string.language), onClick = {
-                // 언어 선택 fun SettingLanguage
-            })
+            SettingItem(text = "${stringResource(R.string.language)}: $appLanguage",
+                onClick = { showLanguageAlertDialog = true }
+            )
             SettingItem(text = "${stringResource(R.string.country)}: $userCountry",
                 onClick = { showCountryAlertDialog = true }
             )
@@ -105,22 +118,43 @@ fun UserSettingScreen(
         }
     }
     if (showCountryAlertDialog) {
-        SelectCountry(
+        SelectDialog(
+            text = stringResource(R.string.select_country),
             onDismiss = { showCountryAlertDialog = false },
-            countries = countries.value,
-            onCountrySelected = { selectedCountry ->
+            selectOptions = countries.value,
+            onSelectedOptions = { selectedCountry ->
                 viewModel.updateCountry(CountryRequest(selectedCountry))
                 userCountry = viewModel.getCountryName(selectedCountry)
             }
         )
     }
+    if (showLanguageAlertDialog) {
+        SelectDialog(
+            text = stringResource(R.string.select_language),
+            onDismiss = { showLanguageAlertDialog = false },
+            selectOptions = languages.value,
+            onSelectedOptions = { selectedLanguage ->
+                appLanguage = selectedLanguage
+                setLocale(context, selectedLanguage)
+            }
+        )
+    }
 }
 
-private fun signOut(activity: Activity) {
+fun setLocale(context: Context, localeCode: String) {
+    val locale = Locale(localeCode)
+    Locale.setDefault(locale)
+    val config = Configuration(context.resources.configuration)
+    config.setLocale(locale)
+    context.resources.updateConfiguration(config, context.resources.displayMetrics)
+    (context as Activity).recreate()
+}
+
+private fun signOut(activity: Activity, onPositiveButton: () -> Unit) {
     AlertDialog.Builder(activity)
         .setTitle(activity.getString(R.string.sign_out))
         .setMessage(activity.getString(R.string.sign_out_confirmation))
-        .setPositiveButton(activity.getString(R.string.sign_out)) { _, _ -> GoogleSignViewModel().signOut(googleSignInClient) }
+        .setPositiveButton(activity.getString(R.string.sign_out)) { _, _ -> onPositiveButton() }
         .setNegativeButton(activity.getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
         .setOnDismissListener { it.dismiss() }
         .show()

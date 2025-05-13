@@ -76,6 +76,7 @@
     <string name="country_fr">France</string>
     <string name="country_mx">Mexico</string>
     <string name="select_country">Select Country</string>
+    <string name="select_language">Select Language</string>
     <string name="no_saved_emergency_info">No saved emergency response information.</string>
     <string name="no_search_results">No search results found.</string>
     <string name="add">Add</string>

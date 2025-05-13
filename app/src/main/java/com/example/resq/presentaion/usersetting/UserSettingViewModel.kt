@@ -31,6 +31,14 @@ class UserSettingViewModel : ViewModel() {
     )
     val countries: StateFlow<List<Country>> = _countries
 
+    private val _languages = MutableStateFlow(
+        listOf(
+            Country("ko", appContext.getString(R.string.country_kr)),
+            Country("en", appContext.getString(R.string.country_us)),
+        )
+    )
+    val languages: StateFlow<List<Country>> = _languages
+
     fun updateCountry(request: CountryRequest) {
         viewModelScope.launch {
             _isLoading.value = true
