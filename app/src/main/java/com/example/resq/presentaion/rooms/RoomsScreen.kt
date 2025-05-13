@@ -79,7 +79,7 @@ fun RoomsScreen(
             CenterCircularProgress()
         } else {
             if (rooms.isEmpty())
-                CenterBlankText("공유 방이 없습니다")
+                CenterBlankText(stringResource(R.string.no_shared_rooms))
             else
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     item { Spacer(Modifier.height(4.dp)) }

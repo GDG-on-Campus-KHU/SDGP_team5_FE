@@ -118,10 +118,10 @@ fun UserSettingScreen(
 
 private fun signOut(activity: Activity) {
     AlertDialog.Builder(activity)
-        .setTitle("로그아웃")
-        .setMessage("정말 로그아웃 하시겠습니까?")
-        .setPositiveButton("로그아웃") { _, _ -> GoogleSignViewModel().signOut(googleSignInClient) }
-        .setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+        .setTitle(activity.getString(R.string.sign_out))
+        .setMessage(activity.getString(R.string.sign_out_confirmation))
+        .setPositiveButton(activity.getString(R.string.sign_out)) { _, _ -> GoogleSignViewModel().signOut(googleSignInClient) }
+        .setNegativeButton(activity.getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
         .setOnDismissListener { it.dismiss() }
         .show()
 }

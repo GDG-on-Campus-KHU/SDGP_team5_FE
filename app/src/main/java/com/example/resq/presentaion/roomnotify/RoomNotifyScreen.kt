@@ -24,9 +24,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.resq.R
 import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.CenterCircularProgress
 
@@ -51,7 +53,7 @@ fun RoomNotifyScreen(
                 CenterCircularProgress()
             else
                 if (notifications.isEmpty())
-                    CenterBlankText("초대받은 공유 방이 없습니다.")
+                    CenterBlankText(stringResource(R.string.no_invited_rooms))
                 else
                     LazyColumn(
                         modifier = Modifier.padding(16.dp),

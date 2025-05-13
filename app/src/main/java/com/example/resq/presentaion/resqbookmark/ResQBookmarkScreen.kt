@@ -33,12 +33,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.R
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.ConfirmDialog
@@ -71,7 +73,7 @@ fun ResQBookmarkScreen(
             .padding(horizontal = InnerPadding)
     ) {
         if (resQBookmarks.isEmpty())
-            CenterBlankText("저장된 응급상황 대처법이 없습니다.")
+            CenterBlankText(stringResource(R.string.no_saved_emergency_info))
         else
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }

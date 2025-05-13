@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
+import com.example.resq.R
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.CenterCircularProgress
@@ -93,7 +95,7 @@ fun ResQSearchScreen(
             CenterCircularProgress()
         } else {
             if (resQDetail.isEmpty())
-                CenterBlankText("검색 결과가 없습니다")
+                CenterBlankText(stringResource(R.string.no_search_results))
             else {
                 Spacer(Modifier.height(4.dp))
                 LazyColumn(modifier = Modifier.padding(horizontal = InnerPadding)) {

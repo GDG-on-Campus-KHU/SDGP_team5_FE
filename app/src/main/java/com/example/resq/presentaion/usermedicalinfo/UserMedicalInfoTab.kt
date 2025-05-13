@@ -105,7 +105,7 @@ fun UserMedicalInfoTab(
         )
 
         if (medicalInfoList.isEmpty())
-            CenterBlankText("의료정보가 없습니다.")
+            CenterBlankText(stringResource(R.string.no_medical_info))
         else
             medicalInfoList.filter { it.show.value }.forEach { element ->
                 Row(

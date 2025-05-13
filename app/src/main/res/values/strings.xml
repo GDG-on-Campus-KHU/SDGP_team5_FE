@@ -75,5 +75,20 @@
     <string name="country_fr">프랑스</string>
     <string name="country_mx">멕시코</string>
     <string name="select_country">여행 국가 선택</string>
+    <string name="no_saved_emergency_info">저장된 응급상황 대처법이 없습니다.</string>
+    <string name="no_search_results">검색 결과가 없습니다.</string>
+    <string name="add">추가하기</string>
+    <string name="no_invited_rooms">초대받은 공유 방이 없습니다.</string>
+    <string name="no_shared_rooms">공유 방이 없습니다.</string>
+    <string name="no_medical_info">의료정보가 없습니다.</string>
+    <string name="no_recordings">저장된 녹음이 없습니다.</string>
+    <string name="sign_out_confirmation">정말 로그아웃 하시겠습니까?</string>
+    <string name="resq_recording">ResQ 녹음</string>
+    <string name="permission_required">권한이 필요합니다.</string>
+    <string name="permission_denied">권한을 거부하셨습니다. 설정에서 권한을 허용해주세요.</string>
+    <string name="go_to_settings">설정으로 가기</string>
+    <string name="recording_saved">음성 녹음이 저장되었습니다.</string>
+    <string name="emergency_call_and_record">긴급 전화 및 녹음</string>
+    <string name="confirm_emergency_action">긴급 전화를 걸고 녹음을 시작하시겠습니까?</string>
 
 </resources>

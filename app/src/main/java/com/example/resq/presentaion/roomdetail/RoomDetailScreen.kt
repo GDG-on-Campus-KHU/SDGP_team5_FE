@@ -27,11 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.resq.R
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.roomdetail.component.TranslationOptions
 import com.example.resq.ui.theme.InnerPadding
@@ -101,14 +103,13 @@ fun RoomDetailScreen(
                                 )
                             else
                                 Column {
-                                    Text(text = userName)
-                                    Text(text = "혈액형: ${userMedicalInfo.userBloodType}")
-                                    Text(text = "알레르기: ${userMedicalInfo.userAllergy}")
-                                    Text(text = "복용중인 약: ${userMedicalInfo.userMedication}")
-                                    Text(text = "키: ${userMedicalInfo.userHeight}")
-                                    Text(text = "체중: ${userMedicalInfo.userWeight}")
-                                    Text(text = "생년월일: ${userMedicalInfo.userBirthdate}")
-                                    Text(text = "참고사항: ${userMedicalInfo.userNotes}")
+                                    Text(text = "${stringResource(R.string.info_blood_type)}: ${userMedicalInfo.userBloodType}")
+                                    Text(text = "${stringResource(R.string.info_allergies)}: ${userMedicalInfo.userAllergy}")
+                                    Text(text = "${stringResource(R.string.info_medicine)}: ${userMedicalInfo.userMedication}")
+                                    Text(text = "${stringResource(R.string.info_height)}: ${userMedicalInfo.userHeight}")
+                                    Text(text = "${stringResource(R.string.info_weight)}: ${userMedicalInfo.userWeight}")
+                                    Text(text = "${stringResource(R.string.info_date_of_birth)}: ${userMedicalInfo.userBirthdate}")
+                                    Text(text = "${stringResource(R.string.info_additional_notes)}: ${userMedicalInfo.userNotes}")
                                 }
                         }
                     }

@@ -76,5 +76,20 @@
     <string name="country_fr">France</string>
     <string name="country_mx">Mexico</string>
     <string name="select_country">Select Country</string>
+    <string name="no_saved_emergency_info">No saved emergency response information.</string>
+    <string name="no_search_results">No search results found.</string>
+    <string name="add">Add</string>
+    <string name="no_invited_rooms">No invited shared rooms available.</string>
+    <string name="no_shared_rooms">No shared rooms available.</string>
+    <string name="no_medical_info">No medical information available.</string>
+    <string name="no_recordings">No saved recordings available.</string>
+    <string name="sign_out_confirmation">Are you sure you want to sign out?</string>
+    <string name="resq_recording">ResQ Recording</string>
+    <string name="permission_required">Permission is required.</string>
+    <string name="permission_denied">You have denied the permission. Please allow it in settings.</string>
+    <string name="go_to_settings">Go to Settings</string>
+    <string name="recording_saved">Recording saved.</string>
+    <string name="emergency_call_and_record">Emergency Call and Recording</string>
+    <string name="confirm_emergency_action">Do you want to make an emergency call and start recording?</string>
 
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -55,7 +56,7 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
                         if (isRecording)
                             stopRecording(context).apply {
                                 isRecording = !this
-                                Toast.makeText(context, "음성 녹음이 저장되었습니다.", Toast.LENGTH_SHORT)
+                                Toast.makeText(context, context.getString(R.string.recording_saved), Toast.LENGTH_SHORT)
                                     .show()
                             }
                         else {
@@ -106,10 +107,10 @@ private fun stopRecording(context: Context): Boolean {
 
 private fun showOnClickCheckDialog(activity: Activity?, onPositive: () -> Unit) {
     AlertDialog.Builder(activity)
-        .setTitle("긴급 전화 및 녹음")
-        .setMessage("긴급 전화를 걸고 녹음을 시작 하시겠습니까?")
-        .setPositiveButton("확인") { _, _ -> onPositive() }
-        .setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+        .setTitle(activity?.getString(R.string.emergency_call_and_record))
+        .setMessage(activity?.getString(R.string.confirm_emergency_action))
+        .setPositiveButton(activity?.getString(R.string.ok)) { _, _ -> onPositive() }
+        .setNegativeButton(activity?.getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
         .setOnDismissListener { it.dismiss() }
         .show()
 }

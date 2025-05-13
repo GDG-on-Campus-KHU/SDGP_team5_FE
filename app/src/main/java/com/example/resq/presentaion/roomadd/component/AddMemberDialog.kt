@@ -68,7 +68,7 @@ fun AddMemberDialog(
                 Spacer(Modifier.height(16.dp))
                 Button(onClick = { onClickEmail(email) }) {
                     Text(
-                        text = "추가하기",
+                        text = stringResource(R.string.add),
                         color = Color.White
                     )
                 }
