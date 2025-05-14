@@ -199,7 +199,7 @@ fun UserMedicalInfoEditScreen(
                     val action = if (isNew) viewModel::newInfo else viewModel::editInfo
                     action(request) { success ->
                         if (success) {
-                            Toast.makeText(context, "저장완료", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.saved_successfully), Toast.LENGTH_SHORT).show()
                             navController.popBackStack()
                         } else {
                             Log.d("UserMedicalInfo", "저장 실패")
