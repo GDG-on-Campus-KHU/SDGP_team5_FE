@@ -42,12 +42,18 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
     val navController = rememberNavController()
     var isRecording by remember { mutableStateOf(false) }
     val isExpanded = remember { mutableStateOf(false) }
+    val isTranslation = remember { mutableStateOf(false) }
 
     if (isToken || viewModel.getUserToken(context)) {
         viewModel.getMyInfo()
         viewModel.getFavoriteResQList { FAVORITE_RESQ_LIST = it }
         Scaffold(
-            topBar = { TopBar(navController) { isExpanded.value = !isExpanded.value } },
+            topBar = {
+                TopBar(
+                    navController = navController,
+                    onNotifications = { isExpanded.value = !isExpanded.value },
+                    onLanguage = { isTranslation.value = !isTranslation.value })
+            },
             bottomBar = { BottomBar(navController) },
             floatingActionButton = {
                 FloatingActionButton(
@@ -55,8 +61,11 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
                         if (isRecording)
                             stopRecording(context).apply {
                                 isRecording = !this
-                                Toast.makeText(context, context.getString(R.string.recording_saved), Toast.LENGTH_SHORT)
-                                    .show()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.recording_saved),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         else {
                             showOnClickCheckDialog(activity) {
@@ -85,7 +94,7 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
                 startDestination = HomeNavigationItem.ResQ.route
             ) {
                 homeNavigationGraph(navController, paddingValues)
-                shareNavigationGraph(navController, paddingValues, isExpanded)
+                shareNavigationGraph(navController, paddingValues, isExpanded, isTranslation)
                 userNavigationGraph(navController, paddingValues)
             }
         }
