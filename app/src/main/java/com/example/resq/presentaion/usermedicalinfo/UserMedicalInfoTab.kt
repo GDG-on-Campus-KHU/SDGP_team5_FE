@@ -1,14 +1,21 @@
 package com.example.resq.presentaion.usermedicalinfo
 
 import android.util.Log
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,42 +63,40 @@ fun UserMedicalInfoTab(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 20.dp)
-            ,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(end = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                imageVector = Icons.Outlined.Edit,
-                contentDescription = "Edit",
-                modifier = Modifier
-                    .padding(top = 5.dp, start = 12.dp)
-                    .size(28.dp)
-                    .clickable {
-                        navController.navigate("user_medical_info_edit")
+            IconButton(onClick = {
+                navController.navigate("user_medical_info_edit")
+            }) {
+                Icon(
+                    imageVector = Icons.Outlined.Edit,
+                    contentDescription = "Edit",
+                )
+            }
+            IconButton(onClick = {
+                userId?.let {
+                    if (isTranslated.value) {
+                        viewModel.getInfo(context)
+                    } else {
+                        viewModel.translateInfo(context, it)
                     }
-            )
-            Icon(
-                painter = painterResource(R.drawable.bootstrap_globe2),
-                contentDescription = "bootstrap_globe2",
-                tint = if (isTranslated.value) IsTranslated else Color.Black,
-                modifier = Modifier
-                    .padding(top = 10.dp, start = 12.dp)
-                    .size(28.dp)
-                    .clickable {
-                        userId?.let {
-                            if (isTranslated.value) {
-                                viewModel.getInfo(context)
-                            } else {
-                                viewModel.translateInfo(context, it)
-                            }
-                            isTranslated.value = !isTranslated.value
-                        } ?: Log.d("translateInfo", "userId 로드 오류")
-                    }
-            )
+                    isTranslated.value = !isTranslated.value
+                } ?: Log.d("translateInfo", "userId 로드 오류")
+            }) {
+                Icon(
+                    imageVector = Icons.Outlined.Language,
+                    contentDescription = "Language",
+                    tint = if (isTranslated.value) IsTranslated else Color.Black,
+                )
+            }
         }
 
-        HorizontalDivider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
+        HorizontalDivider(
+            color = Gray2,
+            modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp)
+        )
 
         if (medicalInfoList.isEmpty())
             CenterBlankText(stringResource(R.string.no_medical_info))
