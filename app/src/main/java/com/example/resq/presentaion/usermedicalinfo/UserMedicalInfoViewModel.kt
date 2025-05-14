@@ -248,6 +248,7 @@ class UserMedicalInfoViewModel : ViewModel() {
         }
     }
 
+    //response_info, response_title
     fun translateInfo(context: Context, userId: Int) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -323,8 +324,8 @@ class UserMedicalInfoViewModel : ViewModel() {
             _isLoading.value = false
         }
     }
-    fun updateDisplayName(name: String) {
-        USER_DISPLAY_NAME = name
+    private fun updateDisplayName(name: String) {
+//        USER_DISPLAY_NAME = name
         _userDisplayName.value = name
     }
 }

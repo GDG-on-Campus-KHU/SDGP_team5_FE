@@ -1,11 +1,9 @@
 package com.example.resq.presentaion.usermedicalinfo
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
@@ -18,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -52,16 +51,17 @@ fun UserMedicalInfoTab(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 5.dp, bottom = 10.dp, start = 5.dp, end = 5.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
+//            .background(Color.White, RoundedCornerShape(12.dp))
             .verticalScroll(rememberScrollState())
     ) {
         Row(
-            modifier = Modifier.padding(top = 10.dp, start = 20.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 20.dp)
+            ,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(R.string.medical_info),
-                fontSize = 24.sp
-            )
+            Spacer(modifier = Modifier.weight(1f))
             Icon(
                 imageVector = Icons.Outlined.Edit,
                 contentDescription = "Edit",
@@ -77,7 +77,7 @@ fun UserMedicalInfoTab(
                 contentDescription = "bootstrap_globe2",
                 tint = if (isTranslated.value) IsTranslated else Color.Black,
                 modifier = Modifier
-                    .padding(top = 7.dp, start = 12.dp)
+                    .padding(top = 10.dp, start = 12.dp)
                     .size(28.dp)
                     .clickable {
                         userId?.let {
@@ -90,19 +90,9 @@ fun UserMedicalInfoTab(
                         } ?: Log.d("translateInfo", "userId 로드 오류")
                     }
             )
-
         }
-        Text(
-            text = stringResource(R.string.info_message_placeholder1),
-            fontSize = 14.sp,
-            color = Gray4,
-            modifier = Modifier.padding(start = 40.dp)
-        )
 
-        HorizontalDivider(
-            color = Gray2,
-            modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp)
-        )
+        HorizontalDivider(color = Gray2, modifier = Modifier.padding(vertical = 7.dp, horizontal = 18.dp))
 
         if (medicalInfoList.isEmpty())
             CenterBlankText(stringResource(R.string.no_medical_info))

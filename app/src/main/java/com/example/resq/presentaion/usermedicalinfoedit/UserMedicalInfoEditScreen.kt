@@ -2,11 +2,9 @@ package com.example.resq.presentaion.usermedicalinfoedit
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -73,7 +71,6 @@ fun UserMedicalInfoEditScreen(
             .fillMaxSize()
             .padding(padding)
             .padding(top = 3.dp, start = 5.dp, end = 5.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
             .verticalScroll(rememberScrollState())
     ) {
         Text(
