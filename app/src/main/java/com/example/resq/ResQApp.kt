@@ -48,7 +48,7 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
         viewModel.getMyInfo()
         viewModel.getFavoriteResQList { FAVORITE_RESQ_LIST = it }
         Scaffold(
-            topBar = { TopBar(navController) { isExpanded.value = true } },
+            topBar = { TopBar(navController) { isExpanded.value = !isExpanded.value } },
             bottomBar = { BottomBar(navController) },
             floatingActionButton = {
                 FloatingActionButton(

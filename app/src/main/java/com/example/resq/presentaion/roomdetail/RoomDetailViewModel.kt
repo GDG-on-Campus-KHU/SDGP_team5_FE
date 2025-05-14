@@ -1,7 +1,6 @@
 package com.example.resq.presentaion.roomdetail
 
 import android.util.Log
-import androidx.compose.ui.text.intl.Locale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resq.network.RetrofitInstance.apiService
@@ -23,25 +22,19 @@ class RoomDetailViewModel : ViewModel() {
     private val _roomTitle = MutableStateFlow("")
     val roomTitle: StateFlow<String> = _roomTitle
 
-    private val _membersInfo = MutableStateFlow(emptyList<String>())
-    val membersInfo: StateFlow<List<String>> = _membersInfo
-
     private val _membersMedicalInfo = MutableStateFlow(emptyList<UserMedicalInfo>())
     val membersMedicalInfo: StateFlow<List<UserMedicalInfo>> = _membersMedicalInfo
 
     private val _translationOptions = MutableStateFlow(listOf("한국" to "ko", "미국" to "us"))
     val translationOptions: StateFlow<List<Pair<String, String>>> = _translationOptions
 
-    fun getRoomDetail(roomId: String, language: String) {
+    fun getRoomDetail(roomId: String, translate: Boolean) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 val response = apiService.getRoomInfo(roomId)
                 response.body()?.roomDetail?.let {
-                    if (language == Locale.current.language)
-                        getMembersMedicalInfo(it.roomMembers, false)
-                    else
-                        getMembersMedicalInfo(it.roomMembers, true)
+                    getMembersMedicalInfo(it.roomMembers, translate)
                     _roomTitle.value = it.roomTitle
                 }
             } catch (e: Exception) {
@@ -52,17 +45,11 @@ class RoomDetailViewModel : ViewModel() {
 
     private fun getMembersMedicalInfo(members: List<Member>, translate: Boolean) {
         viewModelScope.launch {
+            val roomMembers = members.filter { it.invitedStatus == "accepted" }
             try {
-                val infoList = coroutineScope {
-                    members.map { member ->
-                        async {
-                            apiService.getUserInfo(member.userId).body()?.userInfo?.userName
-                        }
-                    }.awaitAll().map { it ?: "" }
-                }
                 val medicalList = coroutineScope {
                     if (translate)
-                        members.map { member ->
+                        roomMembers.map { member ->
                             async {
                                 val userId = TranslateInfoRequest(member.userId)
                                 apiService.translateInfo(userId).body()?.data
@@ -70,6 +57,7 @@ class RoomDetailViewModel : ViewModel() {
                         }.awaitAll().map {
                             it?.let {
                                 UserMedicalInfo(
+                                    userName = it.name,
                                     userBloodType = it.userBloodType,
                                     userAllergy = it.userAllergy,
                                     userMedication = it.userMedication,
@@ -80,16 +68,24 @@ class RoomDetailViewModel : ViewModel() {
                                     userBirthdate = it.userBirthdate,
                                     userNotes = it.userNotes
                                 )
-                            } ?: UserMedicalInfo("", "", "", 0.0, "", 0.0, "", "", "")
+                            } ?: UserMedicalInfo("", "", "", "", 0.0, "", 0.0, "", "", "")
                         }
-                    else
-                        members.map { member ->
+                    else {
+                        val infoList = coroutineScope {
+                            roomMembers.map { member ->
+                                async {
+                                    apiService.getUserInfo(member.userId).body()?.userInfo?.userName
+                                }
+                            }.awaitAll().map { it ?: "" }
+                        }
+                        roomMembers.map { member ->
                             async {
                                 apiService.getMedicalInfo(member.userId).body()?.medicalInfo
                             }
-                        }.awaitAll().map {
-                            it?.let {
+                        }.awaitAll().mapIndexed { index, info ->
+                            info?.let {
                                 UserMedicalInfo(
+                                    userName = infoList[index],
                                     userBloodType = it.userBloodType,
                                     userAllergy = it.userAllergy,
                                     userMedication = it.userMedication,
@@ -100,10 +96,10 @@ class RoomDetailViewModel : ViewModel() {
                                     userBirthdate = it.userBirthdate,
                                     userNotes = it.userNotes
                                 )
-                            } ?: UserMedicalInfo("", "", "", 0.0, "", 0.0, "", "", "")
+                            } ?: UserMedicalInfo("", "", "", "", 0.0, "", 0.0, "", "", "")
                         }
+                    }
                 }
-                _membersInfo.value = infoList
                 _membersMedicalInfo.value = medicalList
             } catch (e: Exception) {
                 Log.d("getMEmbersMedicalInfo", e.message.toString())
