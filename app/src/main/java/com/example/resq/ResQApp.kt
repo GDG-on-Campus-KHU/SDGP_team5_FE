@@ -19,10 +19,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.MainActivity.Companion.EMERGENCY_CALL_NUMBER
 import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.navigation.home.homeNavigationGraph
@@ -42,7 +42,6 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
     val navController = rememberNavController()
     var isRecording by remember { mutableStateOf(false) }
     val isExpanded = remember { mutableStateOf(false) }
-    val emerNumber = viewModel.getEmerNumber()
 
     if (isToken || viewModel.getUserToken(context)) {
         viewModel.getMyInfo()
@@ -64,7 +63,7 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
                                 isRecording = startRecording(context)
 
                                 val dialIntent =
-                                    Intent(Intent.ACTION_CALL, Uri.parse(emerNumber))
+                                    Intent(Intent.ACTION_CALL, Uri.parse(EMERGENCY_CALL_NUMBER))
 //                                context.startActivity(dialIntent)
                             }
                         }
