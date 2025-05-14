@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.resq.MainActivity.Companion.EMERGENCY_CALL_NUMBER
 import com.example.resq.MainActivity.Companion.USER_COUNTRY_CODE
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
 import com.example.resq.MainActivity.Companion.USER_EMAIL
@@ -80,6 +81,7 @@ class GoogleSignViewModel : ViewModel() {
                     USER_DISPLAY_NAME = it.userInfo.userName
                     USER_EMAIL = it.userInfo.userEmail
                     USER_COUNTRY_CODE = it.userInfo.userCountryCode
+                    getEmerNumber(it.userInfo.userCountryCode)
                 }
             } catch (e: Exception) {
                 Log.d("getUserInfo", e.message.toString())
@@ -87,13 +89,10 @@ class GoogleSignViewModel : ViewModel() {
         }
     }
 
-    fun getEmerNumber(): String {
-        return try {
-            // 응급 전화 return
-            "tel:" + "" // ex)119
-        } catch (e: Exception) {
-            Log.d("getEmerNumber", e.message.toString())
-            ""
+    fun getEmerNumber(countryCode: String) {
+        viewModelScope.launch {
+            apiService.getCountryInfo(countryCode).body()
+                ?.let { EMERGENCY_CALL_NUMBER = it.countryInfo.emerCall }
         }
     }
 

@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.resq.MainActivity.Companion.EMERGENCY_CALL_NUMBER
 import com.example.resq.MainActivity.Companion.USER_COUNTRY_CODE
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.googleSignInClient
@@ -125,6 +126,7 @@ fun UserSettingScreen(
             onSelectedOptions = { selectedCountry ->
                 viewModel.updateCountry(CountryRequest(selectedCountry))
                 userCountry = viewModel.getCountryName(selectedCountry)
+                GoogleSignViewModel().getEmerNumber(selectedCountry)
             }
         )
     }

@@ -1,6 +1,7 @@
 package com.example.resq.presentaion.roomdetail.model
 
 data class UserMedicalInfo(
+    val userName: String,
     val userBloodType: String,
     val userAllergy: String,
     val userMedication: String,

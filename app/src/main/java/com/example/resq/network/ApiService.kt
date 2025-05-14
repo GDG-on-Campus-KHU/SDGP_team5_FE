@@ -2,6 +2,7 @@ package com.example.resq.network
 
 import com.example.resq.network.model.AccessTokenResponse
 import com.example.resq.network.model.AuthRequest
+import com.example.resq.network.model.CountryInfoResponse
 import com.example.resq.network.model.CountryRequest
 import com.example.resq.network.model.ElasticSearchResponse
 import com.example.resq.network.model.FavoriteResQListResponse
@@ -216,4 +217,9 @@ interface ApiService {
     suspend fun translateInfo(
         @Body request: TranslateInfoRequest
     ): Response<TranslateInfoResponse>
+
+    @GET("api/country/{country_code}")
+    suspend fun getCountryInfo(
+        @Path("country_code") countryCode: String
+    ): Response<CountryInfoResponse>
 }
