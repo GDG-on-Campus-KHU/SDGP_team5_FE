@@ -46,7 +46,6 @@ fun RoomDetailScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val roomTitle = viewModel.roomTitle.collectAsState()
     val membersMedicalInfo = viewModel.membersMedicalInfo.collectAsState()
-    val translationOptions = viewModel.translationOptions.collectAsState()
     val isHeight = remember { mutableStateMapOf<String, Boolean>() }
 
     LaunchedEffect(isExpanded.value) {
@@ -111,15 +110,6 @@ fun RoomDetailScreen(
                 }
             }
         }
-
-//        Box(modifier = Modifier.align(Alignment.TopEnd)) {
-//            TranslationOptions(
-//                isExpanded = isExpanded.value,
-//                options = translationOptions.value,
-//                onDismissRequest = { isExpanded.value = false },
-//                onClickOption = { viewModel.getRoomDetail(roomId, it) }
-//            )
-//        }
     }
 }
 
