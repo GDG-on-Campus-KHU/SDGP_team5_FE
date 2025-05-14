@@ -1,6 +1,5 @@
 package com.example.resq.presentaion.resqsearch
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -24,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,9 +45,6 @@ import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.SearchBar
 import com.example.resq.presentaion.resqdetail.ResQDetailViewModel
 import com.example.resq.ui.theme.InnerPadding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -58,18 +55,17 @@ fun ResQSearchScreen(
     resQ: String,
     viewModel: ResQSearchViewModel = viewModel()
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
     val resQDetail by viewModel.resQDetail.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
     var searchText by remember { mutableStateOf("") }
-    var isFavorite by remember { mutableStateOf(false) }
+    val isFavorite = remember { mutableStateMapOf<String, Boolean>() }
     val language = Locale.current.language
 
     LaunchedEffect(resQ) {
-        viewModel.getResQSearch(resQ)
-        FAVORITE_RESQ_LIST.forEach {
-            if (it.resQSlug == resQ) {
-                isFavorite = true
-                return@forEach
+        viewModel.getResQSearch(resQ) { resQDetail ->
+            resQDetail.forEach { resQInfo ->
+                isFavorite[resQInfo.id] =
+                    FAVORITE_RESQ_LIST.any { it.resQSlug == resQInfo.resQDetail.slug }
             }
         }
     }
@@ -113,18 +109,20 @@ fun ResQSearchScreen(
                                     fontSize = 30.sp,
                                     modifier = Modifier.weight(1f)
                                 )
+                                val favoriteState = isFavorite.getOrDefault(resQ.id, false)
                                 IconButton(
                                     onClick = {
-                                        isFavorite = !isFavorite
+                                        isFavorite[resQ.id] = !favoriteState
                                         resQ.resQDetail.resQIndex?.let {
-                                            if (isFavorite)
-                                                ResQDetailViewModel().addToFavoriteResQList(it)
+                                            if (isFavorite[resQ.id] == true) ResQDetailViewModel().addToFavoriteResQList(
+                                                it
+                                            )
                                             else ResQDetailViewModel().deleteToFavoriteResQList(it)
                                         }
                                     }
                                 ) {
                                     Icon(
-                                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        imageVector = if (isFavorite[resQ.id] == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                         contentDescription = "Favorite",
                                     )
                                 }
