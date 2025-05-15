@@ -13,6 +13,7 @@ fun NavGraphBuilder.shareNavigationGraph(
     navController: NavController,
     padding: PaddingValues,
     isExpanded: MutableState<Boolean>,
+    isTranslation: MutableState<Boolean>,
 ) {
     composable(ShareNavigationItem.Rooms.route) {
         RoomsScreen(navController, padding, isExpanded)
@@ -20,7 +21,7 @@ fun NavGraphBuilder.shareNavigationGraph(
     composable(ShareNavigationItem.RoomDetail.route + "/{roomId}") { backStackEntry ->
         val roomId = backStackEntry.arguments?.getString("roomId").toString()
 
-        RoomDetailScreen(padding, roomId, isExpanded)
+        RoomDetailScreen(padding, roomId, isTranslation)
     }
     composable(ShareNavigationItem.RoomAdd.route) {
         RoomAddScreen(navController, padding)

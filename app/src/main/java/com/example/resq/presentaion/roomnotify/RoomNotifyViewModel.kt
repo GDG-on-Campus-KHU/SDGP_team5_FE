@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resq.network.RetrofitInstance.apiService
+import com.example.resq.presentaion.rooms.RoomsViewModel
 import com.example.resq.presentaion.rooms.model.Room
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -44,6 +45,7 @@ class RoomNotifyViewModel : ViewModel() {
                         return@forEachIndexed
                     }
                 }
+                RoomsViewModel().getRooms()
             } catch (e: Exception) {
                 Log.d("acceptNotify", e.message.toString())
             }
@@ -60,7 +62,7 @@ class RoomNotifyViewModel : ViewModel() {
                         return@forEachIndexed
                     }
                 }
-
+                RoomsViewModel().getRooms()
             } catch (e: Exception) {
                 Log.d("refuseNotify", e.message.toString())
             }

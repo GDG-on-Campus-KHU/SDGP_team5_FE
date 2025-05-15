@@ -25,9 +25,6 @@ class RoomDetailViewModel : ViewModel() {
     private val _membersMedicalInfo = MutableStateFlow(emptyList<UserMedicalInfo>())
     val membersMedicalInfo: StateFlow<List<UserMedicalInfo>> = _membersMedicalInfo
 
-    private val _translationOptions = MutableStateFlow(listOf("한국" to "ko", "미국" to "us"))
-    val translationOptions: StateFlow<List<Pair<String, String>>> = _translationOptions
-
     fun getRoomDetail(roomId: String, translate: Boolean) {
         viewModelScope.launch {
             _isLoading.value = true

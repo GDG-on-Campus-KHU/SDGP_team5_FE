@@ -31,7 +31,11 @@ import com.example.resq.navigation.user.UserNavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, onClick: () -> Unit) {
+fun TopBar(
+    navController: NavController,
+    onNotifications: () -> Unit,
+    onLanguage: () -> Unit
+) {
     val route = navController.currentBackStackEntryAsState().value?.destination?.route.toString()
     val isButton =
         route != HomeNavigationItem.ResQ.route && route != ShareNavigationItem.Rooms.route && route != UserNavigationItem.User.route
@@ -65,7 +69,7 @@ fun TopBar(navController: NavController, onClick: () -> Unit) {
 
                 ShareNavigationItem.Rooms.route ->
                     Row {
-                        IconButton(onClick = { onClick() }) {
+                        IconButton(onClick = { onNotifications() }) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
                                 contentDescription = "Notifications"
@@ -80,7 +84,7 @@ fun TopBar(navController: NavController, onClick: () -> Unit) {
                     }
 
                 ShareNavigationItem.RoomDetail.route + "/{roomId}" ->
-                    IconButton(onClick = { onClick() }) {
+                    IconButton(onClick = { onLanguage() }) {
                         Icon(
                             imageVector = Icons.Outlined.Language,
                             contentDescription = "Language"
@@ -105,5 +109,5 @@ fun TopBar(navController: NavController, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun TopBarPreview() {
-    TopBar(rememberNavController()) {}
+    TopBar(rememberNavController(), {}, {})
 }

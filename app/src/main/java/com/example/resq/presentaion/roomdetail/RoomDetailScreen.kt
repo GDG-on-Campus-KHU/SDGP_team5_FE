@@ -40,17 +40,16 @@ import com.example.resq.ui.theme.InnerPadding
 fun RoomDetailScreen(
     padding: PaddingValues,
     roomId: String,
-    isExpanded: MutableState<Boolean>,
+    isTranslation: MutableState<Boolean>,
     viewModel: RoomDetailViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val roomTitle = viewModel.roomTitle.collectAsState()
     val membersMedicalInfo = viewModel.membersMedicalInfo.collectAsState()
-    val translationOptions = viewModel.translationOptions.collectAsState()
     val isHeight = remember { mutableStateMapOf<String, Boolean>() }
 
-    LaunchedEffect(isExpanded.value) {
-        viewModel.getRoomDetail(roomId, isExpanded.value)
+    LaunchedEffect(isTranslation.value) {
+        viewModel.getRoomDetail(roomId, isTranslation.value)
     }
 
     Box(
@@ -111,15 +110,6 @@ fun RoomDetailScreen(
                 }
             }
         }
-
-//        Box(modifier = Modifier.align(Alignment.TopEnd)) {
-//            TranslationOptions(
-//                isExpanded = isExpanded.value,
-//                options = translationOptions.value,
-//                onDismissRequest = { isExpanded.value = false },
-//                onClickOption = { viewModel.getRoomDetail(roomId, it) }
-//            )
-//        }
     }
 }
 
