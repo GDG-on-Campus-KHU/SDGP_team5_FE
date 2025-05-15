@@ -16,3 +16,5 @@ val Gray2 = Color(0xFFE7EBEF)
 val Gray3 = Color(0xFFA4ADBC)
 val Gray4 = Color(0xFF8E95A2)
 val Gray5 = Color(0xFF595F72)
+
+val IsTranslated = Color(0xFF03A9F4)

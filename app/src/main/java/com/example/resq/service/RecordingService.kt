@@ -10,6 +10,7 @@ import android.os.IBinder
 import android.provider.MediaStore
 import android.util.Log
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
+import com.example.resq.R
 import com.example.resq.network.RetrofitInstance.apiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,7 @@ class RecordingService : Service() {
     private fun startRecording() {
         val contentResolver: ContentResolver = applicationContext.contentResolver
         val dateFormat = SimpleDateFormat("yyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val fileName = "ResQ 녹음 ${USER_DISPLAY_NAME}_$dateFormat"
+        val fileName = "${getString(R.string.resq_recording)} ${USER_DISPLAY_NAME}_$dateFormat"
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.RELATIVE_PATH, "Recordings/ResQ")
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)

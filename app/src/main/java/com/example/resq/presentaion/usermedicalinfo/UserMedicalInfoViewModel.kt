@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
-import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.R
 import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.presentaion.usermedicalinfo.model.MedicalInfoElement
@@ -22,7 +21,6 @@ import com.example.resq.network.model.MedicalInfoRequest
 import com.example.resq.network.model.TranslateInfoRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class UserMedicalInfoViewModel : ViewModel() {
@@ -30,8 +28,8 @@ class UserMedicalInfoViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _medicalInfoList = MutableStateFlow<List<MedicalInfoElement>>(emptyList())
-    val medicalInfoList: StateFlow<List<MedicalInfoElement>> = _medicalInfoList.asStateFlow()
+    private val _medicalInfoList = MutableStateFlow(emptyList<MedicalInfoElement>())
+    val medicalInfoList: StateFlow<List<MedicalInfoElement>> = _medicalInfoList
 
     private val _isInitialized = MutableStateFlow(false)
     val isInitialized: StateFlow<Boolean> = _isInitialized
@@ -42,6 +40,8 @@ class UserMedicalInfoViewModel : ViewModel() {
     private val _userDisplayName = MutableStateFlow(USER_DISPLAY_NAME)
     val userDisplayName: StateFlow<String> = _userDisplayName
     private var originalDisplayName: String? = null
+
+    private val noneValues = listOf("none", "없음", "なし", "无", "keine", "aucun", "aucune")
 
     fun getInfo(context: Context) {
         viewModelScope.launch {
@@ -126,7 +126,10 @@ class UserMedicalInfoViewModel : ViewModel() {
 
             try {
                 val response = apiService.newInfo(request)
-                Log.d("newInfo", "응답 코드: ${response.code()}, 메시지: ${response.message()}, body: ${response.body()}")
+                Log.d(
+                    "newInfo",
+                    "응답 코드: ${response.code()}, 메시지: ${response.message()}, body: ${response.body()}"
+                )
                 val errorBody = response.errorBody()?.string()
                 Log.e("newInfo", "에러 바디: $errorBody")
                 Log.d("info_id", "현재 유저 id는 ${response.body()?.medicalInfo?.userId}")
@@ -171,6 +174,10 @@ class UserMedicalInfoViewModel : ViewModel() {
         return getValueByLabel(label).toDoubleOrNull() ?: 0.0
     }
 
+    fun getUnitByLabel(label: String): String {
+        return medicalInfoList.value.find { it.label == label }?.unit ?: ""
+    }
+
     fun initEmptyMedicalInfo(context: Context) {
         _medicalInfoList.value = listOf(
             MedicalInfoElement(
@@ -199,14 +206,16 @@ class UserMedicalInfoViewModel : ViewModel() {
                 context.getString(R.string.info_height_placeholder),
                 Icons.Outlined.Accessibility,
                 mutableStateOf(""),
-                mutableStateOf(false)
+                mutableStateOf(false),
+                "cm"
             ),
             MedicalInfoElement(
                 context.getString(R.string.info_weight),
                 context.getString(R.string.info_weight_placeholder),
                 Icons.Outlined.MonitorWeight,
                 mutableStateOf(""),
-                mutableStateOf(false)
+                mutableStateOf(false),
+                "kg"
             ),
             MedicalInfoElement(
                 context.getString(R.string.info_date_of_birth),
@@ -260,28 +269,28 @@ class UserMedicalInfoViewModel : ViewModel() {
                     updateDisplayName(data.name)
                     _medicalInfoList.value = listOf(
                         MedicalInfoElement(
-                            context.getString(R.string.info_blood_type),
+                            data.infoTitles[0],
                             context.getString(R.string.info_blood_type_placeholder),
                             Icons.Outlined.Bloodtype,
                             mutableStateOf(data.userBloodType),
                             mutableStateOf(true)
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_allergies),
+                            data.infoTitles[1],
                             context.getString(R.string.info_allergies_placeholder),
                             Icons.Outlined.Warning,
                             mutableStateOf(data.userAllergy),
                             mutableStateOf(true)
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_medicine),
+                            data.infoTitles[2],
                             context.getString(R.string.info_medicine_placeholder),
                             Icons.Outlined.Medication,
                             mutableStateOf(data.userMedication),
                             mutableStateOf(true)
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_height),
+                            data.infoTitles[3],
                             context.getString(R.string.info_height_placeholder),
                             Icons.Outlined.Accessibility,
                             mutableStateOf(data.userHeight.toString()),
@@ -289,7 +298,7 @@ class UserMedicalInfoViewModel : ViewModel() {
                             data.userHeightUnit
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_weight),
+                            data.infoTitles[4],
                             context.getString(R.string.info_weight_placeholder),
                             Icons.Outlined.MonitorWeight,
                             mutableStateOf(data.userWeight.toString()),
@@ -297,18 +306,18 @@ class UserMedicalInfoViewModel : ViewModel() {
                             data.userWeightUnit
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_date_of_birth),
+                            data.infoTitles[5],
                             context.getString(R.string.info_date_of_birth_placeholder),
                             Icons.Outlined.Today,
                             mutableStateOf(data.userBirthdate),
-                            mutableStateOf(data.userBirthdate != "None")
+                            mutableStateOf(data.userBirthdate != "-")
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_additional_notes),
+                            data.infoTitles[6],
                             context.getString(R.string.info_additional_notes_placeholder),
                             Icons.Outlined.NoteAlt,
                             mutableStateOf(data.userNotes),
-                            mutableStateOf(!(data.userNotes.isBlank() || data.userNotes == "없음" || data.userNotes == "None"))
+                            mutableStateOf(data.userNotes.trim().lowercase() !in noneValues)
                         )
                     )
                     _isInitialized.value = true
@@ -319,8 +328,8 @@ class UserMedicalInfoViewModel : ViewModel() {
             _isLoading.value = false
         }
     }
-    fun updateDisplayName(name: String) {
-        USER_DISPLAY_NAME = name
+
+    private fun updateDisplayName(name: String) {
         _userDisplayName.value = name
     }
 }

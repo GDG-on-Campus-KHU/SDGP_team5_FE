@@ -21,7 +21,7 @@ class ResQSearchViewModel : ViewModel() {
     private val _resQDetail = MutableStateFlow(emptyList<ResQInfo>())
     val resQDetail: MutableStateFlow<List<ResQInfo>> = _resQDetail
 
-    fun getResQSearch(resQ: String) {
+    fun getResQSearch(resQ: String, onResQDetail: (List<ResQInfo>) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
             val request = SearchRequest(
@@ -33,7 +33,10 @@ class ResQSearchViewModel : ViewModel() {
             )
             try {
                 val response = searchApiService.elasticSearch(request)
-                response.body()?.let { _resQDetail.value = it.hits.hits }
+                response.body()?.let {
+                    _resQDetail.value = it.hits.hits
+                    onResQDetail(it.hits.hits)
+                }
             } catch (e: Exception) {
                 Log.d("getResQSearch", e.message.toString())
             }

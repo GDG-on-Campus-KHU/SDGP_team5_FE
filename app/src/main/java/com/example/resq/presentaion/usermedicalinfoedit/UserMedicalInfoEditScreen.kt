@@ -2,11 +2,9 @@ package com.example.resq.presentaion.usermedicalinfoedit
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -53,8 +51,8 @@ fun UserMedicalInfoEditScreen(
     val heightInput = remember(medicalInfoList) { mutableDoubleStateOf(viewModel.getValueByLabelAsDouble(context.getString(R.string.info_height))) }
     val weightInput = remember(medicalInfoList) { mutableDoubleStateOf(viewModel.getValueByLabelAsDouble(context.getString(R.string.info_weight))) }
     val birthDateInput = remember(medicalInfoList) { mutableStateOf(viewModel.getValueByLabel(context.getString(R.string.info_date_of_birth))) }
-    val heightUnitInput = remember { mutableStateOf("cm") }
-    val weightUnitInput = remember { mutableStateOf("kg") }
+    val heightUnitInput = remember(medicalInfoList) { mutableStateOf(viewModel.getUnitByLabel(context.getString(R.string.info_height)).ifBlank { "cm" }) }
+    val weightUnitInput = remember(medicalInfoList){ mutableStateOf(viewModel.getUnitByLabel(context.getString(R.string.info_weight)).ifBlank { "kg" }) }
     val showEditBloodType = remember { mutableStateOf(false) }
     val showEditHeight = remember { mutableStateOf(false) }
     val showEditWeight = remember { mutableStateOf(false) }
@@ -73,7 +71,6 @@ fun UserMedicalInfoEditScreen(
             .fillMaxSize()
             .padding(padding)
             .padding(top = 3.dp, start = 5.dp, end = 5.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
             .verticalScroll(rememberScrollState())
     ) {
         Text(
@@ -192,14 +189,14 @@ fun UserMedicalInfoEditScreen(
                         weight = weightInput.doubleValue,
                         weightUnit = weightUnitInput.value,
                         birthDate = birthDateInput.value,
-                        notes = notesInput.value
+                        notes = notesInput.value.ifBlank { "None" }
                     )
                     Log.d("SaveRequest", "Request 데이터: $request")
                     val isNew = !viewModel.isInitialized.value
                     val action = if (isNew) viewModel::newInfo else viewModel::editInfo
                     action(request) { success ->
                         if (success) {
-                            Toast.makeText(context, "저장완료", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.saved_successfully), Toast.LENGTH_SHORT).show()
                             navController.popBackStack()
                         } else {
                             Log.d("UserMedicalInfo", "저장 실패")

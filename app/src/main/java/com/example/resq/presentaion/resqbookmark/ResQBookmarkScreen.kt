@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -32,14 +33,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.R
 import com.example.resq.navigation.home.HomeNavigationItem
-import com.example.resq.presentaion.component.CenterCircularProgress
+import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.ConfirmDialog
 import com.example.resq.presentaion.resqbookmark.component.BookmarkOptions
 import com.example.resq.ui.theme.InnerPadding
@@ -52,7 +55,6 @@ fun ResQBookmarkScreen(
     padding: PaddingValues,
     viewModel: ResQBookmarkViewModel = viewModel()
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
     val resQBookmarks by viewModel.resQBookmarks.collectAsState()
     val isExpanded = remember { mutableStateMapOf<String, Boolean>() }
     var isDialogExpended by remember { mutableStateOf(false) }
@@ -60,14 +62,18 @@ fun ResQBookmarkScreen(
     val bookmarkTitle = remember { mutableIntStateOf(0) }
     val language = Locale.current.language
 
+    LaunchedEffect(navController) {
+        viewModel.getBookmarks()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
             .padding(horizontal = InnerPadding)
     ) {
-        if (isLoading)
-            CenterCircularProgress()
+        if (resQBookmarks.isEmpty())
+            CenterBlankText(stringResource(R.string.no_saved_emergency_info))
         else
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { Spacer(Modifier.height(4.dp)) }

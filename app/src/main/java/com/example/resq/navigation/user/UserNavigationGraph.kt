@@ -18,6 +18,6 @@ fun NavGraphBuilder.userNavigationGraph(navController: NavController, padding: P
         UserMedicalInfoEditScreen(navController, padding)
     }
     composable(UserNavigationItem.Setting.route) {
-        UserSettingScreen(navController, padding)
+        UserSettingScreen(padding)
     }
 }

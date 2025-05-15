@@ -38,6 +38,8 @@ class MainActivity : ComponentActivity() {
         lateinit var USER_TOKEN: String
         lateinit var USER_DISPLAY_NAME: String
         lateinit var USER_EMAIL: String
+        lateinit var USER_COUNTRY_CODE: String
+        lateinit var EMERGENCY_CALL_NUMBER: String
         lateinit var FAVORITE_RESQ_LIST: List<ResQBookmark>
     }
 
@@ -117,15 +119,15 @@ private fun checkPermissions(
 
 private fun showPermissionSettingsDialog(activity: Activity) {
     AlertDialog.Builder(activity)
-        .setTitle("권한이 필요합니다")
-        .setMessage("권한을 거부하셨습니다. 설정에서 권한을 허용해주세요.")
-        .setPositiveButton("설정으로 가기") { _, _ ->
+        .setTitle(activity.getString(R.string.permission_required))
+        .setMessage(activity.getString(R.string.permission_denied))
+        .setPositiveButton(activity.getString(R.string.go_to_settings)) { _, _ ->
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             val uri = Uri.fromParts("package", activity.packageName, null)
             intent.data = uri
             activity.startActivity(intent)
         }
-        .setNegativeButton("취소") { _, _ ->
+        .setNegativeButton(activity.getString(R.string.cancel)) { _, _ ->
             activity.finish()
         }
         .setOnDismissListener { activity.finish() }

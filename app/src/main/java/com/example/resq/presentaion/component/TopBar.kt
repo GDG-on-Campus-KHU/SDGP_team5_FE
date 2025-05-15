@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,21 +18,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.R
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.navigation.share.ShareNavigationItem
 import com.example.resq.navigation.user.UserNavigationItem
-import com.example.resq.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, onClick: () -> Unit) {
+fun TopBar(
+    navController: NavController,
+    onNotifications: () -> Unit,
+    onLanguage: () -> Unit
+) {
     val route = navController.currentBackStackEntryAsState().value?.destination?.route.toString()
     val isButton =
         route != HomeNavigationItem.ResQ.route && route != ShareNavigationItem.Rooms.route && route != UserNavigationItem.User.route
@@ -65,7 +69,7 @@ fun TopBar(navController: NavController, onClick: () -> Unit) {
 
                 ShareNavigationItem.Rooms.route ->
                     Row {
-                        IconButton(onClick = { onClick() }) {
+                        IconButton(onClick = { onNotifications() }) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
                                 contentDescription = "Notifications"
@@ -80,10 +84,10 @@ fun TopBar(navController: NavController, onClick: () -> Unit) {
                     }
 
                 ShareNavigationItem.RoomDetail.route + "/{roomId}" ->
-                    IconButton(onClick = { onClick() }) {
+                    IconButton(onClick = { onLanguage() }) {
                         Icon(
-                            painter = painterResource(R.drawable.bootstrap_globe2),
-                            contentDescription = "bootstrap_globe2"
+                            imageVector = Icons.Outlined.Language,
+                            contentDescription = "Language"
                         )
                     }
 
@@ -105,5 +109,5 @@ fun TopBar(navController: NavController, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun TopBarPreview() {
-    TopBar(rememberNavController()) {}
+    TopBar(rememberNavController(), {}, {})
 }

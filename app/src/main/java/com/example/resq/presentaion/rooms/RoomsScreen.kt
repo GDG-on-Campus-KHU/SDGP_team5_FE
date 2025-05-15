@@ -40,13 +40,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.R
 import com.example.resq.navigation.share.ShareNavigationItem
+import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.presentaion.component.ConfirmDialog
 import com.example.resq.presentaion.roomnotify.RoomNotifyScreen
 import com.example.resq.presentaion.rooms.component.RoomsOptions
 import com.example.resq.ui.theme.InnerPadding
-import com.example.resq.R
 
 @Composable
 fun RoomsScreen(
@@ -62,9 +63,8 @@ fun RoomsScreen(
     val roomOption = remember { mutableStateOf("") }
     val roomId = remember { mutableStateOf("") }
 
-    LaunchedEffect(isDialogExpended) {
-        if (!isDialogExpended)
-            viewModel.getRooms()
+    LaunchedEffect(navController) {
+        viewModel.getRooms()
     }
 
     Column(
@@ -76,51 +76,54 @@ fun RoomsScreen(
         if (isLoading) {
             CenterCircularProgress()
         } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                item { Spacer(Modifier.height(4.dp)) }
-                items(rooms) { room ->
-                    val isRoomOptions = isRoomState[room.roomId] ?: false
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 80.dp)
-                            .background(Color.LightGray, RoundedCornerShape(16.dp))
-                            .padding(8.dp)
-                            .clickable(
-                                onClick = { navController.navigate(ShareNavigationItem.RoomDetail.route + "/${room.roomId}") },
-                                interactionSource = null,
-                                indication = null
-                            )
-                    ) {
-                        Text(
-                            text = room.roomTitle,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
-                        Row(
-                            modifier = Modifier.align(Alignment.CenterEnd),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            if (isRoomOptions)
-                                RoomsOptions {
-                                    roomOption.value = it
-                                    roomId.value = room.roomId
-                                    isDialogExpended = !isDialogExpended
-                                }
-                            IconButton(onClick = {
-                                isRoomState.keys.forEach { isRoomState[it] = false }
-                                isRoomState[room.roomId] = !isRoomOptions
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.MoreVert,
-                                    contentDescription = "MoreVert"
+            if (rooms.isEmpty())
+                CenterBlankText(stringResource(R.string.no_shared_rooms))
+            else
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    item { Spacer(Modifier.height(4.dp)) }
+                    items(rooms) { room ->
+                        val isRoomOptions = isRoomState[room.roomId] ?: false
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 80.dp)
+                                .background(Color.LightGray, RoundedCornerShape(16.dp))
+                                .padding(8.dp)
+                                .clickable(
+                                    onClick = { navController.navigate(ShareNavigationItem.RoomDetail.route + "/${room.roomId}") },
+                                    interactionSource = null,
+                                    indication = null
                                 )
+                        ) {
+                            Text(
+                                text = room.roomTitle,
+                                modifier = Modifier.align(Alignment.CenterStart)
+                            )
+                            Row(
+                                modifier = Modifier.align(Alignment.CenterEnd),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                if (isRoomOptions)
+                                    RoomsOptions {
+                                        roomOption.value = it
+                                        roomId.value = room.roomId
+                                        isDialogExpended = !isDialogExpended
+                                    }
+                                IconButton(onClick = {
+                                    isRoomState.keys.forEach { isRoomState[it] = false }
+                                    isRoomState[room.roomId] = !isRoomOptions
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.MoreVert,
+                                        contentDescription = "MoreVert"
+                                    )
+                                }
                             }
                         }
                     }
+                    item { Spacer(Modifier.height(4.dp)) }
                 }
-                item { Spacer(Modifier.height(4.dp)) }
-            }
         }
     }
 

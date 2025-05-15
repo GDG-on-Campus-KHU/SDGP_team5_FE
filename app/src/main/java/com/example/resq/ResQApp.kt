@@ -22,8 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.resq.MainActivity.Companion.EMERGENCY_CALL_NUMBER
 import com.example.resq.MainActivity.Companion.FAVORITE_RESQ_LIST
-import com.example.resq.MainActivity.Companion.USER_TOKEN
 import com.example.resq.navigation.home.HomeNavigationItem
 import com.example.resq.navigation.home.homeNavigationGraph
 import com.example.resq.navigation.share.shareNavigationGraph
@@ -42,13 +42,18 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
     val navController = rememberNavController()
     var isRecording by remember { mutableStateOf(false) }
     val isExpanded = remember { mutableStateOf(false) }
-    val emerNumber = viewModel.getEmerNumber()
+    val isTranslation = remember { mutableStateOf(false) }
 
     if (isToken || viewModel.getUserToken(context)) {
         viewModel.getMyInfo()
         viewModel.getFavoriteResQList { FAVORITE_RESQ_LIST = it }
         Scaffold(
-            topBar = { TopBar(navController) { isExpanded.value = true } },
+            topBar = {
+                TopBar(
+                    navController = navController,
+                    onNotifications = { isExpanded.value = !isExpanded.value },
+                    onLanguage = { isTranslation.value = !isTranslation.value })
+            },
             bottomBar = { BottomBar(navController) },
             floatingActionButton = {
                 FloatingActionButton(
@@ -56,15 +61,18 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
                         if (isRecording)
                             stopRecording(context).apply {
                                 isRecording = !this
-                                Toast.makeText(context, "음성 녹음이 저장되었습니다.", Toast.LENGTH_SHORT)
-                                    .show()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.recording_saved),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         else {
                             showOnClickCheckDialog(activity) {
                                 isRecording = startRecording(context)
 
                                 val dialIntent =
-                                    Intent(Intent.ACTION_CALL, Uri.parse(emerNumber))
+                                    Intent(Intent.ACTION_CALL, Uri.parse(EMERGENCY_CALL_NUMBER))
 //                                context.startActivity(dialIntent)
                             }
                         }
@@ -86,7 +94,7 @@ fun ResQApp(viewModel: GoogleSignViewModel = viewModel()) {
                 startDestination = HomeNavigationItem.ResQ.route
             ) {
                 homeNavigationGraph(navController, paddingValues)
-                shareNavigationGraph(navController, paddingValues, isExpanded)
+                shareNavigationGraph(navController, paddingValues, isExpanded, isTranslation)
                 userNavigationGraph(navController, paddingValues)
             }
         }
@@ -107,10 +115,10 @@ private fun stopRecording(context: Context): Boolean {
 
 private fun showOnClickCheckDialog(activity: Activity?, onPositive: () -> Unit) {
     AlertDialog.Builder(activity)
-        .setTitle("긴급 전화 및 녹음")
-        .setMessage("긴급 전화를 걸고 녹음을 시작 하시겠습니까?")
-        .setPositiveButton("확인") { _, _ -> onPositive() }
-        .setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+        .setTitle(activity?.getString(R.string.emergency_call_and_record))
+        .setMessage(activity?.getString(R.string.confirm_emergency_action))
+        .setPositiveButton(activity?.getString(R.string.ok)) { _, _ -> onPositive() }
+        .setNegativeButton(activity?.getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
         .setOnDismissListener { it.dismiss() }
         .show()
 }

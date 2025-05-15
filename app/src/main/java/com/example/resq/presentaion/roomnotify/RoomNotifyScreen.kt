@@ -24,9 +24,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.resq.R
+import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.CenterCircularProgress
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,47 +52,50 @@ fun RoomNotifyScreen(
             if (isLoading)
                 CenterCircularProgress()
             else
-                LazyColumn(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            IconButton(onClick = { onDismissRequest() }) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Close"
-                                )
-                            }
-                        }
-                    }
-                    items(notifications) { notify ->
-                        Card(modifier = Modifier.fillMaxWidth()) {
+                if (notifications.isEmpty())
+                    CenterBlankText(stringResource(R.string.no_invited_rooms))
+                else
+                    LazyColumn(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        item {
                             Row(
-                                modifier = Modifier.padding(8.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
                             ) {
-                                Text(text = notify.roomTitle)
-                                Spacer(Modifier.weight(1f))
-                                IconButton(onClick = { viewModel.rejectNotify(notify.roomId) }) {
+                                IconButton(onClick = { onDismissRequest() }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = "Close"
                                     )
                                 }
-                                IconButton(onClick = { viewModel.acceptNotify(notify.roomId) }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Check,
-                                        contentDescription = "Check"
-                                    )
+                            }
+                        }
+                        items(notifications) { notify ->
+                            Card(modifier = Modifier.fillMaxWidth()) {
+                                Row(
+                                    modifier = Modifier.padding(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(text = notify.roomTitle)
+                                    Spacer(Modifier.weight(1f))
+                                    IconButton(onClick = { viewModel.rejectNotify(notify.roomId) }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Close"
+                                        )
+                                    }
+                                    IconButton(onClick = { viewModel.acceptNotify(notify.roomId) }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Check,
+                                            contentDescription = "Check"
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
         }
     }
 }

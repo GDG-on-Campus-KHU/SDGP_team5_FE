@@ -25,9 +25,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.resq.R
+import com.example.resq.presentaion.component.CenterBlankText
 import com.example.resq.presentaion.component.CenterCircularProgress
 import com.example.resq.ui.theme.InnerPadding
 
@@ -36,54 +39,56 @@ import com.example.resq.ui.theme.InnerPadding
 fun UserRecordList(viewModel: UserRecordListViewModel = viewModel()) {
     val isLoading by viewModel.isLoading.collectAsState()
     val records by viewModel.records.collectAsState()
-
     val isHeight = remember { mutableStateMapOf<String, Boolean>() }
 
     if (isLoading) {
         CenterCircularProgress()
     } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = InnerPadding)
-        ) {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                item { Spacer(Modifier.height(16.dp)) }
-                items(records) { record ->
-                    val isExtended = isHeight[record.id] ?: true
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .background(Color.LightGray, RoundedCornerShape(16.dp))
-                            .padding(horizontal = 8.dp, vertical = 16.dp)
-                            .clickable(
-                                onClick = {
-                                    isHeight.keys.forEach { isHeight[it] = true }
-                                    isHeight[record.id] = !isExtended
-                                },
-                                interactionSource = null,
-                                indication = null
-                            )
-                    ) {
-                        if (isExtended)
-                            Text(
-                                text = record.recordedId,
-                                modifier = Modifier.align(Alignment.CenterStart)
-                            )
-                        else
-                            Column {
-                                Text(text = record.recordedId)
-                                Spacer(Modifier.height(16.dp))
-                                FlowRow {
-                                    Text(text = record.recordText)
+        if (records.isEmpty())
+            CenterBlankText(stringResource(R.string.no_recordings))
+        else
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = InnerPadding)
+            ) {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    item { Spacer(Modifier.height(16.dp)) }
+                    items(records) { record ->
+                        val isExtended = isHeight[record.id] ?: true
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .background(Color.LightGray, RoundedCornerShape(16.dp))
+                                .padding(horizontal = 8.dp, vertical = 16.dp)
+                                .clickable(
+                                    onClick = {
+                                        isHeight.keys.forEach { isHeight[it] = true }
+                                        isHeight[record.id] = !isExtended
+                                    },
+                                    interactionSource = null,
+                                    indication = null
+                                )
+                        ) {
+                            if (isExtended)
+                                Text(
+                                    text = record.recordedId,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            else
+                                Column {
+                                    Text(text = record.recordedId)
+                                    Spacer(Modifier.height(16.dp))
+                                    FlowRow {
+                                        Text(text = record.recordText)
+                                    }
                                 }
-                            }
+                        }
                     }
+                    item { Spacer(Modifier.height(16.dp)) }
                 }
-                item { Spacer(Modifier.height(16.dp)) }
             }
-        }
     }
 }
 

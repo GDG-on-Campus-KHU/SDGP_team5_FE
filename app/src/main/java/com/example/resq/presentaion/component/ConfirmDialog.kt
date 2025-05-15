@@ -39,10 +39,10 @@ fun ConfirmDialog(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(title)
+                Text(stringResource(R.string.delete_check))
                 Spacer(Modifier.height(16.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = { onDismissRequest() }) { Text(stringResource(R.string.delete)) }
+                    Button(onClick = { onDismissRequest() }) { Text(stringResource(R.string.cancel)) }
                     Button(onClick = {
                         onClick(title)
                         onDismissRequest()
