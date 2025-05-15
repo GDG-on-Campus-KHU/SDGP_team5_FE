@@ -26,7 +26,7 @@ class UserRecordListViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 val response = apiService.getRecords().body()
-                response?.let { _records.value = it.records }
+                _records.value = response?.records ?: emptyList()
             } catch (e: Exception) {
                 Log.d("getRecords", e.message.toString())
             }
