@@ -9,6 +9,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -27,6 +28,7 @@ import com.example.resq.ui.theme.ResQTheme
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
 
@@ -63,6 +65,8 @@ class MainActivity : ComponentActivity() {
 
         appContext = applicationContext
 
+        setLocale(this)
+
         checkPermissions(
             activity = this,
             permissions = permissions,
@@ -85,6 +89,16 @@ class MainActivity : ComponentActivity() {
                 if (!isLoading)
                     ResQApp()
             }
+        }
+    }
+
+    private fun setLocale(context: Context) {
+        if (Locale.getDefault().language != "ko") {
+            val locale = Locale("en")
+            Locale.setDefault(locale)
+            val config = Configuration()
+            config.setLocale(locale)
+            context.resources.updateConfiguration(config, context.resources.displayMetrics)
         }
     }
 }

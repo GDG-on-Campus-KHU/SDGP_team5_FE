@@ -79,7 +79,7 @@ fun UserRecordList(viewModel: UserRecordListViewModel = viewModel()) {
                             else
                                 Column {
                                     Text(text = record.recordedId)
-                                    Spacer(Modifier.height(16.dp))
+                                    Spacer(Modifier.height(8.dp))
                                     FlowRow {
                                         Text(text = record.recordText)
                                     }
