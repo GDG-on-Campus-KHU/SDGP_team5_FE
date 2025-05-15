@@ -1,72 +1,128 @@
-# SDGP_team5_FE
-# 🚨 ResQ 🚨
+<h1 align="center">🚨 ResQ 🚨</h1>
 
-```
-여행 중 응급 상황에 신속한 대응을 지원하는 모바일 애플리케이션입니다.
-```
+  
+<div align="center">
+  <h3><b><i>Instant support for your travel emergencies!</i></b></h3>
+  <h4>🌐 This is the <code>English</code> version of the README. | <a href="README.ko.md">한국어 버전</a></h4>
+</div>
+
+## 🎯 Goal
+
+<pre><code><b>Unexpected emergencies</b> can happen anywhere and at any time.<br>
+
+<b>ResQ</b> aims to be a <b>reliable companion</b> that protects your <b>life</b> and <b>safety</b> in such moments.</code></pre>
+
+<div align="center">
+  <img src="https://drive.google.com/uc?id=1wOQnC2JamqkYSGTIdRcSwDGFH92ATsjX" width=60%>
+</div>
+
+---
+
+### 💡 Key Features
+<h4> 🆘 Quickly request help in emergency situations</h4>
+
+<pre><code>* <b>👆One tap</b> to connect to an <b>emergency hotline</b> and start <b>recording</b> the situation
+* Provides <b>guidelines</b> on how to handle common <b>emergency situations</b></code></pre>
+
+---
 
 
-<br>
+#### 📌 Basic Features
 
-## 💡 Key Features
+- Log in with **Google** account
 
-<h3>✅ 위급 상황 시 신속한 도움 요청</h3>
+- **Emergency response guidelines** for each situation -- **`🌐ko(Korean)`**, **`🌐en(English)`**
 
-* 한 번의 터치로 응급 전화 연결 및 녹음 시작
-* 녹음 파일 저장 및 관리
+- Add **favorite** emergency responses
 
-<h3>✅ 응급 상황별 대처법 안내</h3>
+- **Search** for emergency responses that are not displayed on the main screen
 
-* 다국어 지원 🌐
+---
 
-<h3>✅ 의료 정보 관리</h3>
+#### 📌 Medical Information Management
 
-* 응급 상황에 필요한 개인 의료 정보 등록 및 관리
-* 여행 국가의 언어로 자동 번역된 의료 정보 제공 🌐
-* 함께 여행 중인 가족 및 친구의 의료 정보 열람 가능
+- Fill out **medical information** such as **allergies**, **medications**, etc. for emergencies
 
-<br>
+- Set **destination country** -- 🌐 `KR`, `US`, `GB`, `JP`, `CN`, `DE`, `FR`, `MX`
 
-## 👥 Team Members
-📌 2025 파트 연합 장기 프로젝트 SDGP - team5
+- Add family and friends who are traveling with you to the **group**
 
-| Name       | Role     | GitHub                                               |
-|------------|----------|------------------------------------------------------|
-| 권동현      | Mobile  | [GwonDongHyeon21](https://github.com/GwonDongHyeon21) |
-| 김민        | Backend | [kmin1231](https://github.com/kmin1231) |
-| 김태훈      | Mobile  | [taeh-kim](https://github.com/taeh-kim) |
-| 박상영      | Backend | [Imsyp](https://github.com/Imsyp) |
+- **Translate medical information** of the group members into the **language** of the destination country
+
+- Convert **height** and **weight** units based on the **destination country's** measurement system
+
+---
+
+#### 📌 Situation Recording
+
+- Automatically save **audio files** recorded during emergencies
+
+- Save situation recordings as **text** using the **`Speech-to-Text`** API
+
+---
 
 <br>
 
 ## 🧩 Project Architecture
 
-<img src="https://drive.google.com/uc?id=1WH0xObPY-U4_opNcNv_3qroycj5ra3ev" width=80%>
+<div align="center">
+  <img src="https://drive.google.com/uc?id=1WH0xObPY-U4_opNcNv_3qroycj5ra3ev" width=80%>
+</div>
+
+<br>
+
+## ⚙️ Tech Stacks
+| Component      | Stack              |
+|----------------|--------------------|
+| Architecture   | MVVM               |
+| UI             | Jetpack Compose    |
+| Asynchronous   | Coroutine          |
+| Network        | Retrofit2, Okhttp3 |
+| etc            | MediaRecorder      |
 
 <br>
 
 ## 📂 Project Structure
 
-
+```
+.
+├── app/
+│   ├── manifests/
+│   ├── kotlin+java/
+│   │   └── com/example/resq/
+│   │       ├── navigation/     
+│   │       ├── network/        
+│   │       ├── presentaion/    
+│   │       │   ├── component/
+│   │       │   ├── resq/
+│   │       │   ├── user/
+│   │       │   └── ...         
+│   │       ├── service/        
+│   │       └── ui/             
+│   ├── MainActivity.kt
+│   └── ResQApp.kt
+├── build.gradle.kts
+├── gradle.properties
+├── README.md
+└── settings.gradle.kts
+```
 
 <br>
 
 ## ▶️ How to Run
 
 ```
-git clone https://github.com/GDG-on-Campus-KHU/SDGP_team5_FE.git
-```
-
-```
-cd SDGP_team5_FE
-```
-
-```
-Android Studio > File > Open > 'SDGP_team5_FE'
-```
-
-```
-./gradlew installDebug
+https://drive.google.com/drive/folders/1z3-TDW1zmh7yXzowaQMQVtV6B4R-zbfA?usp=share_link
 ```
 
 <br>
+
+
+## 👥 Team Members
+
+| Name       | English Name   | Role     | GitHub                                                |
+|------------|----------------|----------|-------------------------------------------------------|
+| 권동현      | DongHyeon Gwon | Mobile   | [GwonDongHyeon21](https://github.com/GwonDongHyeon21) |
+| 김민        | Min Kim        | Backend | [kmin1231](https://github.com/kmin1231) |
+| 김태훈      | Taehoon Kim    | Mobile  | [taeh-kim](https://github.com/taeh-kim) |
+| 박상영      | SangYeong Park | Backend | [Imsyp](https://github.com/Imsyp) |
