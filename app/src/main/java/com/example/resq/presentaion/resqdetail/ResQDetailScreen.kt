@@ -126,14 +126,19 @@ fun ResQDetailScreen(
                     item { Spacer(Modifier.height(16.dp)) }
                     resQ.resQActions?.let {
                         itemsIndexed(it.getLocalizedTitle(language)) { index, resQ ->
-                            Text(text = "${index + 1}. ${resQ.step}", fontSize = 20.sp)
-                            resQ.detail.forEach { detail ->
-                                Row {
-                                    Spacer(Modifier.width(20.dp))
-                                    Text(text = detail)
+                            Row {
+                                Text(text = "${index + 1}. ", fontSize = 20.sp)
+                                Column {
+                                    Text(text = resQ.step, fontSize = 20.sp)
+                                    resQ.detail.forEach { detail ->
+                                        Row {
+                                            Text(text = "- ")
+                                            Text(text = detail)
+                                        }
+                                    }
+                                    Spacer(Modifier.height(12.dp))
                                 }
                             }
-                            Spacer(Modifier.height(8.dp))
                         }
                     }
                 }
