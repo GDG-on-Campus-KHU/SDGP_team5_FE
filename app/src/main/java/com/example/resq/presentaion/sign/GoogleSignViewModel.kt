@@ -33,8 +33,8 @@ class GoogleSignViewModel : ViewModel() {
                 response?.let {
                     USER_TOKEN = it.accessToken
                     saveUserToken(context, it.accessToken)
+                    _isToken.value = true
                 }
-                _isToken.value = true
             } catch (e: Exception) {
                 Log.d("signInTest", e.toString())
             }
