@@ -218,6 +218,7 @@ interface ApiService {
         @Body request: TranslateInfoRequest
     ): Response<TranslateInfoResponse>
 
+    // 나라 관련 정보 조회
     @GET("api/country/{country_code}")
     suspend fun getCountryInfo(
         @Path("country_code") countryCode: String

@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,16 +29,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.resq.MainActivity.Companion.EMERGENCY_CALL_NUMBER
 import com.example.resq.MainActivity.Companion.USER_COUNTRY_CODE
 import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.MainActivity.Companion.googleSignInClient
 import com.example.resq.R
-import com.example.resq.network.model.CountryRequest
 import com.example.resq.presentaion.sign.GoogleSignViewModel
 import com.example.resq.presentaion.usersetting.component.SelectDialog
 import com.example.resq.presentaion.usersetting.component.SettingItem
 import com.example.resq.presentaion.usersetting.component.SettingSection
+import com.example.resq.presentaion.usersetting.model.Country
 import java.util.Locale
 
 @Composable
@@ -51,8 +51,14 @@ fun UserSettingScreen(
     val languages = viewModel.languages.collectAsState()
     var showLanguageAlertDialog by remember { mutableStateOf(false) }
     var showCountryAlertDialog by remember { mutableStateOf(false) }
-    var appLanguage by remember { mutableStateOf(Locale.getDefault().language) }
-    var userCountry by remember { mutableStateOf(viewModel.getCountryName(USER_COUNTRY_CODE)) }
+    var appLanguage by remember { mutableStateOf(Country("", "")) }
+    var userCountry by remember { mutableStateOf("") }
+
+    LaunchedEffect(appLanguage, USER_COUNTRY_CODE) {
+        viewModel.updateTranslation(appLanguage.code)
+        appLanguage = viewModel.getCountryLanguage(Locale.getDefault().language)
+        userCountry = viewModel.getCountryName(USER_COUNTRY_CODE)
+    }
 
     Column(
         modifier = Modifier
@@ -93,7 +99,7 @@ fun UserSettingScreen(
 
         // 앱 기본 설정
         SettingSection(title = stringResource(R.string.app_settings)) {
-            SettingItem(text = "${stringResource(R.string.language)}: $appLanguage",
+            SettingItem(text = "${stringResource(R.string.language)}: ${appLanguage.name}",
                 onClick = { showLanguageAlertDialog = true }
             )
             SettingItem(text = "${stringResource(R.string.country)}: $userCountry",
@@ -124,9 +130,9 @@ fun UserSettingScreen(
             onDismiss = { showCountryAlertDialog = false },
             selectOptions = countries.value,
             onSelectedOptions = { selectedCountry ->
-                viewModel.updateCountry(CountryRequest(selectedCountry))
-                userCountry = viewModel.getCountryName(selectedCountry)
-                GoogleSignViewModel().getEmerNumber(selectedCountry)
+                USER_COUNTRY_CODE = selectedCountry.code
+                viewModel.updateCountry(selectedCountry.code)
+                GoogleSignViewModel().getEmerNumber(selectedCountry.code)
             }
         )
     }
@@ -136,8 +142,8 @@ fun UserSettingScreen(
             onDismiss = { showLanguageAlertDialog = false },
             selectOptions = languages.value,
             onSelectedOptions = { selectedLanguage ->
-                appLanguage = selectedLanguage
-                setLocale(context, selectedLanguage)
+                appLanguage.name = selectedLanguage.name
+                setLocale(context, selectedLanguage.code)
             }
         )
     }
@@ -148,6 +154,7 @@ fun setLocale(context: Context, localeCode: String) {
     Locale.setDefault(locale)
     val config = Configuration(context.resources.configuration)
     config.setLocale(locale)
+    @Suppress("DEPRECATION")
     context.resources.updateConfiguration(config, context.resources.displayMetrics)
     (context as Activity).recreate()
 }

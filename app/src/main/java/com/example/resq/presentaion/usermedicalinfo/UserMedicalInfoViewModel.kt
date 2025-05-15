@@ -30,8 +30,8 @@ class UserMedicalInfoViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _medicalInfoList = MutableStateFlow<List<MedicalInfoElement>>(emptyList())
-    val medicalInfoList: StateFlow<List<MedicalInfoElement>> = _medicalInfoList.asStateFlow()
+    private val _medicalInfoList = MutableStateFlow(emptyList<MedicalInfoElement>())
+    val medicalInfoList: StateFlow<List<MedicalInfoElement>> = _medicalInfoList
 
     private val _isInitialized = MutableStateFlow(false)
     val isInitialized: StateFlow<Boolean> = _isInitialized
@@ -126,7 +126,10 @@ class UserMedicalInfoViewModel : ViewModel() {
 
             try {
                 val response = apiService.newInfo(request)
-                Log.d("newInfo", "응답 코드: ${response.code()}, 메시지: ${response.message()}, body: ${response.body()}")
+                Log.d(
+                    "newInfo",
+                    "응답 코드: ${response.code()}, 메시지: ${response.message()}, body: ${response.body()}"
+                )
                 val errorBody = response.errorBody()?.string()
                 Log.e("newInfo", "에러 바디: $errorBody")
                 Log.d("info_id", "현재 유저 id는 ${response.body()?.medicalInfo?.userId}")
@@ -170,9 +173,11 @@ class UserMedicalInfoViewModel : ViewModel() {
     fun getValueByLabelAsDouble(label: String): Double {
         return getValueByLabel(label).toDoubleOrNull() ?: 0.0
     }
-    fun getUnitByLabel(label: String) : String {
-        return medicalInfoList.value.find {it.label == label}?.unit ?: ""
+
+    fun getUnitByLabel(label: String): String {
+        return medicalInfoList.value.find { it.label == label }?.unit ?: ""
     }
+
     fun initEmptyMedicalInfo(context: Context) {
         _medicalInfoList.value = listOf(
             MedicalInfoElement(
@@ -323,8 +328,8 @@ class UserMedicalInfoViewModel : ViewModel() {
             _isLoading.value = false
         }
     }
+
     private fun updateDisplayName(name: String) {
-//        USER_DISPLAY_NAME = name
         _userDisplayName.value = name
     }
 }

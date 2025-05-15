@@ -28,8 +28,8 @@
     <string name="info_message_placeholder1">Enter medical information for emergency use.</string>
     <string name="info_message_placeholder2">All information entered.</string>
     <string name="info_message1">indicates a required field.</string>
-    <string name="medical_info">Medical Info</string>
-    <string name="record_list">Recording List</string>
+    <string name="medical_info">Medical</string>
+    <string name="record_list">Records</string>
     <string name="info_name">Name</string>
     <string name="info_blood_type">Blood Type</string>
     <string name="info_allergies">Allergies</string>
@@ -92,5 +92,7 @@
     <string name="recording_saved">Recording saved.</string>
     <string name="emergency_call_and_record">Emergency Call and Recording</string>
     <string name="confirm_emergency_action">Do you want to make an emergency call and start recording?</string>
+    <string name="korean">Korean</string>
+    <string name="english">English</string>
 
 </resources>
