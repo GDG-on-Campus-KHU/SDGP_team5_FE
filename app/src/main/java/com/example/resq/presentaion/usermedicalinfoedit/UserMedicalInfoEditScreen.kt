@@ -189,7 +189,7 @@ fun UserMedicalInfoEditScreen(
                         weight = weightInput.doubleValue,
                         weightUnit = weightUnitInput.value,
                         birthDate = birthDateInput.value,
-                        notes = notesInput.value
+                        notes = notesInput.value.ifBlank { "None" }
                     )
                     Log.d("SaveRequest", "Request 데이터: $request")
                     val isNew = !viewModel.isInitialized.value

@@ -40,7 +40,7 @@ fun EditBasicTextFieldWithCheckbox(
         verticalAlignment = Alignment.CenterVertically
     ) {
         BasicTextField(
-            value = if (state.value == "None") "" else state.value,
+            value = if (state.value == "None") stringResource(R.string.none) else state.value,
             onValueChange = { state.value = it },
             enabled = !checkboxState.value,
             textStyle = textStyle,
@@ -52,7 +52,7 @@ fun EditBasicTextFieldWithCheckbox(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    if (state.value.isBlank() || state.value == "None" ) {
+                    if (state.value.isBlank()) {
                         Text(text = placeholder, style = textStyle)
                     }
                     innerTextField()

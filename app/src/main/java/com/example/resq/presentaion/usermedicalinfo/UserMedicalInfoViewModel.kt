@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.resq.MainActivity.Companion.USER_DISPLAY_NAME
-import com.example.resq.MainActivity.Companion.USER_EMAIL
 import com.example.resq.R
 import com.example.resq.network.RetrofitInstance.apiService
 import com.example.resq.presentaion.usermedicalinfo.model.MedicalInfoElement
@@ -22,7 +21,6 @@ import com.example.resq.network.model.MedicalInfoRequest
 import com.example.resq.network.model.TranslateInfoRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class UserMedicalInfoViewModel : ViewModel() {
@@ -42,6 +40,8 @@ class UserMedicalInfoViewModel : ViewModel() {
     private val _userDisplayName = MutableStateFlow(USER_DISPLAY_NAME)
     val userDisplayName: StateFlow<String> = _userDisplayName
     private var originalDisplayName: String? = null
+
+    private val noneValues = listOf("none", "없음", "なし", "无", "keine", "aucun", "aucune")
 
     fun getInfo(context: Context) {
         viewModelScope.launch {
@@ -310,14 +310,14 @@ class UserMedicalInfoViewModel : ViewModel() {
                             context.getString(R.string.info_date_of_birth_placeholder),
                             Icons.Outlined.Today,
                             mutableStateOf(data.userBirthdate),
-                            mutableStateOf(data.userBirthdate != "None")
+                            mutableStateOf(data.userBirthdate != "-")
                         ),
                         MedicalInfoElement(
                             data.infoTitles[6],
                             context.getString(R.string.info_additional_notes_placeholder),
                             Icons.Outlined.NoteAlt,
                             mutableStateOf(data.userNotes),
-                            mutableStateOf(!(data.userNotes.isBlank() || data.userNotes == "없음" || data.userNotes == "None"))
+                            mutableStateOf(data.userNotes.trim().lowercase() !in noneValues)
                         )
                     )
                     _isInitialized.value = true
