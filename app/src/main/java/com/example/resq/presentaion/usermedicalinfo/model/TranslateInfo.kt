@@ -13,5 +13,6 @@ data class TranslateInfo(
     @SerializedName("weight") val userWeight: Double,
     @SerializedName("weight_unit") val userWeightUnit: String,
     @SerializedName("birth_date") val userBirthdate: String,
-    @SerializedName("notes") val userNotes: String
+    @SerializedName("notes") val userNotes: String,
+    @SerializedName("info_titles") val infoTitles: List<String>
 )

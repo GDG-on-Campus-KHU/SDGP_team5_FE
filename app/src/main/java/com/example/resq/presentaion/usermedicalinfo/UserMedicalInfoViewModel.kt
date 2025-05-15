@@ -248,7 +248,6 @@ class UserMedicalInfoViewModel : ViewModel() {
         }
     }
 
-    //response_info, response_title
     fun translateInfo(context: Context, userId: Int) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -265,28 +264,28 @@ class UserMedicalInfoViewModel : ViewModel() {
                     updateDisplayName(data.name)
                     _medicalInfoList.value = listOf(
                         MedicalInfoElement(
-                            context.getString(R.string.info_blood_type),
+                            data.infoTitles[0],
                             context.getString(R.string.info_blood_type_placeholder),
                             Icons.Outlined.Bloodtype,
                             mutableStateOf(data.userBloodType),
                             mutableStateOf(true)
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_allergies),
+                            data.infoTitles[1],
                             context.getString(R.string.info_allergies_placeholder),
                             Icons.Outlined.Warning,
                             mutableStateOf(data.userAllergy),
                             mutableStateOf(true)
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_medicine),
+                            data.infoTitles[2],
                             context.getString(R.string.info_medicine_placeholder),
                             Icons.Outlined.Medication,
                             mutableStateOf(data.userMedication),
                             mutableStateOf(true)
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_height),
+                            data.infoTitles[3],
                             context.getString(R.string.info_height_placeholder),
                             Icons.Outlined.Accessibility,
                             mutableStateOf(data.userHeight.toString()),
@@ -294,7 +293,7 @@ class UserMedicalInfoViewModel : ViewModel() {
                             data.userHeightUnit
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_weight),
+                            data.infoTitles[4],
                             context.getString(R.string.info_weight_placeholder),
                             Icons.Outlined.MonitorWeight,
                             mutableStateOf(data.userWeight.toString()),
@@ -302,14 +301,14 @@ class UserMedicalInfoViewModel : ViewModel() {
                             data.userWeightUnit
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_date_of_birth),
+                            data.infoTitles[5],
                             context.getString(R.string.info_date_of_birth_placeholder),
                             Icons.Outlined.Today,
                             mutableStateOf(data.userBirthdate),
                             mutableStateOf(data.userBirthdate != "None")
                         ),
                         MedicalInfoElement(
-                            context.getString(R.string.info_additional_notes),
+                            data.infoTitles[6],
                             context.getString(R.string.info_additional_notes_placeholder),
                             Icons.Outlined.NoteAlt,
                             mutableStateOf(data.userNotes),
