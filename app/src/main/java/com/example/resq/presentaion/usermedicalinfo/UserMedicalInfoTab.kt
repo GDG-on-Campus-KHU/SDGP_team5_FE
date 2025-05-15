@@ -57,7 +57,6 @@ fun UserMedicalInfoTab(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 5.dp, bottom = 10.dp, start = 5.dp, end = 5.dp)
-//            .background(Color.White, RoundedCornerShape(12.dp))
             .verticalScroll(rememberScrollState())
     ) {
         Row(

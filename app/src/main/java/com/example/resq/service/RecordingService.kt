@@ -106,7 +106,7 @@ class RecordingService : Service() {
     }
 
     private suspend fun uploadAudioFile(file: File) {
-        val requestFile = file.asRequestBody("audio/mp4".toMediaTypeOrNull())
+        val requestFile = file.asRequestBody("audio/x-m4a".toMediaTypeOrNull())
         val audioPart = MultipartBody.Part.createFormData("audio", file.name, requestFile)
 
         try {
