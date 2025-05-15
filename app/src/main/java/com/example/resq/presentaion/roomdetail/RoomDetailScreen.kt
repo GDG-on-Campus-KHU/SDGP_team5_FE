@@ -95,14 +95,15 @@ fun RoomDetailScreen(
                             if (isExtended)
                                 Text(text = userMedicalInfo.userName)
                             else {
+                                val isTranslateState = userMedicalInfo.infoTitles.isEmpty()
                                 Text(text = userMedicalInfo.userName)
-                                Text(text = "${stringResource(R.string.info_blood_type)}: ${userMedicalInfo.userBloodType}")
-                                Text(text = "${stringResource(R.string.info_allergies)}: ${userMedicalInfo.userAllergy}")
-                                Text(text = "${stringResource(R.string.info_medicine)}: ${userMedicalInfo.userMedication}")
-                                Text(text = "${stringResource(R.string.info_height)}: ${userMedicalInfo.userHeight}")
-                                Text(text = "${stringResource(R.string.info_weight)}: ${userMedicalInfo.userWeight}")
-                                Text(text = "${stringResource(R.string.info_date_of_birth)}: ${userMedicalInfo.userBirthdate}")
-                                Text(text = "${stringResource(R.string.info_additional_notes)}: ${userMedicalInfo.userNotes}")
+                                Text(text = "${if (isTranslateState) stringResource(R.string.info_blood_type) else userMedicalInfo.infoTitles[0]}: ${userMedicalInfo.userBloodType}")
+                                Text(text = "${if (isTranslateState) stringResource(R.string.info_allergies) else userMedicalInfo.infoTitles[1]}: ${userMedicalInfo.userAllergy}")
+                                Text(text = "${if (isTranslateState) stringResource(R.string.info_medicine) else userMedicalInfo.infoTitles[2]}: ${userMedicalInfo.userMedication}")
+                                Text(text = "${if (isTranslateState) stringResource(R.string.info_height) else userMedicalInfo.infoTitles[3]}: ${userMedicalInfo.userHeight}")
+                                Text(text = "${if (isTranslateState) stringResource(R.string.info_weight) else userMedicalInfo.infoTitles[4]}: ${userMedicalInfo.userWeight}")
+                                Text(text = "${if (isTranslateState) stringResource(R.string.info_date_of_birth) else userMedicalInfo.infoTitles[5]}: ${userMedicalInfo.userBirthdate}")
+                                Text(text = "${if (isTranslateState) stringResource(R.string.info_additional_notes) else userMedicalInfo.infoTitles[6]}: ${userMedicalInfo.userNotes}")
                             }
                         }
                     }

@@ -10,5 +10,6 @@ data class UserMedicalInfo(
     val userWeight: Double,
     val userWeightUnit: String,
     val userBirthdate: String,
-    val userNotes: String
+    val userNotes: String,
+    val infoTitles: List<String>
 )

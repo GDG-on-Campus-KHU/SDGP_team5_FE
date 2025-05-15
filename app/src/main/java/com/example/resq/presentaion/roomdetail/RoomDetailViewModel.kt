@@ -63,9 +63,22 @@ class RoomDetailViewModel : ViewModel() {
                                     userWeight = it.userWeight,
                                     userWeightUnit = it.userWeightUnit,
                                     userBirthdate = it.userBirthdate,
-                                    userNotes = it.userNotes
+                                    userNotes = it.userNotes,
+                                    infoTitles = it.infoTitles
                                 )
-                            } ?: UserMedicalInfo("", "", "", "", 0.0, "", 0.0, "", "", "")
+                            } ?: UserMedicalInfo(
+                                "",
+                                "",
+                                "",
+                                "",
+                                0.0,
+                                "",
+                                0.0,
+                                "",
+                                "",
+                                "",
+                                emptyList()
+                            )
                         }
                     else {
                         val infoList = coroutineScope {
@@ -91,9 +104,22 @@ class RoomDetailViewModel : ViewModel() {
                                     userWeight = it.userWeight,
                                     userWeightUnit = it.userWeightUnit,
                                     userBirthdate = it.userBirthdate,
-                                    userNotes = it.userNotes
+                                    userNotes = it.userNotes,
+                                    infoTitles = emptyList()
                                 )
-                            } ?: UserMedicalInfo("", "", "", "", 0.0, "", 0.0, "", "", "")
+                            } ?: UserMedicalInfo(
+                                "",
+                                "",
+                                "",
+                                "",
+                                0.0,
+                                "",
+                                0.0,
+                                "",
+                                "",
+                                "",
+                                emptyList()
+                            )
                         }
                     }
                 }
