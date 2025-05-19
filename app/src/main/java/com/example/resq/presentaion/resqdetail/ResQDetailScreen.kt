@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -23,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,12 +53,16 @@ fun ResQDetailScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val resQDetail by viewModel.resQDetail.collectAsState()
     var searchText by remember { mutableStateOf("") }
-    var isFavorite by remember { mutableStateOf(false) }
+    val isFavorite = remember { mutableStateMapOf<String, Boolean>() }
     val language = Locale.current.language
 
     LaunchedEffect(resQ) {
-        viewModel.getResQDetail(resQ, language)
-        isFavorite = FAVORITE_RESQ_LIST.any { it.resQSlug == resQ }
+        viewModel.getResQDetail(resQ, language) { resQDetail ->
+            resQDetail.forEach { resQInfo ->
+                isFavorite[resQInfo.slug] =
+                    FAVORITE_RESQ_LIST.any { it.resQSlug == resQInfo.slug }
+            }
+        }
     }
 
     Column(
@@ -95,17 +99,20 @@ fun ResQDetailScreen(
                                 fontSize = 30.sp,
                                 modifier = Modifier.weight(1f)
                             )
+                            val favoriteState = isFavorite.getOrDefault(resQ.slug, false)
                             IconButton(
                                 onClick = {
-                                    isFavorite = !isFavorite
+                                    isFavorite[resQ.slug] = !favoriteState
                                     resQ.resQIndex?.let {
-                                        if (isFavorite) viewModel.addToFavoriteResQList(it)
-                                        else viewModel.deleteToFavoriteResQList(it)
+                                        if (isFavorite[resQ.slug] == true) ResQDetailViewModel().addToFavoriteResQList(
+                                            it
+                                        )
+                                        else ResQDetailViewModel().deleteToFavoriteResQList(it)
                                     }
                                 }
                             ) {
                                 Icon(
-                                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                    imageVector = if (isFavorite[resQ.slug] == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                     contentDescription = "Favorite",
                                 )
                             }
