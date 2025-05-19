@@ -61,16 +61,10 @@ class GoogleSignViewModel : ViewModel() {
         editor.apply()
     }
 
-    fun removeUserToken(context: Context) {
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.remove("userToken")
-        editor.apply()
-    }
-
-    fun signOut(googleSignInClient: GoogleSignInClient) {
-        googleSignInClient.signOut()
+    fun signOut(context: Context, googleSignInClient: GoogleSignInClient) {
+        googleSignInClient.revokeAccess().addOnCompleteListener {
+            context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE).edit().clear().apply()
+        }
     }
 
     fun getMyInfo() {

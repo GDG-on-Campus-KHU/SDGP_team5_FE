@@ -19,7 +19,11 @@ class ResQDetailViewModel : ViewModel() {
     private val _resQDetail = MutableStateFlow(emptyList<ResQDetailResponse>())
     val resQDetail: MutableStateFlow<List<ResQDetailResponse>> = _resQDetail
 
-    fun getResQDetail(resQ: String, language: String) {
+    fun getResQDetail(
+        resQ: String,
+        language: String,
+        onResQDetail: (List<ResQDetailResponse>) -> Unit
+    ) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -35,6 +39,7 @@ class ResQDetailViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.d("getResQDetail", e.message.toString())
             }
+            onResQDetail(_resQDetail.value)
             _isLoading.value = false
         }
     }

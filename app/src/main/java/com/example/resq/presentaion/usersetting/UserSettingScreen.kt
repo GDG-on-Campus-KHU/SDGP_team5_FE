@@ -85,9 +85,7 @@ fun UserSettingScreen(
                 onClick = {
                     activity?.let {
                         signOut(it) {
-                            val viewmodel = GoogleSignViewModel()
-                            viewmodel.removeUserToken(context)
-                            viewmodel.signOut(googleSignInClient)
+                            GoogleSignViewModel().signOut(context, googleSignInClient)
                             it.finish()
                         }
                     }

@@ -25,7 +25,7 @@ fun BookmarkOptions(onClick: (String) -> Unit) {
             )
     ) {
         Text(
-            text = stringResource(R.string.cancel),
+            text = delete,
             modifier = Modifier.padding(4.dp)
         )
     }
